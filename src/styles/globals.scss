@@ -1,0 +1,39 @@
+// Theme Colors
+:root {
+  --bg: #232323;
+  --bg-light: #2e2e2e;
+  --bg-lighter: #3a3a3a;
+  --bg-dark: #1a1a1a;
+  --bg-white: #f0f0f0;
+  --bg-white-dark: #e0e0e0;
+  --bg-white-light: #ffffff;
+
+  --green: #63ed60;
+  --green-light: #a5f3a5;
+  --green-dark: #2bb32b;
+
+  --purple: #853abf;
+  --purple-light: #b97af7;
+  --purple-dark: #5a1e8f;
+
+  --blue: #85c7f2;
+  --blue-light: #bde0f7;
+  --blue-dark: #5a9ec2;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
