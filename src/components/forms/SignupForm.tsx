@@ -3,8 +3,11 @@ import { api } from "@/utils/api";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/router";
 
 const SignupForm = () => {
+  const router = useRouter();
+
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
@@ -28,11 +31,20 @@ const SignupForm = () => {
     },
     onSuccess: async (user) => {
       setErrorMessage(undefined);
-      await signIn("credentials", {
+      
+      const res = await signIn("credentials", {
         username: user.username,
         password: getValues("password"),
-        callbackUrl: "/",
+        redirect: false,
       });
+
+      if (res && res.error) {
+        setErrorMessage(res.error);
+      } else if (res && res.ok) {
+        router.push("/");
+      } else {
+        setErrorMessage("Something went wrong");
+      }
     }
   });
 

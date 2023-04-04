@@ -1,11 +1,12 @@
 import { LoginSchema } from "@/validation/auth";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 const LoginForm = () => {
   const router = useRouter();
-  const errorMessage = router.query.error; // Get the NextAuth Error from the URL
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register, // function to register a form field
@@ -15,10 +16,18 @@ const LoginForm = () => {
 
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-      await signIn("credentials", {
-        ...data,
-        callbackUrl: "/",
-      });
+    const res = await signIn("credentials", {
+      ...data,
+      redirect: false,
+    });
+
+    if (res && res.ok) {
+      router.push("/"); // Redirect to the homepage
+    } else if (res && res.error) {
+      setErrorMessage(res.error); // Set the error message
+    } else {
+      setErrorMessage("Something went wrong"); // Set the error message
+    }
   };
 
   return <div>
