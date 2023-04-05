@@ -72,8 +72,6 @@ import { ZodError } from "zod";
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
-    console.log("error", error, "cause", error.cause, "shape", shape)
-    if (error.cause instanceof ZodError) console.log("zod error", error.cause.flatten())
     return {
       ...shape,
       data: {

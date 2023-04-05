@@ -78,7 +78,6 @@ export const authOptions: NextAuthOptions = {
         });
         if (!user) throw new Error("Unknown User");
 
-        console.log("comparing", cred.password, user.password, user)
         const isValidPassword = await bcrypt.compare(
           cred.password,
           user.password
