@@ -29,4 +29,14 @@ model User {
     image         String?
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt
+    Event         Event[]
+}
+
+model Event {
+    id          String   @id @default(cuid())
+    title       String
+    date        DateTime
+    description String
+    user        User     @relation(fields: [userId], references: [id])
+    userId      String
 }
