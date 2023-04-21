@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
+import c from "./SignupForm.module.scss"
+
 const LoginForm = () => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,15 +36,15 @@ const LoginForm = () => {
     {errorMessage && <p>{errorMessage}</p>}
     <form onSubmit={handleSubmit(onSubmit)}>
 
-      <label>Username</label>
-      <input {...register("username", { required: true })} />
+      <label className={c.description}>Username</label>
+      <input className={c.insertField} placeholder="Insert Username" {...register("username", { required: true })} />
       {errors.username && <p>This field is required</p>}
 
-      <label>Password</label>
-      <input type="password" {...register("password", { required: true })} />
+      <label className={c.description}>Password</label>
+      <input className={c.insertField} placeholder="Create Password" type="password" {...register("password", { required: true })} />
       {errors.password && <p>This field is required</p>}
 
-      <button type="submit">Submit</button>
+      <button type="submit" className={c.SignUpButton}>Submit</button>
     </form>
   </div>;
 };

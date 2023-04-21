@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 
+import c from "./SignupForm.module.scss"
+
+
 const SignupForm = () => {
   const router = useRouter();
 
@@ -56,17 +59,20 @@ const SignupForm = () => {
   return <div>
     {errorMessage && <p>{errorMessage}</p>}
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label>Username</label>
-      <input {...register("username", { required: true })} />
-      {errors.username && <p>This field is required</p>}
-      <label>Email</label>
-      <input {...register("email", { required: true })} />
-      {errors.email && <p>This field is required</p>}
-      <label>Password</label>
-      <input type="password" {...register("password", { required: true })} />
-      {errors.password && <p>This field is required</p>}
+      <label className={c.description}>Username*</label>
+      <input className={c.insertField} placeholder="Insert Username" {...register("username", { required: true })} />
+      {errors.username && <p className={c.text}>This field is required</p>}
+      <label className={c.description}>Email*</label>
+      <input className={c.insertField} placeholder="Insert E-Mail" {...register("email", { required: true })} />
+      {errors.email && <p className={c.text}>This field is required</p>}
+      <label className={c.description}>Password*</label>
+      <input className={c.insertField} placeholder="Create Password" type="password" {...register("password", { required: true })} />
+      {errors.password && <p className={c.text}>This field is required</p>}
+      <label className={c.description}>Confirm Password*</label>
+      <input className={c.insertField} placeholder="Confirm Password" type="password" {...register("password", { required: true })} />
+      {errors.password && <p className={c.text}>This field is required</p>}
 
-      <button type="submit">Submit</button>
+      <button type="submit" className={c.SignUpButton}>Submit</button>
     </form>
   </div>;
 };

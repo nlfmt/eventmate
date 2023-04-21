@@ -1,0 +1,30 @@
+.SignUpButton {
+    color: #000000;
+    background-color: var(--green);
+    border: none;
+    border-radius: 4px;
+}
+
+.description {
+    font-weight: bold;
+    text-align: center;
+    color: var(--bg-white);
+}
+
+.text {
+    color: var(--bg-white); 
+}
+
+
+.insertField {
+    color: var(--text-dark);
+    border-color: var(--bg-white);
+    background-color: var(--bg);
+    border-radius: 4px;
+    margin-bottom: 20px;
+    display: flex;
+}
+
+.link {
+    text-decoration: underline;
+}
