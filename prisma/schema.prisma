@@ -16,33 +16,36 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  username      String?   @unique
-  email         String?   @unique
+  id            String                   @id @default(cuid())
+  username      String?                  @unique
+  email         String?                  @unique
   emailVerified DateTime?
   password      String
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  events        Event[]
-  myEvents      Event[]   @relation("EventAuthor")
-  Message       Message[]
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+  events        Event[]                  @relation("EventParticipants")
+  myEvents      Event[]                  @relation("EventAuthor")
+  messages      Message[]                @relation("UserMessages")
+  invitations   EventInvitation[]        @relation("UserInvitations")
+  fulfillments  RequirementFulfillment[] @relation("UserFulfillments")
 }
 
 model Event {
-  id           String        @id @default(cuid())
+  id           String            @id @default(cuid())
   authorId     String
-  author       User          @relation("EventAuthor", fields: [authorId], references: [id])
+  author       User              @relation("EventAuthor", fields: [authorId], references: [id])
   capacity     Int?
-  participants User[]
+  participants User[]            @relation("EventParticipants")
   title        String
   date         DateTime
   latitude     Float?
   longitude    Float?
   description  String
-  chat         Message[]
-  private      Boolean       @default(false)
-  requirements Requirement[]
+  private      Boolean           @default(false)
+  chat         Message[]         @relation("EventChat")
+  requirements Requirement[]     @relation("EventRequirements")
+  invitations  EventInvitation[] @relation("EventInvitations")
 
   @@index([authorId], name: "authorId")
 }
@@ -51,7 +54,7 @@ model Requirement {
   id           String                   @id @default(uuid())
   description  String
   count        Int
-  event        Event?                   @relation(fields: [eventId], references: [id])
+  event        Event?                   @relation("EventRequirements", fields: [eventId], references: [id])
   eventId      String?
   fulfillments RequirementFulfillment[]
 
@@ -61,22 +64,35 @@ model Requirement {
 model RequirementFulfillment {
   id            String      @id @default(uuid())
   quantity      Int
-  userId        String
+  user          User        @relation("UserFulfillments", fields: [userId], references: [id])
   requirementId String
   requirement   Requirement @relation(fields: [requirementId], references: [id])
+  userId        String
 
   @@index([requirementId], name: "requirementId")
+  @@index([userId], name: "userId")
 }
 
 model Message {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   body      String
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation("UserMessages", fields: [authorId], references: [id])
   authorId  String
-  event     Event?   @relation(fields: [eventId], references: [id])
+  event     Event?   @relation("EventChat", fields: [eventId], references: [id])
   eventId   String?
 
   @@index([authorId], name: "authorId")
   @@index([eventId], name: "eventId")
+}
+
+model EventInvitation {
+  id      String @id @default(uuid())
+  event   Event  @relation("EventInvitations", fields: [eventId], references: [id])
+  eventId String
+  user    User   @relation("UserInvitations", fields: [userId], references: [id])
+  userId  String
+
+  @@index([eventId], name: "eventId")
+  @@index([userId], name: "userId")
 }
