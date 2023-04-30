@@ -42,6 +42,8 @@ model Event {
   latitude     Float?
   longitude    Float?
   description  String
+  tags         String
+  category     String
   private      Boolean           @default(false)
   chat         Message[]         @relation("EventChat")
   requirements Requirement[]     @relation("EventRequirements")
