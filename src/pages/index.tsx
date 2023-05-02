@@ -7,6 +7,7 @@ import { MenuOutlined } from "@mui/icons-material";
 import { api } from "@/utils/api";
 import Card from "@/components/LandingPage/Card";
 import type { Event, User } from "@prisma/client";
+import dayjs from "dayjs";
 
 const Home: NextPage = () => {
 

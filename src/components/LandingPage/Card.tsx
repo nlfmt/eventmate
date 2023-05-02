@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import c from "./Card.module.scss";
 
 import type { Event, User } from "@prisma/client";
@@ -17,20 +17,28 @@ import {
   SchoolRounded,
   PaletteRounded,
   TipsAndUpdatesRounded,
+  InfoRounded,
+  ExpandLessRounded,
 } from "@mui/icons-material";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const categories = {
-  "show": ["Show", TheaterComedyRounded],
-  "party": ["Party", CelebrationRounded],
-  "sport": ["Sport", SportsBasketballRounded],
-  "education": ["Education", SchoolRounded],
-  "culture": ["Culture", PaletteRounded],
-  "meetup": ["Meetup", GroupRounded],
-  "other": ["Other", TipsAndUpdatesRounded],
+  show: ["Show", TheaterComedyRounded],
+  party: ["Party", CelebrationRounded],
+  sport: ["Sport", SportsBasketballRounded],
+  education: ["Education", SchoolRounded],
+  culture: ["Culture", PaletteRounded],
+  meetup: ["Meetup", GroupRounded],
+  other: ["Other", TipsAndUpdatesRounded],
 } as const;
 
 export interface CardProps {
-  event: Event & { _count: { participants: number }, author: Omit<User, "password"> };
+  event: Event & {
+    _count: { participants: number };
+    author: Omit<User, "password">;
+  };
 }
 
 const Card = (props: CardProps) => {
@@ -41,12 +49,38 @@ const Card = (props: CardProps) => {
   console.log(title, titleParts);
   if (titleParts.length > 3) title += " " + titleParts.slice(3).join(" ");
 
-  const category = categories[event.category as keyof typeof categories] ?? categories["other"];
+  const category =
+    categories[event.category as keyof typeof categories] ??
+    categories["other"];
   const categoryName = category?.[0];
   const CategoryIcon = category?.[1];
 
+  const [small, setSmall] = useState(true);
+  const desktop = useMediaQuery("(min-width: 500px)");
+  const router = useRouter();
+
+  async function onCardClick() {
+    if (!desktop && small) return setSmall(false);
+    await router.push(`/event/${event.id}`);
+  }
+
   return (
-    <div className={c.card} data-cat={event.category}>
+    <div
+      className={c.card}
+      data-cat={event.category}
+      data-small={desktop ? false : small}
+      onClick={onCardClick}
+    >
+      <div
+        className={c.collapse}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setSmall(true);
+        }}
+      >
+        <ExpandLessRounded />
+      </div>
       <div className={c.tags}>
         {event.tags.split(";").map((tag) => {
           return <span key={tag}>{tag}</span>;
