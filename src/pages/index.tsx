@@ -1,8 +1,7 @@
 import c from "./index.module.scss";
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { MenuOutlined } from "@mui/icons-material";
 
 import { api } from "@/utils/api";

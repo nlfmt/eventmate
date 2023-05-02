@@ -2,7 +2,6 @@
     position: relative;
     z-index: 5;
     background-color: var(--clr);
-    // color: var(--text-inv-light);
     border-radius: var(--radius-large);
     width: 100%;
     height: 15rem;
@@ -25,20 +24,26 @@
         opacity: 0.5;
     }
 
-    &[data-cat="outdoor"] {
-      --clr: #79cf76;
+    &[data-cat="show"] {
+      --clr: var(--purple-light);
     }
-    &[data-cat="indoor"] {
-      --clr: #bc91d8;
+    &[data-cat="party"] {
+      --clr: var(--purple);
     }
-    &[data-cat="concert"] {
-      --clr: #d384c2;
+    &[data-cat="sport"] {
+      --clr: var(--blue-light);
     }
-    &[data-cat="online"] {
-      --clr: #84a7cf;
+    &[data-cat="meetup"] {
+      --clr: var(--blue);
+    }
+    &[data-cat="education"] {
+      --clr: var(--green);
+    }
+    &[data-cat="culture"] {
+      --clr: var(--green-light); 
     }
     &[data-cat="other"] {
-      --clr: #df8e76;
+      --clr: #7c698b;
     }
 
 }
@@ -64,12 +69,19 @@
 .title {
     font-size: 1.2rem;
     font-weight: 700;
-    margin: 0;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
+
+    // This causes the text to be cut off with "..." if it is longer than three lines
+    display: -webkit-box;
     -webkit-line-clamp: 3;
-    // white-space: nowrap;
+    -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.categoryName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-inv);
+  opacity: 0.5;
 }
 
 .middle {
@@ -86,7 +98,7 @@ $info-padding: 1rem;
 
 .info {
     position: relative;
-    background-color: var(--bg-white-dark);
+    background-color: var(--bg-white);
     border-radius: var(--radius-large);
     border-radius: 0 0 var(--radius-large) var(--radius-large);
     padding: $info-padding;
