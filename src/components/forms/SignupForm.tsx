@@ -1,4 +1,4 @@
-import { SignupSchema } from "@/validation/auth";
+import { type SignupSchema } from "@/validation/auth";
 import { api } from "@/utils/api";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
@@ -34,7 +34,7 @@ const SignupForm = () => {
       
       const res = await signIn("credentials", {
         username: user.username,
-        password: getValues("password"),
+        password: getValues().password,
         redirect: false,
       });
 
@@ -50,7 +50,10 @@ const SignupForm = () => {
 
   const onSubmit: SubmitHandler<SignupSchema> = async (data) => {
     setErrorMessage(undefined);
-    signup(data).catch(e => {});
+    try {
+      await signup(data);
+    } catch (_e) {
+    }
   };
 
   return <div>

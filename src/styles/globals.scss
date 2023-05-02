@@ -30,16 +30,22 @@
   --blue-dark: #5a9ec2;
 
   --text: #ffffff;
-  --text-dark: #b6b6b6;
+  --text-dark: #dddddd;
+  --text-darker: #bbbbbb;
   --text-inv: #000000;
   --text-inv-light: #1a1a1a;
 
   --font: "Inter", sans-serif;
   --title-font: "LilyScriptOne", sans-serif;
+
+  --radius: 0.5rem;
+  --radius-large: 1rem;
 }
 
 html,
-body {
+body,
+#__next {
+  height: 100%;
   padding: 0;
   margin: 0;
   font-family: var(--font), -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
