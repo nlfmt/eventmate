@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 import c from "./SignupForm.module.scss"
+import common from "@/styles/common.module.scss"
 import Link from "next/link";
 
 const LoginForm = () => {
@@ -52,8 +53,8 @@ const LoginForm = () => {
       </div>
 
       <div className={c.pass}>Forgot Password?</div>
-      <button type="submit" className={c.SignUpButton}>Submit</button>
-      <div className={c.signin_link}>Don't have an account? <Link href="/signup" className={c.link}> Signup</Link></div>
+      <button type="submit" className={common.submitButton}>Submit</button>
+      <div className={c.signin_link}>Don&apos;t have an account? <Link href="/signup" className={c.link}> Signup</Link></div>
       
     </form>
   </div>;

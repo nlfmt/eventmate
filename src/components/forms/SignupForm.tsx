@@ -6,6 +6,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 
 import c from "./SignupForm.module.scss"
+import common from "@/styles/common.module.scss"
 import Link from "next/link";
 
 
@@ -89,7 +90,7 @@ const SignupForm = () => {
         <label  className={c.label}>Confirm Password</label>
       </div>
 
-      <button type="submit" className={c.SignUpButton}>Submit</button>
+      <button type="submit" className={common.submitButton}>Submit</button>
       <div className={c.signin_link}> Already have an account? <Link href="/login" className={c.link}> Log in</Link></div>
       
     </form>
