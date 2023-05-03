@@ -1,0 +1,5 @@
+{
+  "editor.tabSize": 2,
+  // Enabling this will sometimes cause VsCode to confuse the indentation of a file
+  "editor.detectIndentation": false
+}
