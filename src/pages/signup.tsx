@@ -12,11 +12,12 @@ const SignupPage: NextPage = () => {
       <Head>
         <title>Sign Up</title>
       </Head>
-      <main className={common.main}>
-        <h1 className={c.text}>Event Mate</h1>
+      <div className={common.main}>  
+      <main className={c.center}>
+        <h1>Event Mate</h1>
         <SignupForm />
-        <p className={c.text}>Already have an account? <a href="Link-Ziel" className={c.link}> Log in</a></p>
       </main>
+      </div>
     </>
   );
 };

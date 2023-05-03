@@ -13,10 +13,11 @@ const LoginPage: NextPage = () => {
         <title>Login</title>
       </Head>
       <main className={common.main}>
-        <h1 className={c.text}>Event Mate</h1>
-        <p className={c.text}>Perfectly planned<br></br>-unforgettable experience!</p>
-        <LoginForm />
-        <p className={c.text}>Don't have an account? <a href="Link-Ziel" className={c.link}> Sign up</a></p>
+        <div className={c.center}>
+          <h1>Event Mate</h1>
+          <p>Perfectly planned<br></br>-unforgettable experience!</p>
+          <LoginForm />
+        </div>
       </main>
     </>
   );

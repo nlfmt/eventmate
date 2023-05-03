@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
 import c from "./SignupForm.module.scss"
+import Link from "next/link";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const LoginForm = () => {
     register, // function to register a form field
     handleSubmit,
     formState: { errors },
+    getValues
   } = useForm<LoginSchema>();
 
 
@@ -34,17 +36,25 @@ const LoginForm = () => {
 
   return <div>
     {errorMessage && <p>{errorMessage}</p>}
+
     <form onSubmit={handleSubmit(onSubmit)}>
 
-      <label className={c.description}>Username</label>
-      <input className={c.insertField} placeholder="Insert Username" {...register("username", { required: true })} />
-      {errors.username && <p>This field is required</p>}
+      <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+        <input {...register("username", { required: true })} />
+        <span className={c.span}></span>
+        <label>Username</label>
+      </div>
+      
+      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <input type="password" {...register("password", { required: true })} />
+        <span className={c.span}></span>
+        <label>Password</label>
+      </div>
 
-      <label className={c.description}>Password</label>
-      <input className={c.insertField} placeholder="Create Password" type="password" {...register("password", { required: true })} />
-      {errors.password && <p>This field is required</p>}
-
+      <div className={c.pass}>Forgot Password?</div>
       <button type="submit" className={c.SignUpButton}>Submit</button>
+      <div className={c.signin_link}>Don't have an account? <Link href="/signup" className={c.link}> Signup</Link></div>
+      
     </form>
   </div>;
 };

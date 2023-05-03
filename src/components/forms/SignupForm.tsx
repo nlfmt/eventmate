@@ -6,6 +6,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 
 import c from "./SignupForm.module.scss"
+import Link from "next/link";
 
 
 const SignupForm = () => {
@@ -61,21 +62,36 @@ const SignupForm = () => {
 
   return <div>
     {errorMessage && <p>{errorMessage}</p>}
+    
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label className={c.description}>Username*</label>
-      <input className={c.insertField} placeholder="Insert Username" {...register("username", { required: true })} />
-      {errors.username && <p className={c.text}>This field is required</p>}
-      <label className={c.description}>Email*</label>
-      <input className={c.insertField} placeholder="Insert E-Mail" {...register("email", { required: true })} />
-      {errors.email && <p className={c.text}>This field is required</p>}
-      <label className={c.description}>Password*</label>
-      <input className={c.insertField} placeholder="Create Password" type="password" {...register("password", { required: true })} />
-      {errors.password && <p className={c.text}>This field is required</p>}
-      <label className={c.description}>Confirm Password*</label>
-      <input className={c.insertField} placeholder="Confirm Password" type="password" {...register("password", { required: true })} />
-      {errors.password && <p className={c.text}>This field is required</p>}
+
+      <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+        <input {...register("username", { required: true })} />
+        <span></span>
+        <label  className={c.label}>Username</label>
+      </div>
+
+      <div className={c.txt_field} data-error={!!errors.email} data-has-text={!!getValues().email}>
+        <input {...register("email", { required: true })} />
+        <span></span>
+        <label className={c.label}>Email</label>
+      </div>
+
+      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <input type="password" {...register("password", { required: true })} />
+        <span></span>
+        <label  className={c.label}>Password</label>
+      </div>
+
+      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <input type="password" {...register("password", { required: true })} />
+        <span></span>
+        <label  className={c.label}>Confirm Password</label>
+      </div>
 
       <button type="submit" className={c.SignUpButton}>Submit</button>
+      <div className={c.signin_link}> Already have an account? <Link href="/login" className={c.link}> Log in</Link></div>
+      
     </form>
   </div>;
 };
