@@ -28,6 +28,7 @@ const categories = {
   "meetup": ["Meetup", GroupRounded],
   "other": ["Other", TipsAndUpdatesRounded],
 } as const;
+type Category = keyof typeof categories;
 
 export interface CardProps {
   event: Event & { _count: { participants: number }, author: Omit<User, "password"> };
@@ -35,13 +36,16 @@ export interface CardProps {
 
 const Card = (props: CardProps) => {
   const { event } = props;
-  // Only allow three newlines in the title
+  // Only allow two newlines in the title
+  const allowed = 2;
   const titleParts = event.title.split("\n");
-  let title = titleParts.slice(0, 3).join("\n");
+  let title = titleParts.slice(0, allowed).join("\n");
   console.log(title, titleParts);
-  if (titleParts.length > 3) title += " " + titleParts.slice(3).join(" ");
+  if (titleParts.length > 3) title += " " + titleParts.slice(allowed).join(" ");
 
-  const category = categories[event.category as keyof typeof categories] ?? categories["other"];
+  const category =
+    categories[event.category as Category] ??
+    categories["other"];
   const categoryName = category?.[0];
   const CategoryIcon = category?.[1];
 

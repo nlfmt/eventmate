@@ -7,6 +7,7 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import c from "./SignupForm.module.scss"
 import common from "@/styles/common.module.scss"
 import Link from "next/link";
+import { KeyRounded, PersonRounded } from "@mui/icons-material";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -40,16 +41,18 @@ const LoginForm = () => {
 
     <form onSubmit={handleSubmit(onSubmit)}>
 
-      <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
-        <input {...register("username", { required: true })} />
-        <span className={c.span}></span>
-        <label>Username</label>
-      </div>
-      
-      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
-        <input type="password" {...register("password", { required: true })} />
-        <span className={c.span}></span>
-        <label>Password</label>
+      <div className={c.inputs}>
+        <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+          <PersonRounded />
+          <input {...register("username", { required: true })} />
+          <label>Username</label>
+        </div>
+        
+        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+          <KeyRounded />
+          <input type="password" {...register("password", { required: true })} />
+          <label>Password</label>
+        </div>
       </div>
 
       <div className={c.pass}>Forgot Password?</div>
