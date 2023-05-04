@@ -5,6 +5,11 @@ import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 
+import c from "./SignupForm.module.scss"
+import common from "@/styles/common.module.scss"
+import Link from "next/link";
+
+
 const SignupForm = () => {
   const router = useRouter();
 
@@ -58,18 +63,36 @@ const SignupForm = () => {
 
   return <div>
     {errorMessage && <p>{errorMessage}</p>}
+    
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label>Username</label>
-      <input {...register("username", { required: true })} />
-      {errors.username && <p>This field is required</p>}
-      <label>Email</label>
-      <input {...register("email", { required: true })} />
-      {errors.email && <p>This field is required</p>}
-      <label>Password</label>
-      <input type="password" {...register("password", { required: true })} />
-      {errors.password && <p>This field is required</p>}
 
-      <button type="submit">Submit</button>
+      <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+        <input {...register("username", { required: true })} />
+        <span></span>
+        <label  className={c.label}>Username</label>
+      </div>
+
+      <div className={c.txt_field} data-error={!!errors.email} data-has-text={!!getValues().email}>
+        <input {...register("email", { required: true })} />
+        <span></span>
+        <label className={c.label}>Email</label>
+      </div>
+
+      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <input type="password" {...register("password", { required: true })} />
+        <span></span>
+        <label  className={c.label}>Password</label>
+      </div>
+
+      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <input type="password" {...register("password", { required: true })} />
+        <span></span>
+        <label  className={c.label}>Confirm Password</label>
+      </div>
+
+      <button type="submit" className={common.submitButton}>Submit</button>
+      <div className={c.signin_link}> Already have an account? <Link href="/login" className={c.link}> Log in</Link></div>
+      
     </form>
   </div>;
 };

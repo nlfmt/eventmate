@@ -1,0 +1,110 @@
+.center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    /*background-color: gray;*/
+    border-radius: 10px;
+}
+
+.center h1{
+    text-align: center;
+    padding: 0 0 20px 0;
+    border-bottom: 1px solid var(--green);
+    color: var(--bg-white-dark);
+    font-family: var(--title-font);
+    font-size: 45px;
+}
+
+.center form{
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+form .txt_field{
+    position: relative;
+    border-bottom: 2px solid var(--bg-white-dark);
+    margin: 30px 0;
+
+}
+
+form .txt_field[data-error="true"] {
+  border-color: var(--error);
+}
+
+.txt_field input{
+    width: 100%;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16;
+    border: none;
+    background: none;
+    outline: none;
+    color: var(--bg-white-dark);
+}
+.txt_field label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: var(--bg-white-dark);
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .2s;
+}
+
+.span::before{
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background: var(--green);
+    content: '';
+    transition: .2s;
+}
+
+.txt_field:focus-within label,
+.txt_field[data-has-text="true"] label {
+    top: -5px;
+    color: var(--green);
+}
+
+.txt_field:focus-within span::before,
+.txt_field[data-has-text="true"] label {
+    width: 100%;
+}
+
+.pass{
+    margin: -2px 0 20px 5px;
+    color: var(--bg-white-dark);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+
+.signin_link{
+    margin: 30px 0;
+    text-align: center;
+    font-size: 16px;
+    color: var(--bg-white-dark);
+}
+
+.signin_link a{
+    color: var(--green);
+    text-decoration: underline;
+}
+
+.center p {
+    color: var(--bg-white-dark);
+    text-align: center;
+    font-size: 20px;
+    padding: 0 0 20px 0;
+}
+
+.required_text{
+    color: var(--bg-white-dark);
+    font-size: 5px;
+    text-decoration: none;
+}

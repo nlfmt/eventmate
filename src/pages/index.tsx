@@ -75,5 +75,6 @@ const MyEventsSection = () => {
 
 const JoinedEventsSection = () => {
   const { data: events } = api.event.joinedEvents.useQuery();
+  const { data: participants } = api.event.getParticipants.useQuery({ eventId: "" });
   return <EventSection title="Joined Events" events={events} />;
 }
