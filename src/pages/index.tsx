@@ -24,6 +24,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={c.main}>
+        {/* <SideBar /> */}
         <header className={c.navbar}>
           <span>EventMate</span>
           <MenuOutlined />

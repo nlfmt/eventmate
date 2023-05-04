@@ -15,7 +15,10 @@ const LoginPage: NextPage = () => {
       <main className={common.main}>
         <div className={c.center}>
           <h1>Event Mate</h1>
-          <p>Perfectly planned<br></br>-unforgettable experience!</p>
+          <p>
+            Perfectly planned
+            <br /> - unforgettable experience!
+          </p>
           <LoginForm />
         </div>
       </main>

@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import c from "./SignupForm.module.scss"
 import common from "@/styles/common.module.scss"
 import Link from "next/link";
+import { EmailRounded, KeyRounded, PersonRounded } from "@mui/icons-material";
 
 
 const SignupForm = () => {
@@ -66,29 +67,29 @@ const SignupForm = () => {
     
     <form onSubmit={handleSubmit(onSubmit)}>
 
-      <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
-        <input {...register("username", { required: true })} />
-        <span></span>
-        <label  className={c.label}>Username</label>
+      <div className={c.inputs}>
+        <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+          <PersonRounded />
+          <input {...register("username", { required: true })} />
+          <label  className={c.label}>Username</label>
+        </div>
+        <div className={c.txt_field} data-error={!!errors.email} data-has-text={!!getValues().email}>
+          <EmailRounded />
+          <input {...register("email", { required: true })} />
+          <label className={c.label}>Email</label>
+        </div>
+        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+          <KeyRounded />
+          <input type="password" {...register("password", { required: true })} />
+          <label  className={c.label}>Password</label>
+        </div>
+        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+          <KeyRounded />
+          <input type="password" {...register("password", { required: true })} />
+          <label  className={c.label}>Confirm Password</label>
+        </div>
       </div>
-
-      <div className={c.txt_field} data-error={!!errors.email} data-has-text={!!getValues().email}>
-        <input {...register("email", { required: true })} />
-        <span></span>
-        <label className={c.label}>Email</label>
-      </div>
-
-      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
-        <input type="password" {...register("password", { required: true })} />
-        <span></span>
-        <label  className={c.label}>Password</label>
-      </div>
-
-      <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
-        <input type="password" {...register("password", { required: true })} />
-        <span></span>
-        <label  className={c.label}>Confirm Password</label>
-      </div>
+      <div style={{ height: "4rem" }}></div>
 
       <button type="submit" className={common.submitButton}>Submit</button>
       <div className={c.signin_link}> Already have an account? <Link href="/login" className={c.link}> Log in</Link></div>
