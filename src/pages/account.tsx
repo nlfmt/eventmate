@@ -14,23 +14,37 @@ const AccountPage: NextPage = () => {
         // router.push("/login");
     }
     
-    //hier zwei separate components erstellen
+    const NotLoggedIn = () => {
+        return (
+            <>
+                <div>not logged in</div>
+                <Link href="/login" >Login</Link>
+            </>
+        );
+    };
+
+    const LoggedIn = () => {
+        return (
+            <>
+                <div>
+                    User: {sessionData?.user.name}
+                    EMail: {sessionData?.user.email}
+                </div>
+            </>
+        );
+    };
+
     return (
         <>
             <Head>
                 <title>Account</title>
+                <h1>Account Information</h1>
             </Head>
             <main> 
                 {!sessionData ? (
-                    <>
-                        <div>not logged in</div>
-                        <Link href="/login" >Login</Link>
-                    </>
+                    <NotLoggedIn />
                 ) : (
-                    <div>
-                        User: {sessionData.user.name}
-                        EMail: {sessionData.user.email}
-                    </div>
+                    <LoggedIn/>
                 )}
             </main>
         </>
