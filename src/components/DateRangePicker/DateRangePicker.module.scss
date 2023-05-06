@@ -1,0 +1,183 @@
+.popover {
+  background-color: var(--bg-light);
+  width: 100%;
+  left: 0 !important;
+  top: unset !important;
+  bottom: 0 !important;
+  box-shadow: 0 0 2rem 1rem rgba(0, 0, 0, 0.7);
+  padding-bottom: 1rem;
+  height: 80%;
+  max-height: unset !important;
+
+  :global(.react-aria-Dialog) {
+    width: 100%;
+    height: 100%;
+    // margin-bottom: 5rem;
+
+    :global(.react-aria-RangeCalendar) {
+      width: 100%;
+      height: 100%;
+      // height: 30rem;
+      background: var(--bg-light);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      header {
+        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 5rem;
+        color: var(--text);
+
+        :global(.react-aria-Heading) {
+          font-size: 1.3rem;
+          margin: 0;
+        }
+
+        :global(.react-aria-Button) {
+          width: 4rem;
+          height: 100%;
+          background: none;
+          border: none;
+          outline: none;
+
+          & svg {
+            fill: var(--text);
+          }
+
+          &[disabled] {
+            opacity: 0.2;
+          }
+        }
+      }
+
+      :global(.react-aria-CalendarGrid) {
+        width: 100%;
+        height: 100%;
+        flex-grow: 1;
+        border-spacing: 0;
+
+        td {
+          padding: 0;
+          vertical-align: middle;
+          height: 0; // somehow makes the td's height 100% of the parent
+        }
+
+        :global(.react-aria-CalendarHeaderCell) {
+          height: 2rem;
+          color: var(--text);
+          opacity: 0.1;
+        }
+
+        :global(.react-aria-CalendarCell) {
+          height: 3rem;
+          width: 100%;
+          display: grid;
+          place-items: center;
+          color: var(--text);
+          outline: none;
+
+          &[data-selected="true"] {
+            background: var(--bg-lighter);
+          }
+
+          &[data-selection-start="true"] {
+            background: linear-gradient(to right, transparent 50%, var(--bg-lighter) 50%);
+          }
+
+          &[data-selection-end="true"] {
+            background: linear-gradient(to left, transparent 50%, var(--bg-lighter) 50%);
+          }
+
+          &[data-selection-start="true"][data-selection-end="true"] {
+            background: none;
+          }
+
+          &[data-selection-start="true"],
+          &[data-selection-end="true"] {
+            &>div {
+              background: var(--green);
+              color: var(--text-inv);
+            }
+          }
+
+          &[data-outside-month="true"],
+          &[data-disabled="true"],
+          &[data-outside-visible-range="true"] {
+            opacity: 0;
+          }
+
+          &>div {
+            max-width: 3rem;
+            height: 2rem;
+            display: grid;
+            place-items: center;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+}
+
+.dateRangePicker {
+  display: flex;
+  flex-direction: column;
+  max-width: 30rem;
+
+  :global(.react-aria-Group) {
+    padding: 0.5rem;
+    color: var(--text);
+    border-radius: var(--radius-large);
+    background-color: var(--bg);
+    display: flex;
+    align-items: stretch;
+    flex-grow: 1;
+    gap: 0.5rem;
+
+    &>span {
+      display: grid;
+      place-items: center;
+      margin-left: auto;
+    }
+  }
+
+  :global(.react-aria-DateInput) {
+    display: flex;
+    flex-grow: 1;
+    max-width: 8rem;
+    padding: 0.5rem;
+    justify-content: space-between;
+    background-color: var(--bg-light);
+    border-radius: var(--radius);
+
+    :global(.react-aria-DateSegment) {
+      &:focus-within {
+        outline: none;
+        box-shadow: 0 2px 0 var(--green);
+      }
+    }
+  }
+
+  :global(.react-aria-Button) {
+    border: none;
+    background-color: var(--green);
+    margin-left: auto;
+    border-radius: var(--radius);
+    outline: none;
+
+    &>svg {
+      fill: rgba(0, 0, 0, 0.8);
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .dateRangePicker :global(.react-aria-Group)>span:first-child {
+    display: none;
+  }
+}

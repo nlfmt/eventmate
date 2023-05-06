@@ -5,8 +5,6 @@ import type { Event, User } from "@prisma/client";
 import dayjs from "dayjs";
 
 import {
-  ParkRounded,
-  MeetingRoomRounded,
   PersonRounded,
   GroupRounded,
   EventNoteRounded,
@@ -17,11 +15,9 @@ import {
   SchoolRounded,
   PaletteRounded,
   TipsAndUpdatesRounded,
-  InfoRounded,
   ExpandLessRounded,
 } from "@mui/icons-material";
 import useMediaQuery from "@/hooks/useMediaQuery";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 const categories = {
@@ -52,8 +48,7 @@ const Card = (props: CardProps) => {
   if (titleParts.length > 3) title += " " + titleParts.slice(allowed).join(" ");
 
   const category =
-    categories[event.category as Category] ??
-    categories["other"];
+    categories[event.category as Category] ?? categories["other"];
   const categoryName = category?.[0];
   const CategoryIcon = category?.[1];
 
@@ -106,16 +101,14 @@ const Card = (props: CardProps) => {
       <div className={c.info}>
         <div className={c.category}>
           <svg
-            width={100}
-            height={44}
-            viewBox="0 0 100 44"
             className={c.categoryBG}
             xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 100"
           >
             <path
-              d="M60 0C80 0 100 0 100 0V44C100 44 -32 44 8 44C48 44 30 0 60 0Z"
               fill="white"
-              fillOpacity="0.5"
+              fill-opacity="0.5"
+              d="M200,100H0C50,100,50,0,100,0H200Z"
             />
           </svg>
           <div className={c.categoryIcon}>

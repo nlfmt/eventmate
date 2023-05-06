@@ -7,7 +7,8 @@ import { MenuOutlined } from "@mui/icons-material";
 import { api } from "@/utils/api";
 import Card from "@/components/LandingPage/Card";
 import type { Event, User } from "@prisma/client";
-import dayjs from "dayjs";
+import MyDateRangePicker from "@/components/DateRangePicker/DateRangePicker";
+
 
 const Home: NextPage = () => {
 
@@ -30,9 +31,9 @@ const Home: NextPage = () => {
           <MenuOutlined />
         </header>
         <div className={c.searchSection}>
+          <h1>Find Events</h1>
           <div className={c.searchBar}>
-            <input type="text" placeholder="Search for events" />
-            <input type="text" placeholder="Search for events" />
+            <MyDateRangePicker />
           </div>
         </div>
         {session.data && <JoinedEventsSection />}
@@ -76,6 +77,5 @@ const MyEventsSection = () => {
 
 const JoinedEventsSection = () => {
   const { data: events } = api.event.joinedEvents.useQuery();
-  const { data: participants } = api.event.getParticipants.useQuery({ eventId: "" });
   return <EventSection title="Joined Events" events={events} />;
 }

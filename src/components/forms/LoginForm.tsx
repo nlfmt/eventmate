@@ -1,4 +1,4 @@
-import { LoginSchema } from "@/validation/auth";
+import type { LoginSchema } from "@/validation/auth";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
