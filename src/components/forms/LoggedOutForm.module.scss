@@ -1,0 +1,39 @@
+
+.user-logo.frame{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--green);
+  border: 3px solid black;
+}
+
+.user-info{
+  background-color: black;
+  text-align: center;
+  border-bottom: 2px solid var(--green);
+  color: var(--text);
+  font-size: 4rem;
+  margin: 2rem;
+  white-space: nowrap;
+  color: var(--bg-white-dark);
+  text-align: center;
+  font-size: 1.3rem;
+  padding: 2rem 0;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.h1{
+  text-align: center;
+      
+      border-bottom: 2px solid var(--green);
+      font-size: 4rem;
+      margin: 2rem;
+      white-space: nowrap;
+}
+
+.button{
+  color: black;
+}
+

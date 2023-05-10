@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 
-import c from "./LoginForm.module.scss"
 
 const LoginForm = () => {
   const router = useRouter();
