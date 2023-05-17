@@ -127,7 +127,7 @@
 .dateRangePicker {
   display: flex;
   flex-direction: column;
-  max-width: 30rem;
+  border-radius: var(--radius-large);
 
   :global(.react-aria-Group) {
     padding: 0.5rem;
@@ -165,13 +165,14 @@
 
   :global(.react-aria-Button) {
     border: none;
-    background-color: var(--green);
+    background-color: var(--bg-lighter);
     margin-left: auto;
     border-radius: var(--radius);
     outline: none;
 
     &>svg {
-      fill: rgba(0, 0, 0, 0.8);
+      margin-top: 0.2rem;
+      fill: var(--text);
     }
   }
 }

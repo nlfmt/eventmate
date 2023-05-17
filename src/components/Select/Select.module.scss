@@ -1,0 +1,127 @@
+/* reset */
+.SelectRoot button {
+  all: unset;
+}
+
+.SelectTrigger {
+  // all: unset;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: var(--radius-large);
+  padding: 0.5rem 1rem;
+  height: 3rem;
+  font-size: 1rem;
+  gap: 0.5rem;
+  color: var(--text);
+  background-color: var(--bg);
+
+  & > span:first-of-type {
+    margin-right: auto;
+  }
+}
+
+.SelectTrigger[data-placeholder] {
+  color: var(--text-darker);
+}
+
+.SelectArrow {
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  height: 100%;
+
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
+
+.SelectContent {
+  overflow: hidden;
+  background-color: var(--bg-light);
+  border-radius: var(--radius-large);
+  box-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.3);
+  z-index: 100;
+  border: 1px solid var(--bg-lighter);
+
+}
+
+.SelectViewport {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.SelectItem {
+  color: var(--text);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  // height: 25px;
+  padding: 0.5rem;
+  position: relative;
+  user-select: none;
+  // background-color: var(--bg-lighter);
+}
+.SelectItem[data-disabled] {
+  & > * {
+    opacity: 0.5;
+  }
+  pointer-events: none;
+}
+.SelectItem[data-highlighted] {
+  outline: none;
+  background-color: var(--bg-white);
+  color: var(--violet1);
+}
+.SelectItem[data-state="checked"] {
+  background-color: var(--green);
+  color: var(--violet1);
+}
+
+.emptyItem {
+  font-style: italic;
+}
+
+.SelectLabel {
+  padding: 0 25px;
+  font-size: 12px;
+  line-height: 25px;
+  color: var(--bg-light);
+}
+
+.SelectSeparator {
+  height: 1px;
+  background-color: var(--purple);
+  margin: 5px;
+}
+
+.SelectItemIndicator {
+  position: absolute;
+  right: 0.5rem;
+  width: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SelectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.5rem;
+  // background: var(--bg-light);
+  box-shadow: 0 0 0.5rem 0.2rem var(--bg-light);
+  color: var(--text);
+  cursor: default;
+  z-index: +1;
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}

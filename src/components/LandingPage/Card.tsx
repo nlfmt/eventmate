@@ -9,27 +9,12 @@ import {
   GroupRounded,
   EventNoteRounded,
   WatchLater,
-  TheaterComedyRounded,
-  CelebrationRounded,
-  SportsBasketballRounded,
-  SchoolRounded,
-  PaletteRounded,
-  TipsAndUpdatesRounded,
   ExpandLessRounded,
 } from "@mui/icons-material";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useRouter } from "next/router";
 
-const categories = {
-  show: ["Show", TheaterComedyRounded],
-  party: ["Party", CelebrationRounded],
-  sport: ["Sport", SportsBasketballRounded],
-  education: ["Education", SchoolRounded],
-  culture: ["Culture", PaletteRounded],
-  meetup: ["Meetup", GroupRounded],
-  other: ["Other", TipsAndUpdatesRounded],
-} as const;
-type Category = keyof typeof categories;
+import categories, { type Category } from "@/utils/categories";
 
 export interface CardProps {
   event: Event & {
