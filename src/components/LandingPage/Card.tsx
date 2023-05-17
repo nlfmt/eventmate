@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import c from "./Card.module.scss";
 
 import type { Event, User } from "@prisma/client";
@@ -15,6 +15,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import { useRouter } from "next/router";
 
 import categories, { type Category } from "@/utils/categories";
+import OverlayContext from "@/contexts/OverlayContext";
 
 export interface CardProps {
   event: Event & {
@@ -41,7 +42,13 @@ const Card = (props: CardProps) => {
   const desktop = useMediaQuery("(min-width: 500px)");
   const router = useRouter();
 
-  async function onCardClick() {
+  const { overlay } = useContext(OverlayContext);
+
+  const onCardClick: React.MouseEventHandler<HTMLDivElement> = async e => {
+    if (e.defaultPrevented) return;
+    console.log(e);
+    // e.preventDefault();
+    // e.stopPropagation();
     if (!desktop && small) return setSmall(false);
     await router.push(`/event/${event.id}`);
   }
@@ -51,11 +58,12 @@ const Card = (props: CardProps) => {
       className={c.card}
       data-cat={event.category}
       data-small={desktop ? false : small}
-      onClick={onCardClick}
+      onClick={overlay ? undefined : onCardClick}
     >
       <div
         className={c.collapse}
-        onClick={(e) => {
+        onClick={overlay ? undefined : (e) => {
+          if (e.defaultPrevented) return;
           e.preventDefault();
           e.stopPropagation();
           setSmall(true);
@@ -92,7 +100,7 @@ const Card = (props: CardProps) => {
           >
             <path
               fill="white"
-              fill-opacity="0.5"
+              fillOpacity="0.5"
               d="M200,100H0C50,100,50,0,100,0H200Z"
             />
           </svg>

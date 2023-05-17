@@ -23,13 +23,6 @@ export interface DateRangePickerProps extends ARIADateRangePickerProps<CalendarD
 }
 
 const DateRangePicker = ({ className, ...props }: DateRangePickerProps) => {
-  const now = new Date();
-  const start = new CalendarDate(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    now.getDate()
-  );
-  const end = start.add({ days: 7 });
 
   return (
     <SSRProvider>
@@ -38,8 +31,7 @@ const DateRangePicker = ({ className, ...props }: DateRangePickerProps) => {
           className={classes(c.dateRangePicker, className)}
           aria-label="Select Date Range"
           hourCycle={24}
-          defaultValue={{ start, end }}
-          minValue={start}
+          minValue={props.defaultValue?.start}
           {...props}
         >
           <Group>

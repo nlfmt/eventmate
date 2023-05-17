@@ -20,18 +20,20 @@
   gap: 1rem;
   width: 100%;
   max-width: 30rem;
+}
 
-  input {
-    outline: none;
-    border: none;
-    background-color: var(--bg);
-    border-radius: var(--radius-large);
-    padding: 1rem 2rem;
-    width: 100%;
-    font-size: 1rem;
-    color: var(--text);
-    font-family: var(--font);
-  }
+.queryInput {
+  border: none;
+  flex-grow: 1;
+  max-width: 30rem;
+  border-radius: var(--radius-large);
+  background-color: var(--bg);
+  padding: 0 1rem;
+  height: 3rem;
+  font-size: 1rem;
+  color: var(--text);
+  font-family: var(--font);
+  box-shadow: var(--shadow1);
 }
 
 .datePicker {

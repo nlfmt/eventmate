@@ -63,4 +63,22 @@ a {
 
 * {
   box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-family: var(--font);
+}
+
+
+*::-webkit-scrollbar {
+  width: 1rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--bg-lighter);
+  border: 0.2rem solid var(--bg);
+  border-radius: var(--radius);
 }

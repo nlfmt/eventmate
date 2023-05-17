@@ -8,6 +8,16 @@ import { api } from "@/utils/api";
 import Card from "@/components/LandingPage/Card";
 import type { Event, User } from "@prisma/client";
 import SearchSection from "@/components/LandingPage/SearchSection";
+import { classes } from "@/utils/utils";
+
+export const PlaceHolderSideBar = () => {
+  return (
+    <header className={c.navbar}>
+      <span>EventMate</span>
+      <MenuOutlined />
+    </header>
+  );
+};
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -24,10 +34,7 @@ const Home: NextPage = () => {
       </Head>
       <main className={c.main}>
         {/* <SideBar /> */}
-        <header className={c.navbar}>
-          <span>EventMate</span>
-          <MenuOutlined />
-        </header>
+        <PlaceHolderSideBar />
 
         <SearchSection />
         <NewEventsSection />
@@ -41,19 +48,20 @@ const Home: NextPage = () => {
 export default Home;
 
 interface EventSectionProps {
-  title: string;
+  title?: string;
+  className?: string;
   events:
     | (Event & { _count: { participants: number }; author: User })[]
     | undefined;
 }
 
-const EventSection = (props: EventSectionProps) => {
+export const EventSection = (props: EventSectionProps) => {
   return (
-    <div className={c.eventSection}>
-      <div className={c.sectionTitle}>
+    <div className={classes(c.eventSection, props.className)}>
+      {props.title && <div className={c.sectionTitle}>
         <span>{props.title}</span>
         <div />
-      </div>
+      </div>}
       {props.events && props.events.length > 0 ? (
         <div className={c.eventList}>
           {props.events.map((event) => {

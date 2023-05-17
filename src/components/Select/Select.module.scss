@@ -16,6 +16,7 @@
   gap: 0.5rem;
   color: var(--text);
   background-color: var(--bg);
+  outline: none;
 
   & > span:first-of-type {
     margin-right: auto;
@@ -44,9 +45,8 @@
   background-color: var(--bg-light);
   border-radius: var(--radius-large);
   box-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.3);
-  z-index: 100;
+  z-index: 500;
   border: 1px solid var(--bg-lighter);
-
 }
 
 .SelectViewport {

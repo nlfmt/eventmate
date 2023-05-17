@@ -5,6 +5,7 @@ import { KeyboardArrowDownRounded, KeyboardArrowUpRounded, CheckRounded } from "
 
 import c from "./Select.module.scss"
 import { classes } from "@/utils/utils";
+import OverlayContext from "@/contexts/OverlayContext";
 
 interface SelectProps extends RadixSelectProps {
   label?: string;
@@ -15,8 +16,21 @@ interface SelectProps extends RadixSelectProps {
 }
 
 const SelectComp = ({ label, options, placeholder, allowEmpty, className, ...props }: SelectProps) => {
+
+  const [open, setOpen] = React.useState(false);
+  const { setOverlay } = React.useContext(OverlayContext);
+
   return (
-    <Select.Root {...props}>
+    <Select.Root
+      open={open}
+      onOpenChange={v => {
+        setOpen(v);
+        // For some reason we have to use a timeout to make the cards
+        // ignore click events after the overlay is closed
+        setTimeout(() => setOverlay(v), 0);
+      }}
+      {...props}
+    >
       <Select.Trigger className={classes(c.SelectTrigger, className)} aria-label={label}>
         <Select.Value placeholder={placeholder} />
         <Select.Icon className={c.SelectArrow}>

@@ -5,66 +5,86 @@ import categories, { type Category } from "@/utils/categories";
 
 import DateRangePicker from "@/components/DateRangePicker/DateRangePicker";
 import Select from "@/components/Select/Select";
-import { CalendarDate } from "@internationalized/date";
+import {
+  type CalendarDate,
+} from "@internationalized/date";
 import { ArrowForwardRounded } from "@mui/icons-material";
 import { useRouter } from "next/router";
 
 const SearchSection = () => {
-  const router = useRouter();
-
-  const [category, setCategory] = React.useState<Category | "">("");
-  const now = new Date();
-  const start = new CalendarDate(
-    now.getFullYear(),
-    now.getMonth() + 1,
-    now.getDate()
+  return (
+    <div className={c.searchSection}>
+      <h1>Find Events</h1>
+      <SearchFilters />
+    </div>
   );
-  const end = start.add({ days: 7 });
-  const [dateRange, setDateRange] = React.useState<{
-    start: CalendarDate;
-    end: CalendarDate;
-  } | null>({ start, end });
+};
 
-  function findEvents() {
+export interface SearchFilterProps {
+  textSearch?: boolean;
+  defaults?: {
+    category?: Category;
+    dateRange?: { start: CalendarDate; end: CalendarDate } | null;
+    query?: string;
+  }
+}
+type DateRange = { start: CalendarDate; end: CalendarDate };
+
+export const SearchFilters = ({ defaults, textSearch }: SearchFilterProps) => {
+  const router = useRouter();
+  const [category, setCategory] = React.useState<Category | "">(defaults?.category ?? "");
+  const [dateRange, setDateRange] = React.useState<DateRange | null>(defaults?.dateRange ?? null);
+  const [query, setQuery] = React.useState(defaults?.query ?? "");
+
+  function findEvents(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
     router.push({
       pathname: "search",
       query: {
         category,
         start: dateRange?.start.toString(),
         end: dateRange?.end.toString(),
+        q: query,
       },
     });
   }
 
   return (
-    <div className={c.searchSection}>
-      <h1>Find Events</h1>
-      <div className={c.searchBar}>
-        <DateRangePicker
-          value={dateRange}
-          onChange={setDateRange}
-          className={c.datePicker}
+    <form className={c.searchBar} onSubmit={findEvents}>
+      {textSearch && (
+        <input
+          placeholder="Search Events..."
+          type="text"
+          className={c.queryInput}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
-        <div className={c.selectWrapper}>
-          <Select
-            className={c.selectBox}
-            value={category}
-            allowEmpty
-            onValueChange={(v) => setCategory(v as Category)}
-            placeholder="Select a Category..."
-            options={Object.entries(categories).map((c) => {
-              return { value: c[0], label: c[1][0] };
-            })}
-          />
-          <button className={c.searchButton} onClick={findEvents}>
-            <span>Find</span>
-            <div className={c.searchIcon}>
-              <ArrowForwardRounded />
-            </div>
-          </button>
-        </div>
+      )}
+      <DateRangePicker
+        value={dateRange}
+        onChange={setDateRange}
+        className={c.datePicker}
+      />
+      <div className={c.selectWrapper}>
+        <Select
+          className={c.selectBox}
+          value={category}
+          allowEmpty
+          onValueChange={(v) => setCategory(v as Category)}
+          placeholder="Select a Category..."
+          options={Object.entries(categories).map((c) => {
+            return { value: c[0], label: c[1][0] };
+          })}
+        />
+        <button className={c.searchButton} type="submit">
+          <span>Find</span>
+          <div className={c.searchIcon}>
+            <ArrowForwardRounded />
+          </div>
+        </button>
       </div>
-    </div>
+    </form>
   );
 };
 
