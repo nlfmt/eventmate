@@ -23,6 +23,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={c.main}>
+        {/* <SideBar /> */}
         <header className={c.navbar}>
           <span>EventMate</span>
           <MenuOutlined />
@@ -74,5 +75,6 @@ const MyEventsSection = () => {
 
 const JoinedEventsSection = () => {
   const { data: events } = api.event.joinedEvents.useQuery();
+  const { data: participants } = api.event.getParticipants.useQuery({ eventId: "" });
   return <EventSection title="Joined Events" events={events} />;
 }

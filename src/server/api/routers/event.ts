@@ -30,4 +30,11 @@ export const eventRouter = createTRPCRouter({
         take: input.count,
       });
     }),
+  getParticipants: protectedProcedure
+    .input(z.object({ eventId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findMany({
+        where: { events: { some: { id: input.eventId} } }
+      });
+    }),
 });

@@ -1,0 +1,127 @@
+.header{
+  background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+  height: 75px;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+
+
+.userLogoFrame{
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 70%;
+ background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+
+
+  svg {
+    width: 6rem;
+    height: 6rem;
+    fill: #232323e9;
+  }
+}
+
+.innerBorder{
+  border-radius: 70%;
+  padding: 15px;
+  background-color: #232323;
+}
+
+.outerBorder{
+  background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+  border-radius: 70%;
+  padding: 4px;
+  margin-bottom: 7px;
+  margin-top: -70px;
+}
+
+
+.edit{
+  color: #b97af7;
+}
+
+.main{
+  width: 100%;
+}
+
+.main > div{
+    display: flex;
+    color: #ffffff;
+    margin: 1.5rem;
+    padding: 1rem;
+    gap: 1rem;  
+
+    border-radius: 0.5rem;
+    background-color: #292929;
+}
+
+.container1{
+  display: flex;
+  align-items: center;
+  justify-content: center;  
+  flex-direction: column;
+  height: 3rem;
+  border-bottom: 1px solid #5a1e8f;
+
+}
+
+.name{
+  margin-bottom: -17px;
+  font-size: medium;
+}
+
+.email{
+  color: #bbbbbb;
+  font-size: small;
+}
+
+.container2{
+  border-bottom: 1px solid #853abf;
+
+  display: flex;
+  align-items: center;
+  font-size: medium;
+  height: 3rem;
+
+  svg{
+    display: inline-block;
+    margin-left: auto;
+  }
+}
+
+.container3{
+  border-bottom: 1px solid #853abf;
+
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 4rem;
+
+
+  svg{
+    display: inline-block;
+    // margin-left: auto;
+    margin: 0rem 0rem 0rem 4.8rem;
+    color: #ffffff;
+  }
+}
+
+.about{
+  margin-bottom: -1.5rem;
+  font-size: medium;
+  color: #ffffff;
+}
+
+.saySth{
+  color: #bbbbbb;
+  font-size: small;  
+}
+
+/* @media screen and (max-width: 500px) {
+  .main{
+  width: 100%;
+  }
+}
+*/

@@ -1,16 +1,71 @@
 
-.user-logo.frame{
+.userLogoFrame{
+  text-align: center;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
+  border-radius: 70%;
   background-color: var(--green);
-  border: 3px solid black;
+ // border: black;
+  background-image: linear-gradient(to right, #63ED60, #4494B7);
+
+
+  svg {
+    width: 6rem;
+    height: 6rem;
+    fill: #232323;
+  }
+
+  .grad{
+    background-image: linear-gradient(#63ED60, #4494B7);
+  }
 }
 
-.user-info{
-  background-color: black;
+.main{
+  width: 100%;
+  padding-right: 2em;
+  padding-left: 0em;
+  align-items: center;
+}
+
+.container{
+  align-items: left;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: #292929;
+  height: 100%;
+  width: calc(100% );
+  border-bottom: 2px solid #9000FF;
+  border-top: 2px solid #9000FF;
+  padding: 0.5rem;
+  margin: 2em;
+  justify-content: center;
+
+
+  color: aliceblue;
+}
+/*
+display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: #292929;
+  height: 100%;
+  width: calc(100% - 2em);
+  border-bottom: 2px solid #9000FF;
+  border-top: 2px solid #9000FF;
+  padding: 0.5rem;
+  margin: 2em;
+  justify-content: space-evenly;
+*/
+
+.edit{
+  color: #9000FF;
+}
+
+.user{
+  //background-color: black;
   text-align: center;
-  border-bottom: 2px solid var(--green);
+  //border-bottom: 2px solid var(--green);
   color: var(--text);
   font-size: 4rem;
   margin: 2rem;
@@ -28,12 +83,17 @@
   text-align: center;
       
       border-bottom: 2px solid var(--green);
-      font-size: 4rem;
       margin: 2rem;
       white-space: nowrap;
 }
 
+.about{
+  text-align: left;
+  font-size: small;
+  color: #a2a2a2;
+}
+
 .button{
-  color: black;
+  color: 232323;
 }
 
