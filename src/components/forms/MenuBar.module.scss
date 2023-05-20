@@ -1,0 +1,33 @@
+.menuBar {
+  position: fixed;
+  width: 100%;
+  height: 4rem;
+  background-color:grey;  /*var(--bg)*/
+}
+
+.menuBar header{
+  font-size: 2.5rem;
+  color: white;
+  font-family: var(--title-font);
+  line-height: 1rem;
+}
+
+.menuBar span{
+  padding: 0.1rem 1rem 8rem;
+}
+
+.svgMenu {
+  fill: white;
+  width: 3rem;
+  height: 3rem;
+  margin-left: 1rem;
+  padding-top: 1rem;
+}
+
+.svgSearch{
+  fill: white;
+  width: 3rem;
+  height: 3rem;
+  padding-top: 1rem;
+}
+

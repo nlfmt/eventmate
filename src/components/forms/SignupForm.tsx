@@ -89,7 +89,7 @@ const SignupForm = () => {
           <label  className={c.label}>Confirm Password</label>
         </div>
       </div>
-      <div style={{ height: "4rem" }}></div>
+      <div style={{ height: "2rem" }}></div>
 
       <button type="submit" className={common.submitButton}>Submit</button>
       <div className={c.signin_link}> Already have an account? <Link href="/login" className={c.link}> Log in</Link></div>
