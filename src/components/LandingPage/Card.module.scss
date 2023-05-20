@@ -9,7 +9,7 @@
     flex-direction: column;
     cursor: pointer;
 
-    box-shadow: 0 0.5rem 0.5rem rgba(0,0,0,0.3);
+    box-shadow: var(--shadow1);
 
     &::after {
         // content: "";
@@ -79,7 +79,7 @@
 }
 
 .categoryName {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--text-inv);
   opacity: 0.5;

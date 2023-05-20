@@ -33,6 +33,11 @@
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
+
+  &[data-wrap="true"] .eventList {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 .sectionTitle {

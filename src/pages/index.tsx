@@ -50,6 +50,7 @@ export default Home;
 interface EventSectionProps {
   title?: string;
   className?: string;
+  wrap?: boolean;
   events:
     | (Event & { _count: { participants: number }; author: User })[]
     | undefined;
@@ -57,7 +58,7 @@ interface EventSectionProps {
 
 export const EventSection = (props: EventSectionProps) => {
   return (
-    <div className={classes(c.eventSection, props.className)}>
+    <div className={classes(c.eventSection, props.className)} data-wrap={props.wrap}>
       {props.title && <div className={c.sectionTitle}>
         <span>{props.title}</span>
         <div />

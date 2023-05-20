@@ -26,11 +26,14 @@ export interface SearchFilterProps {
     category?: Category;
     dateRange?: { start: CalendarDate; end: CalendarDate } | null;
     query?: string;
-  }
+  };
+  onSearch?: () => void;
+  submitText?: string;
+  submitIcon?: React.ReactNode;
 }
 type DateRange = { start: CalendarDate; end: CalendarDate };
 
-export const SearchFilters = ({ defaults, textSearch }: SearchFilterProps) => {
+export const SearchFilters = ({ defaults, textSearch, onSearch, submitText, submitIcon }: SearchFilterProps) => {
   const router = useRouter();
   const [category, setCategory] = React.useState<Category | "">(defaults?.category ?? "");
   const [dateRange, setDateRange] = React.useState<DateRange | null>(defaults?.dateRange ?? null);
@@ -38,6 +41,8 @@ export const SearchFilters = ({ defaults, textSearch }: SearchFilterProps) => {
 
   function findEvents(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    onSearch?.();
 
     router.push({
       pathname: "search",
@@ -78,9 +83,9 @@ export const SearchFilters = ({ defaults, textSearch }: SearchFilterProps) => {
           })}
         />
         <button className={c.searchButton} type="submit">
-          <span>Find</span>
+          <span>{submitText ?? "Find"}</span>
           <div className={c.searchIcon}>
-            <ArrowForwardRounded />
+            {submitIcon ?? <ArrowForwardRounded />}
           </div>
         </button>
       </div>

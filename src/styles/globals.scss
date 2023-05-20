@@ -66,11 +66,15 @@ a {
   border: none;
   outline: none;
   font-family: var(--font);
+
+  // dont show annoying blue highlight on tap on mobile
+  -webkit-tap-highlight-color: transparent;
 }
 
 
 *::-webkit-scrollbar {
-  width: 1rem;
+  width: 0.8rem;
+  height: 0.8rem;
 }
 
 *::-webkit-scrollbar-track {
@@ -78,7 +82,11 @@ a {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--bg-lighter);
+  background: var(--bg-light);
   border: 0.2rem solid var(--bg);
   border-radius: var(--radius);
+
+  &:hover {
+    background: var(--bg-lighter);
+  }
 }

@@ -40,7 +40,7 @@
   box-shadow: var(--shadow1);
 }
 
-.selectBox {
+.selectBox[data-trigger] {
   box-shadow: var(--shadow1);
   flex-grow: 1;
 }
@@ -58,8 +58,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  color: var(--text);
+  font-weight: 600;
+  color: var(--text-inv);
+  background-color: var(--green);
   box-shadow: var(--shadow1);
   cursor: pointer;
 
@@ -74,7 +75,7 @@
   height: 2rem;
   margin-right: 0.5rem;
   // height: 100%;
-  background-color: var(--green);
+  background-color: rgba(0,0,0,0.1);
   display: grid;
   place-items: center;
   border-radius: var(--radius);

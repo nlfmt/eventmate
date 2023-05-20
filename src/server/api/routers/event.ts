@@ -55,27 +55,38 @@ export const eventRouter = createTRPCRouter({
         query: z.string().optional(),
         pageSize: z.number().min(1).optional().default(15),
         page: z.number().min(1).optional().default(1),
+        orderBy: z.enum(["date", "title", "capacity", "participants"]).optional().default("date"),
+        order: z.enum(["asc", "desc"]).optional().default("asc"),
       })
     )
-    .query(async ({ ctx, input: { category, end, start, query, page, pageSize } }) => {
-      console.log("")
-      console.log({ category, end, start, query, page, pageSize });
-      console.log("")
-      console.log({
+    .query(async ({ ctx, input: { category, end, start, query, page, pageSize, order, orderBy } }) => {
+
+      let _order: "asc" | "desc" | { _count: "asc" | "desc" } = order;
+      if (orderBy === "participants") {
+        _order = { _count: order };
+      } else if (orderBy === "title") {
+        _order = order === "asc" ? "desc" : "asc";
+      }
+
+      const where = {
         category: category ? category : undefined,
         date: (start && end) ? { gte: new Date(start), lte: new Date(end) } : undefined,
         title: query ? { contains: query } : undefined,
-      })
-      console.log("")
-      return await ctx.prisma.event.findMany({
-        where: {
-          category: category ? category : undefined,
-          date: (start && end) ? { gte: new Date(start), lte: new Date(end) } : undefined,
-          title: query ? { contains: query } : undefined,
-        },
-        include: { author: true, _count: { select: { participants: true } } },
-        take: pageSize,
-        skip: (page - 1) * pageSize,
-      });
+      };
+
+      const [events, count] = await Promise.all([
+        ctx.prisma.event.findMany({
+          where,
+          include: { author: true, _count: { select: { participants: true } } },
+          take: pageSize,
+          skip: (page - 1) * pageSize,
+          orderBy: { [orderBy]: _order }
+        }),
+        ctx.prisma.event.count({ where })
+      ]);
+
+      const pageCount = Math.ceil(count / pageSize);
+
+      return { events, pageCount, count };
     }),
 });

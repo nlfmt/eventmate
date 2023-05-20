@@ -7,10 +7,11 @@ import c from "./Select.module.scss"
 import { classes } from "@/utils/utils";
 import OverlayContext from "@/contexts/OverlayContext";
 
-interface SelectProps extends RadixSelectProps {
+export type SelectOptions = readonly { label: string; value: string; disabled?: boolean }[];
+export interface SelectProps extends RadixSelectProps {
   label?: string;
   placeholder?: string;
-  options: { label: string; value: string; disabled?: boolean }[];
+  options: SelectOptions;
   allowEmpty?: boolean;
   className?: string;
 }
@@ -31,14 +32,14 @@ const SelectComp = ({ label, options, placeholder, allowEmpty, className, ...pro
       }}
       {...props}
     >
-      <Select.Trigger className={classes(c.SelectTrigger, className)} aria-label={label}>
+      <Select.Trigger data-trigger className={classes(c.SelectTrigger, className)} aria-label={label}>
         <Select.Value placeholder={placeholder} />
         <Select.Icon className={c.SelectArrow}>
           <KeyboardArrowDownRounded />
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
-        <Select.Content className={c.SelectContent}>
+        <Select.Content data-content className={classes(c.SelectContent, className)}>
           <Select.ScrollUpButton className={c.SelectScrollButton}>
             <KeyboardArrowUpRounded />
           </Select.ScrollUpButton>

@@ -13,6 +13,8 @@
   align-items: center;
   width: 100%;
   gap: 1rem;
+  
+  color: var(--bg);
 
   button {
     border: none;
@@ -20,7 +22,7 @@
     font-size: 0.8rem;
     background-color: var(--bg-white-dark);
     border-radius: var(--radius-large);
-    height: 3rem;
+    height: 2.5rem;
     color: var(--text-inv);
     cursor: pointer;
     padding: 0 1rem;
@@ -32,8 +34,13 @@
 }
 
 .results {
-  flex-grow: 1;
   padding: 0;
+}
+
+@media screen and (max-width: 499px) {
+  .results {
+    flex-grow: 1;
+  }
 }
 
 .filters {
@@ -57,10 +64,93 @@
 .info {
   display: flex;
   align-items: center;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   color: var(--text-darker);
   justify-content: space-between;
   width: 100%;
   font-size: 0.9rem;
   margin-top: 1rem;
+}
+
+.pageInfo {
+  font-size: 0.8rem;
+  color: var(--text-darker);
+}
+
+.orderResults {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.orderSelect[data-content] {
+  font-size: 0.8rem;
+
+  svg {
+    width: 1rem;
+  }
+}
+
+.orderSelect[data-trigger] {
+  font-size: 0.8rem;
+  background-color: var(--bg-light);
+  height: 2.5rem;
+}
+
+.resultCount {
+  font-size: 0.8rem;
+  color: var(--text);
+  background-color: var(--bg-light);
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: var(--radius-large);
+  display: flex;
+  align-items: center;
+}
+
+.pageControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 26rem);
+  padding: 0.5rem 1rem;
+  padding-bottom: 1rem;
+  
+  button {
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 0.5rem;
+    height: 2.5rem;
+    background-color: var(--bg-light);
+    border-radius: var(--radius-large);
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    svg {
+      width: 1rem;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: unset;
+    }
+
+    &:active {
+      background-color: var(--bg-lighter);
+    }
+  }
+}
+
+@media (hover: hover) {
+  .pageControls button:hover:not(:disabled) {
+    background-color: var(--bg-lighter);
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .pageControls {
+    width: 100%;
+  }
 }

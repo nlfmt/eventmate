@@ -1,0 +1,14 @@
+
+.toggle {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-large);
+  background-color: var(--bg-light);
+
+  color: var(--text);
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}
