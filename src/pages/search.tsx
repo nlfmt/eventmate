@@ -32,6 +32,8 @@ const orderTypes = [
   { value: "capacity", label: "Capacity" },
 ] as const;
 
+const PAGE_SIZE = 12;
+
 const SearchPage: NextPage = () => {
   const router = useRouter();
   const { query, isReady } = router;
@@ -60,7 +62,7 @@ const SearchPage: NextPage = () => {
       orderBy,
       order: order ? "asc" : "desc",
       page,
-      pageSize: 2,
+      pageSize: PAGE_SIZE,
     },
     { enabled: isReady }
   );
@@ -128,7 +130,7 @@ const SearchPage: NextPage = () => {
             </div>
           </div>
 
-          <EventSection wrap className={c.results} events={events} />
+          <EventSection fill={true} wrap className={c.results} events={events} />
 
           {/* Page Controls */}
           {(data && data.pageCount > 1) && (

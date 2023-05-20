@@ -11,8 +11,10 @@
 
     box-shadow: var(--shadow1);
 
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+
     &::after {
-        // content: "";
+        content: "";
         z-index: -1;
         position: absolute;
         top: 0;
@@ -22,7 +24,8 @@
         background-color: var(--clr);
         border-radius: var(--radius-large);
         filter: blur(0.5rem);
-        opacity: 0.5;
+        opacity: 0;
+        transition: opacity 0.2s ease;
     }
 
     &[data-cat="show"] {
@@ -44,7 +47,7 @@
       --clr: #ffbdad;
     }
     &[data-cat="other"] {
-      --clr: #7c698b;
+      --clr: #80e7ae;
     }
 
 }
@@ -181,7 +184,11 @@ $info-padding: 1rem;
 @media screen and (min-width: 1000px) {
   .card {
     &:hover {
-      transform: scale(0.97);
+      transform: scale(1.01);
+      box-shadow: var(--shadow1-dark);
+      &::after {
+        opacity: 0.3;
+      }
     }
   }
 }

@@ -51,6 +51,7 @@ interface EventSectionProps {
   title?: string;
   className?: string;
   wrap?: boolean;
+  fill?: boolean;
   events:
     | (Event & { _count: { participants: number }; author: User })[]
     | undefined;
@@ -68,6 +69,9 @@ export const EventSection = (props: EventSectionProps) => {
           {props.events.map((event) => {
             return <Card key={event.id} event={event} />;
           })}
+          {props.fill && (
+            <div className={c.filler} />
+          )}
         </div>
       ) : (props.events && props.events.length === 0) ? (
         <div className={c.noEvents}>No events found</div>

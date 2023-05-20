@@ -1,0 +1,31 @@
+
+
+@mixin btn($bg: var(--bg-light), $bg-hvr: var(--bg-lighter), $text: var(--text), $text-hvr: $text) {
+  border: none;
+  outline: none;
+  padding: 0 1rem;
+  height: 2.5rem;
+  font-size: 0.8rem;
+  
+  border-radius: var(--radius-large);
+  background-color: $bg;
+  color: $text;
+  
+  cursor: pointer;
+  &:disabled {
+    opacity: 0.5;
+    cursor: unset;
+  }
+
+  &:active {
+    background-color: $bg-hvr;
+    color: $text-hvr;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: $bg-hvr;
+      color: $text-hvr;
+    }
+  }
+}

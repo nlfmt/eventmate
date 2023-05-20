@@ -24,7 +24,7 @@ export const eventRouter = createTRPCRouter({
     .input(defaultCountSchema)
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.event.findMany({
-        where: { participants: { some: { id: ctx.session.user.id } } },
+        where: { participants: { some: { id: ctx.session.user.id } }, authorId: { not: ctx.session.user.id } },
         include: { author: true, _count: { select: { participants: true } } },
         take: input.count,
       });
@@ -64,13 +64,13 @@ export const eventRouter = createTRPCRouter({
       let _order: "asc" | "desc" | { _count: "asc" | "desc" } = order;
       if (orderBy === "participants") {
         _order = { _count: order };
-      } else if (orderBy === "title") {
+      } else if (["title", "date"].includes(orderBy)) {
         _order = order === "asc" ? "desc" : "asc";
       }
 
       const where = {
         category: category ? category : undefined,
-        date: (start && end) ? { gte: new Date(start), lte: new Date(end) } : undefined,
+        date: (start && end) ? { gte: new Date(start), lte: new Date(end) } : { gte: new Date() },
         title: query ? { contains: query } : undefined,
       };
 

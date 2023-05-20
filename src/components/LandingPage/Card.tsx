@@ -30,7 +30,6 @@ const Card = (props: CardProps) => {
   const allowed = 2;
   const titleParts = event.title.split("\n");
   let title = titleParts.slice(0, allowed).join("\n");
-  console.log(title, titleParts);
   if (titleParts.length > 3) title += " " + titleParts.slice(allowed).join(" ");
 
   const category =
@@ -46,9 +45,6 @@ const Card = (props: CardProps) => {
 
   const onCardClick: React.MouseEventHandler<HTMLDivElement> = async e => {
     if (e.defaultPrevented) return;
-    console.log(e);
-    // e.preventDefault();
-    // e.stopPropagation();
     if (!desktop && small) return setSmall(false);
     await router.push(`/event/${event.id}`);
   }

@@ -1,3 +1,5 @@
+@use "@/styles/mixins.scss" as mixins;
+
 .searchPage {
   display: flex;
   flex-direction: column;
@@ -13,19 +15,12 @@
   align-items: center;
   width: 100%;
   gap: 1rem;
+  max-width: 74rem;
   
   color: var(--bg);
 
   button {
-    border: none;
-    outline: none;
-    font-size: 0.8rem;
-    background-color: var(--bg-white-dark);
-    border-radius: var(--radius-large);
-    height: 2.5rem;
-    color: var(--text-inv);
-    cursor: pointer;
-    padding: 0 1rem;
+    @include mixins.btn(var(--bg-white-dark), var(--bg-white-darker), var(--text-inv));
 
     display: flex;
     align-items: center;
@@ -68,6 +63,7 @@
   color: var(--text-darker);
   justify-content: space-between;
   width: 100%;
+  max-width: 76rem;
   font-size: 0.9rem;
   margin-top: 1rem;
 }
@@ -91,9 +87,7 @@
 }
 
 .orderSelect[data-trigger] {
-  font-size: 0.8rem;
-  background-color: var(--bg-light);
-  height: 2.5rem;
+  @include mixins.btn;
 }
 
 .resultCount {

@@ -1,11 +1,10 @@
+@use "@/styles/mixins.scss" as mixins;
 
 .toggle {
   min-width: 2.5rem;
   height: 2.5rem;
-  border-radius: var(--radius-large);
-  background-color: var(--bg-light);
-
-  color: var(--text);
+  @include mixins.btn;
+  padding: 0 0.5rem;
 
   svg {
     width: 1.2rem;
