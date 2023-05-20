@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import common from "@/styles/common.module.scss";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,19 +10,17 @@ import { SearchFilters } from "@/components/LandingPage/SearchSection";
 import { useState } from "react";
 import { type CalendarDate, parseDate } from "@internationalized/date";
 import {
-  ArrowBackIosRounded,
   ArrowBackRounded,
   ArrowDownwardRounded,
-  ArrowForward,
   ArrowForwardRounded,
   ArrowUpwardRounded,
   CheckRounded,
   KeyboardArrowDownRounded,
   KeyboardArrowUpRounded,
 } from "@mui/icons-material";
-import { Category } from "@/utils/categories";
-import Select, { SelectOptions } from "@/components/Select/Select";
-import { OrderBySchema } from "@/validation/types";
+import { type Category } from "@/utils/categories";
+import Select from "@/components/Select/Select";
+import { type OrderBySchema } from "@/validation/types";
 import ToggleButton from "@/components/ToggleButton/ToggleButton";
 
 const orderTypes = [
@@ -92,19 +90,17 @@ const SearchPage: NextPage = () => {
                 )}
               </button>
             </header>
-            {isReady && (
-              <SearchFilters
-                textSearch
-                defaults={{
-                  dateRange,
-                  category: category as Category,
-                  query: q,
-                }}
-                onSearch={() => setFiltersOpen(false)}
-                submitText="Apply"
-                submitIcon={<CheckRounded />}
-              />
-            )}
+            <SearchFilters
+              textSearch
+              defaults={{
+                dateRange,
+                category: category as Category,
+                query: q,
+              }}
+              onSearch={() => setFiltersOpen(false)}
+              submitText="Apply"
+              submitIcon={<CheckRounded />}
+            />
           </div>
 
           {/* Metadata & sort options */}
