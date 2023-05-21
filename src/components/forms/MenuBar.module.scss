@@ -6,28 +6,33 @@
 }
 
 .menuBar header{
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: white;
   font-family: var(--title-font);
   line-height: 1rem;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
 }
 
 .menuBar span{
-  padding: 0.1rem 1rem 8rem;
+  padding: 0.1rem 1.5rem ;
 }
 
 .svgMenu {
   fill: white;
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   margin-left: 1rem;
-  padding-top: 1rem;
+  float: left;
+  margin-top: 1rem;
 }
 
 .svgSearch{
   fill: white;
-  width: 3rem;
-  height: 3rem;
-  padding-top: 1rem;
+  width: 2rem;
+  height: 2rem;
+  float: right;
+  margin-top: 1rem;
 }
 
