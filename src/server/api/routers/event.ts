@@ -71,7 +71,10 @@ export const eventRouter = createTRPCRouter({
       const where = {
         category: category ? category : undefined,
         date: (start && end) ? { gte: new Date(start), lte: new Date(end) } : { gte: new Date() },
-        title: query ? { contains: query } : undefined,
+        OR: query ? [
+          { title: { contains: query } },
+          { tags: { contains: query } }
+        ] : undefined
       };
 
       const [events, count] = await Promise.all([

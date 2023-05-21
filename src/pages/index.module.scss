@@ -86,8 +86,7 @@
 
     // prevent cards from shrinking/growing
     & > div {
-      min-width: 24rem;
-      max-width: 24rem;
+      width: 24rem;
     }
   }
 

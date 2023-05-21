@@ -59,21 +59,24 @@ interface EventSectionProps {
 
 export const EventSection = (props: EventSectionProps) => {
   return (
-    <div className={classes(c.eventSection, props.className)} data-wrap={props.wrap}>
-      {props.title && <div className={c.sectionTitle}>
-        <span>{props.title}</span>
-        <div />
-      </div>}
+    <div
+      className={classes(c.eventSection, props.className)}
+      data-wrap={props.wrap}
+    >
+      {props.title && (
+        <div className={c.sectionTitle}>
+          <span>{props.title}</span>
+          <div />
+        </div>
+      )}
       {props.events && props.events.length > 0 ? (
         <div className={c.eventList}>
           {props.events.map((event) => {
             return <Card key={event.id} event={event} />;
           })}
-          {props.fill && (
-            <div className={c.filler} />
-          )}
+          {props.fill && <div className={c.filler} />}
         </div>
-      ) : (props.events && props.events.length === 0) ? (
+      ) : props.events && props.events.length === 0 ? (
         <div className={c.noEvents}>No events found</div>
       ) : (
         <div className={c.loading}>Loading...</div>
