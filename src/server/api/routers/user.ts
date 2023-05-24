@@ -19,4 +19,14 @@ export const userRouter = createTRPCRouter({
         include: input,
       });
     }),
+
+    changePassword: protectedProcedure
+      .input(z.object({
+        oldPassword: z.string(),
+        newPassword: z.string(),
+        confirmPassword: z.string()
+      }))
+      .mutation(async ({ ctx, input }) => {
+
+      })
 });

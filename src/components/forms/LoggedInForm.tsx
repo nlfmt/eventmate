@@ -4,7 +4,13 @@ import c from "@/components/forms/LoggedOutForm2.module.scss";
 
 import LogoImage from "@/assets/images/logo.png";
 import Image from "next/image";
-import { AccountCircleRounded, AdjustRounded, ArrowForwardIosRounded } from "@mui/icons-material";
+import {
+  AccountCircleRounded,
+  AdjustRounded,
+  ArrowForwardIosRounded,
+  EditRounded,
+} from "@mui/icons-material";
+import Link from "next/link";
 
 const LoggedIn = () => {
   const { data: sessionData } = useSession();
@@ -23,21 +29,36 @@ const LoggedIn = () => {
       <div className={c.edit}>Edit</div>
 
       <main className={c.main}>
+        {/* prostheto container me user info, opou mporo na allakso onoma, mail, bio*/}
         <div className={c.container1}>
-          <div className={c.name}>{sessionData?.user.name}</div>
-          <div className={c.email}>{sessionData?.user.email}</div>
-        </div>
-
-        <div className={c.container2}>Change password
-            <ArrowForwardIosRounded />
-        </div>
-
-        <div className={c.container3}>
-          <div className={c.about}>About me</div> 
-          <div className={c.saySth}>Say something about yourself...
-          <ArrowForwardIosRounded />
+          <div>
+            <span className={c.name}>{sessionData?.user.name}</span>
+            <br />
+            <span className={c.email}>{sessionData?.user.email}</span>
           </div>
         </div>
+        <div className={c.container1}>
+          <div>
+            Bioooooo
+          </div>
+        </div>
+        
+        <div className={c.seperator}></div>
+
+        <Link className={c.container3} href="/account/edit/user">
+          <div className={c.about}>
+            <span>Change User Data</span>
+            <br />
+            <span className={c.saySth}>Update your username, email or bio</span>
+          </div>
+          <ArrowForwardIosRounded />
+        </Link>
+
+        <Link className={c.container2} href="/account/edit/password">
+          Change password
+          <ArrowForwardIosRounded />
+        </Link>
+
       </main>
     </>
   );
