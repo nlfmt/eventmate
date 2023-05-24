@@ -7,9 +7,9 @@ import { MenuOutlined } from "@mui/icons-material";
 import { api } from "@/utils/api";
 import Card from "@/components/LandingPage/Card";
 import type { Event, User } from "@prisma/client";
+import SearchSection from "@/components/LandingPage/SearchSection";
 
 const Home: NextPage = () => {
-
   const session = useSession();
 
   return (
@@ -28,12 +28,9 @@ const Home: NextPage = () => {
           <span>EventMate</span>
           <MenuOutlined />
         </header>
-        <div className={c.searchSection}>
-          <div className={c.searchBar}>
-            <input type="text" placeholder="Search for events" />
-            <input type="text" placeholder="Search for events" />
-          </div>
-        </div>
+
+        <SearchSection />
+        <NewEventsSection />
         {session.data && <JoinedEventsSection />}
         {session.data && <MyEventsSection />}
       </main>
@@ -45,7 +42,9 @@ export default Home;
 
 interface EventSectionProps {
   title: string;
-  events: (Event & { _count: { participants: number }, author: User })[] | undefined;
+  events:
+    | (Event & { _count: { participants: number }; author: User })[]
+    | undefined;
 }
 
 const EventSection = (props: EventSectionProps) => {
@@ -53,16 +52,18 @@ const EventSection = (props: EventSectionProps) => {
     <div className={c.eventSection}>
       <div className={c.sectionTitle}>
         <span>{props.title}</span>
-        <div/>
+        <div />
       </div>
-      {props.events ? (
+      {props.events && props.events.length > 0 ? (
         <div className={c.eventList}>
           {props.events.map((event) => {
             return <Card key={event.id} event={event} />;
           })}
         </div>
+      ) : (props.events && props.events.length === 0) ? (
+        <div className={c.noEvents}>No events found</div>
       ) : (
-        <div>Loading...</div>
+        <div className={c.loading}>Loading...</div>
       )}
     </div>
   );
@@ -71,10 +72,14 @@ const EventSection = (props: EventSectionProps) => {
 const MyEventsSection = () => {
   const { data: events } = api.event.myEvents.useQuery();
   return <EventSection title="My Events" events={events} />;
-}
+};
 
 const JoinedEventsSection = () => {
   const { data: events } = api.event.joinedEvents.useQuery();
-  const { data: participants } = api.event.getParticipants.useQuery({ eventId: "" });
   return <EventSection title="Joined Events" events={events} />;
-}
+};
+
+const NewEventsSection = () => {
+  const { data: events } = api.event.newEvents.useQuery();
+  return <EventSection title="New Events" events={events} />;
+};

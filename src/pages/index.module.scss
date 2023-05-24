@@ -28,30 +28,6 @@
   
 }
 
-.searchSection {
-  width: 100%;
-  background-color: var(--bg-white);
-  padding: 4rem 2rem;
-}
-
-.searchBar {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  input {
-    outline: none;
-    border: none;
-    background-color: var(--bg);
-    border-radius: var(--radius-large);
-    padding: 1rem 2rem;
-    width: 100%;
-    font-size: 1rem;
-    color: var(--text);
-    font-family: var(--font);
-  }
-}
-
 .eventSection {
   width: 100%;
   padding: 1rem 0;
@@ -87,6 +63,16 @@
 
 }
 
+.noEvents, .loading {
+  height: 5rem;
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-darker);
+  display: grid;
+  place-items: center;
+}
+
 // desktop layout
 @media screen and (min-width: 500px) {
 
@@ -103,6 +89,7 @@
 
   .eventSection {
     position: relative;
+    max-width: 76rem;
     &::before, &::after {
       z-index: 6;
       content: "";

@@ -1,37 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import c from "./Card.module.scss";
 
 import type { Event, User } from "@prisma/client";
 import dayjs from "dayjs";
 
 import {
-  ParkRounded,
-  MeetingRoomRounded,
   PersonRounded,
   GroupRounded,
   EventNoteRounded,
   WatchLater,
-  TheaterComedyRounded,
-  CelebrationRounded,
-  SportsBasketballRounded,
-  SchoolRounded,
-  PaletteRounded,
-  TipsAndUpdatesRounded,
+  ExpandLessRounded,
 } from "@mui/icons-material";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import { useRouter } from "next/router";
 
-const categories = {
-  "show": ["Show", TheaterComedyRounded],
-  "party": ["Party", CelebrationRounded],
-  "sport": ["Sport", SportsBasketballRounded],
-  "education": ["Education", SchoolRounded],
-  "culture": ["Culture", PaletteRounded],
-  "meetup": ["Meetup", GroupRounded],
-  "other": ["Other", TipsAndUpdatesRounded],
-} as const;
-type Category = keyof typeof categories;
+import categories, { type Category } from "@/utils/categories";
 
 export interface CardProps {
-  event: Event & { _count: { participants: number }, author: Omit<User, "password"> };
+  event: Event & {
+    _count: { participants: number };
+    author: Omit<User, "password">;
+  };
 }
 
 const Card = (props: CardProps) => {
@@ -44,13 +33,36 @@ const Card = (props: CardProps) => {
   if (titleParts.length > 3) title += " " + titleParts.slice(allowed).join(" ");
 
   const category =
-    categories[event.category as Category] ??
-    categories["other"];
+    categories[event.category as Category] ?? categories["other"];
   const categoryName = category?.[0];
   const CategoryIcon = category?.[1];
 
+  const [small, setSmall] = useState(true);
+  const desktop = useMediaQuery("(min-width: 500px)");
+  const router = useRouter();
+
+  async function onCardClick() {
+    if (!desktop && small) return setSmall(false);
+    await router.push(`/event/${event.id}`);
+  }
+
   return (
-    <div className={c.card} data-cat={event.category}>
+    <div
+      className={c.card}
+      data-cat={event.category}
+      data-small={desktop ? false : small}
+      onClick={onCardClick}
+    >
+      <div
+        className={c.collapse}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setSmall(true);
+        }}
+      >
+        <ExpandLessRounded />
+      </div>
       <div className={c.tags}>
         {event.tags.split(";").map((tag) => {
           return <span key={tag}>{tag}</span>;
@@ -74,16 +86,14 @@ const Card = (props: CardProps) => {
       <div className={c.info}>
         <div className={c.category}>
           <svg
-            width={100}
-            height={44}
-            viewBox="0 0 100 44"
             className={c.categoryBG}
             xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 100"
           >
             <path
-              d="M60 0C80 0 100 0 100 0V44C100 44 -32 44 8 44C48 44 30 0 60 0Z"
               fill="white"
-              fillOpacity="0.5"
+              fill-opacity="0.5"
+              d="M200,100H0C50,100,50,0,100,0H200Z"
             />
           </svg>
           <div className={c.categoryIcon}>
