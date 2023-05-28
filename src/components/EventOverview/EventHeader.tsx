@@ -1,5 +1,5 @@
 import common from "@/styles/common.module.scss"
-import c from "./components/EventOverview/eventOverview.module.scss"
+import c from "@/components/EventOverview/eventOverview.module.scss"
 import type { Event, User } from "@prisma/client";
 
 
@@ -46,7 +46,7 @@ const EventHeader = (props: HeaderProps) => {
   const CategoryIcon = category?.[1];
 
   return (
-    <div className={c.heading}>
+    <div className={c.heading} data-HEADER>
       <div className={c.categories}>
           {/* Categories */}
           <div className={c.tags}>

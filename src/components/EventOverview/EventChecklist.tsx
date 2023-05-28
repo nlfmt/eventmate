@@ -1,5 +1,5 @@
 import common from "@/styles/common.module.scss"
-import c from "./components/EventOverview/eventOverview.module.scss"
+import c from "@/components/EventOverview/eventOverview.module.scss"
 
 
 interface ItemProps {
