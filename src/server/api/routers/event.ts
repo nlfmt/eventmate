@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 const defaultCountSchema = z
   .object({
@@ -36,5 +36,16 @@ export const eventRouter = createTRPCRouter({
       return await ctx.prisma.user.findMany({
         where: { events: { some: { id: input.eventId} } }
       });
+    }),
+
+    get: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input.id },
+        include: { author: true, _count: { select: { participants: true } } },
+      });
+
+      return event;
     }),
 });

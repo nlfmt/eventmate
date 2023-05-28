@@ -1,0 +1,162 @@
+.center {
+  width: min(100%, 650px);
+
+  h1 {
+    text-align: center;
+    
+    border-bottom: 2px solid var(--green);
+    color: var(--text);
+    font-family: var(--title-font);
+    font-size: 4rem;
+    margin: 2rem;
+    white-space: nowrap;
+  }
+
+  p {
+    color: var(--bg-white-dark);
+    text-align: center;
+    font-size: 1.3rem;
+    padding: 2rem 0;
+  }
+}
+
+// h2 {
+//   font-weight: bolder;
+//   font-size: 16px;
+// }
+
+
+.header {
+  display: flex;
+}
+
+.categories {
+  display: flex;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.categoryIcon {
+  position: absolute;
+  height: 100%;
+  width: 3.5rem;
+  right: 0;
+
+  display: grid;
+  place-items: center;
+
+  svg {
+      height: 1.4rem;
+      width: 1.4rem;
+      fill: var(--text-inv-light);
+      opacity: 0.8;
+  }
+}
+
+
+.information {
+  display: flex;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+
+  svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    fill: var(--text-inv-light);
+  }
+}
+
+// Invitation
+.invitation {
+  display: flex;
+  flex-direction: row;
+}
+
+.invitationField {
+  display: flex;
+  flex-direction: row;
+}
+
+.tickCircle {
+  position: absolute;
+  height: 100%;
+  width: 3.5rem;
+
+  display: grid;
+  place-items: center;
+
+  svg {
+      height: 1.4rem;
+      width: 1.4rem;
+      fill: var(--green-light);
+  }
+}
+
+.tickIcon {
+  position: absolute;
+  height: 100%;
+  width: 3.5rem;
+
+  display: grid;
+  place-items: center;
+
+  svg {
+      height: 1.4rem;
+      width: 1.4rem;
+      fill: var(--green-dark);
+  }
+}
+
+.crossCircle {
+  position: absolute;
+  height: 100%;
+  width: 3.5rem;
+
+  display: grid;
+  place-items: center;
+
+  svg {
+      height: 1.4rem;
+      width: 1.4rem;
+      fill: var(--error);
+  }
+}
+
+.crossIcon {
+  position: absolute;
+  height: 100%;
+  width: 3.5rem;
+
+  display: grid;
+  place-items: center;
+
+  svg {
+      height: 1.4rem;
+      width: 1.4rem;
+      fill: #d82e1f;
+  }
+}
+
+
+.description {
+  display: flex;
+}
+
+
+.checklist {
+  display: flex;
+}
+
+
+.chat {
+  display: flex;
+}
+
