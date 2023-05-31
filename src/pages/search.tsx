@@ -7,7 +7,7 @@ import { EventSection, PlaceHolderSideBar } from ".";
 
 import c from "./SearchPage.module.scss";
 import { SearchFilters } from "@/components/LandingPage/SearchSection";
-import { useState } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 import { type CalendarDate, parseDate } from "@internationalized/date";
 import {
   ArrowBackRounded,
@@ -35,7 +35,13 @@ const PAGE_SIZE = 12;
 const SearchPage: NextPage = () => {
   const router = useRouter();
   const { query, isReady } = router;
-  const { category, start, end, q } = query as {
+  const {
+    category,
+    start, end,
+    q,
+    // order,
+    // dir
+  } = query as {
     [key: string]: string | undefined;
   };
 

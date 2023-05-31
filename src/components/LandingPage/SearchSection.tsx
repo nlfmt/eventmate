@@ -10,6 +10,7 @@ import {
 } from "@internationalized/date";
 import { ArrowForwardRounded } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import Checkbox from "@/components/Checkbox/Checkbox";
 
 const SearchSection = () => {
   return (
@@ -58,13 +59,16 @@ export const SearchFilters = ({ defaults, textSearch, onSearch, submitText, subm
   return (
     <form className={c.searchBar} onSubmit={findEvents}>
       {textSearch && (
-        <input
-          placeholder="Search Events..."
-          type="text"
-          className={c.queryInput}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <>
+          <input
+            placeholder="Search Events..."
+            type="text"
+            className={c.queryInput}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <Checkbox />
+        </>
       )}
       <DateRangePicker
         value={dateRange}

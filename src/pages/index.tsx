@@ -10,11 +10,15 @@ import type { Event, User } from "@prisma/client";
 import SearchSection from "@/components/LandingPage/SearchSection";
 import { classes } from "@/utils/utils";
 
+import Image from "next/image";
+import EventMateLogo from "@/components/EventMateLogo";
+
 export const PlaceHolderSideBar = () => {
   return (
     <header className={c.navbar}>
+      <EventMateLogo />
       <span>EventMate</span>
-      <MenuOutlined />
+      
     </header>
   );
 };
