@@ -22,6 +22,29 @@
   max-width: 30rem;
 }
 
+.checkboxes {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  & > * {
+    flex-grow: 1;
+  }
+}
+
+.checkbox {
+  background-color: var(--bg);
+
+  & > div {
+    border-radius: var(--radius-large) 0 0 var(--radius-large);
+    background-color: var(--bg-light);
+  }
+
+  & > span {
+    color: var(--text)
+  }
+}
+
 .queryInput {
   border: none;
   flex-grow: 1;

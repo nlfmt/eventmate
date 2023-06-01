@@ -11,6 +11,7 @@ import {
 import { ArrowForwardRounded } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import Checkbox from "@/components/Checkbox/Checkbox";
+import { SearchFilter, runSearch } from "@/pages/search";
 
 const SearchSection = () => {
   return (
@@ -22,43 +23,48 @@ const SearchSection = () => {
 };
 
 export interface SearchFilterProps {
-  textSearch?: boolean;
+  moreFilters?: boolean;
   defaults?: {
     category?: Category;
     dateRange?: { start: CalendarDate; end: CalendarDate } | null;
     query?: string;
+    owned?: boolean;
+    joined?: boolean;
   };
   onSearch?: () => void;
   submitText?: string;
   submitIcon?: React.ReactNode;
+  filters?: SearchFilter;
 }
 type DateRange = { start: CalendarDate; end: CalendarDate };
 
-export const SearchFilters = ({ defaults, textSearch, onSearch, submitText, submitIcon }: SearchFilterProps) => {
-  const router = useRouter();
+export const SearchFilters = ({ defaults, moreFilters, onSearch, submitText, submitIcon, filters }: SearchFilterProps) => {
   const [category, setCategory] = React.useState<Category | "">(defaults?.category ?? "");
   const [dateRange, setDateRange] = React.useState<DateRange | null>(defaults?.dateRange ?? null);
   const [query, setQuery] = React.useState(defaults?.query ?? "");
+  const [owned, setOwned] = React.useState(defaults?.owned);
+  const [joined, setJoined] = React.useState(defaults?.joined);
+  console.log({ owned, joined, defaults })
 
   function findEvents(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     onSearch?.();
 
-    router.push({
-      pathname: "search",
-      query: {
-        category,
-        start: dateRange?.start.toString(),
-        end: dateRange?.end.toString(),
-        q: query,
-      },
+    runSearch({
+      ...filters,
+      category,
+      start: dateRange?.start.toString(),
+      end: dateRange?.end.toString(),
+      q: query,
+      joined: joined ? "1" : undefined,
+      owned: owned ? "1" : undefined,
     });
   }
 
   return (
     <form className={c.searchBar} onSubmit={findEvents}>
-      {textSearch && (
+      {moreFilters && (
         <>
           <input
             placeholder="Search Events..."
@@ -67,7 +73,10 @@ export const SearchFilters = ({ defaults, textSearch, onSearch, submitText, subm
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <Checkbox />
+          <div className={c.checkboxes}>
+            <Checkbox className={c.checkbox} label="Owned only" checked={owned} onCheckedChange={setOwned} />
+            <Checkbox className={c.checkbox} label="Joined only" checked={joined} onCheckedChange={setJoined} />
+          </div>
         </>
       )}
       <DateRangePicker

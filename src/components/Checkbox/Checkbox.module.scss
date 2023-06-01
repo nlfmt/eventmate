@@ -1,14 +1,26 @@
-.root {
-  width: 2.5rem;
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 2.5rem;
   height: 2.5rem;
-  background: var(--bg);
   border-radius: var(--radius-large);
+  padding: 0;
 }
 
+.label {
+  
+}
+
+
 .indicator {
+  border-radius: var(--radius-large);
+  background: var(--bg);
   --indicator: var(--green);
-  width: 100%;
-  height: 100%;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
 
   svg {
     width: 1.5rem;

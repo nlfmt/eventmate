@@ -1,13 +1,12 @@
 import { type NextPage } from "next";
 import common from "@/styles/common.module.scss";
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import { api } from "@/utils/api";
 import { EventSection, PlaceHolderSideBar } from ".";
 
 import c from "./SearchPage.module.scss";
-import { SearchFilters } from "@/components/LandingPage/SearchSection";
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { type CalendarDate, parseDate } from "@internationalized/date";
 import {
   ArrowBackRounded,
@@ -18,10 +17,12 @@ import {
   KeyboardArrowDownRounded,
   KeyboardArrowUpRounded,
 } from "@mui/icons-material";
-import { type Category } from "@/utils/categories";
+import categories, { type Category } from "@/utils/categories";
 import Select from "@/components/Select/Select";
 import { type OrderBySchema } from "@/validation/types";
 import ToggleButton from "@/components/ToggleButton/ToggleButton";
+import { SearchFilters } from "@/components/LandingPage/SearchSection";
+
 
 const orderTypes = [
   { value: "date", label: "Date" },
@@ -29,25 +30,51 @@ const orderTypes = [
   { value: "participants", label: "Participants" },
   { value: "capacity", label: "Capacity" },
 ] as const;
+type OrderType = typeof orderTypes[number]["value"];
+const orderValues = orderTypes.map((v) => v.value) as string[];
+
+export type SearchFilter = Partial<{
+  category: string;
+  start: string;
+  end: string;
+  q: string;
+  order: string;
+  dir: string;
+  joined: string;
+  owned: string;
+  page: string;
+}>;
 
 const PAGE_SIZE = 12;
 
+export async function runSearch(filters: SearchFilter) {
+  const filters_noUndef = Object.fromEntries(
+    Object.entries(filters).filter(([_, value]) => value !== undefined && value !== "")
+  );
+  await Router.push({
+    pathname: "/search",
+    query: filters_noUndef,
+  });
+}
+
 const SearchPage: NextPage = () => {
   const router = useRouter();
-  const { query, isReady } = router;
+
+
+  const filters = router.query as SearchFilter;
   const {
-    category,
     start, end,
     q,
-    // order,
-    // dir
-  } = query as {
-    [key: string]: string | undefined;
-  };
+  } = filters;
 
-  const [orderBy, setOrderBy] = useState<OrderBySchema>(orderTypes[0].value);
-  const [order, setOrder] = useState(false);
-  const [page, setPage] = useState(1);
+  const category = filters.category && Object.keys(categories).includes(filters.category) ? filters.category as Category : undefined;
+  const order: OrderType = filters.order && orderValues.includes(filters.order) ? filters.order as OrderType : "date";
+  const dir = filters.dir === "asc";
+  const joined = filters.joined === "1";
+  const owned = filters.owned === "1";
+  let page = isNaN(Number(filters.page)) ? 1 : Number(filters.page);
+  if (page < 1) page = 1;
+
 
   let dateRange: { start: CalendarDate; end: CalendarDate } | null = null;
   if (start && end) {
@@ -63,21 +90,25 @@ const SearchPage: NextPage = () => {
       start: start,
       end: end,
       query: q,
-      orderBy,
-      order: order ? "asc" : "desc",
+      orderBy: order && orderValues.includes(order) ? order : undefined,
+      order: dir ? "asc" : "desc",
+      joined,
+      owned,
       page,
       pageSize: PAGE_SIZE,
+
     },
-    { enabled: isReady }
+    { enabled: router.isReady }
   );
   const events = data?.events;
+  if (data && page > data.pageCount) runSearch({ ...filters, page: String(data.pageCount) });
 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   return (
     <>
       <Head>
-        <title>EventMate - Search</title>
+        <title>{"EventMate - " + (owned ? "My Events" : joined ? "Joined Events" : "Search")}</title>
       </Head>
       <main className={common.main}>
         <PlaceHolderSideBar />
@@ -86,7 +117,7 @@ const SearchPage: NextPage = () => {
           {/* Filters */}
           <div className={c.filters} data-filters={filtersOpen}>
             <header className={c.header}>
-              <h1>Find Events</h1>
+              <h1>{owned ? "My" : joined ? "Joined" : "Find"} Events</h1>
               <button onClick={() => setFiltersOpen((v) => !v)}>
                 <span>Filters</span>
                 {filtersOpen ? (
@@ -96,17 +127,27 @@ const SearchPage: NextPage = () => {
                 )}
               </button>
             </header>
-            <SearchFilters
-              textSearch
+            {router.isReady && <SearchFilters
+              moreFilters
               defaults={{
                 dateRange,
                 category: category as Category,
                 query: q,
+                owned, joined,
               }}
               onSearch={() => setFiltersOpen(false)}
               submitText="Apply"
               submitIcon={<CheckRounded />}
-            />
+              filters={{
+                category,
+                start, end,
+                joined: joined ? "1" : undefined,
+                owned: owned ? "1" : undefined,
+                order,
+                dir: dir ? "asc" : "desc",
+                page: String(page),
+              }}
+            />}
           </div>
 
           {/* Metadata & sort options */}
@@ -123,11 +164,11 @@ const SearchPage: NextPage = () => {
               <Select
                 className={c.orderSelect}
                 options={orderTypes}
-                value={orderBy}
-                onValueChange={setOrderBy as (v: string) => void}
+                value={order}
+                onValueChange={v => runSearch({ ...filters, order: v as OrderType })}
               />
-              <ToggleButton pressed={order} onPressedChange={setOrder}>
-                {order ? <ArrowUpwardRounded /> : <ArrowDownwardRounded />}
+              <ToggleButton pressed={dir} onPressedChange={v => runSearch({ ...filters, dir: v ? "asc" : "desc" })}>
+                {dir ? <ArrowUpwardRounded /> : <ArrowDownwardRounded />}
               </ToggleButton>
             </div>
           </div>
@@ -137,7 +178,7 @@ const SearchPage: NextPage = () => {
           {/* Page Controls */}
           {(data && data.pageCount > 1) && (
             <footer className={c.pageControls}>
-              <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+              <button disabled={page <= 1} onClick={() => runSearch({ ...filters, page: String(page - 1) })}>
                 <ArrowBackRounded />
                 <span>Back</span>
               </button>
@@ -146,7 +187,7 @@ const SearchPage: NextPage = () => {
               </span>
               <button
                 disabled={!data || page >= data.pageCount}
-                onClick={() => setPage((p) => p + 1)}
+                onClick={() => runSearch({ ...filters, page: String(page + 1) })}
               >
                 <span>Next</span>
                 <ArrowForwardRounded />
