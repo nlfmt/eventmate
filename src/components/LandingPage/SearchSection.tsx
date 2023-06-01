@@ -44,7 +44,6 @@ export const SearchFilters = ({ defaults, moreFilters, onSearch, submitText, sub
   const [query, setQuery] = React.useState(defaults?.query ?? "");
   const [owned, setOwned] = React.useState(defaults?.owned);
   const [joined, setJoined] = React.useState(defaults?.joined);
-  console.log({ owned, joined, defaults })
 
   function findEvents(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
