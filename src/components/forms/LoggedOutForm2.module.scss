@@ -7,7 +7,6 @@
 }
 
 
-
 .userLogoFrame{
   text-align: center;
   width: 100px;
@@ -56,6 +55,7 @@
   background: var(--bg-white);
   height: 2px;
   opacity: 0.5;
+  border-radius: 70%;
 }
 
 .main > *:not(.seperator) {
@@ -83,7 +83,6 @@
       display: inline-block;
       position: absolute;
       right: 1rem;
-      // color: #b97af7;
     }
 
 }
@@ -139,7 +138,6 @@
 }
 
 .about{
-  // margin-bottom: -1.5rem;
   font-size: medium;
   color: #ffffff;
 

@@ -6,19 +6,18 @@ import common from "@/styles/common.module.scss";
 import ChangeAccountInfo from "@/components/forms/ChangeAccountInfo";
 
 const AccountPage: NextPage = () => {
+  const { data: sessionData } = useSession();
 
-    const { data: sessionData } = useSession();
-   
-    return (
-        <>
-            <Head>
-                <title>Account</title>
-            </Head>
-            <main className={common.main}> 
-              <ChangeAccountInfo />
-            </main>
-        </>
-    );
+  return (
+    <>
+      <Head>
+        <title>Account</title>
+      </Head>
+      <main className={common.main}>
+        <ChangeAccountInfo />
+      </main>
+    </>
+  );
 };
 
 export default AccountPage;

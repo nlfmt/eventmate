@@ -38,9 +38,9 @@ const LoggedIn = () => {
           </div>
         </div>
         <div className={c.container1}>
-          <div>
-            Bioooooo
-          </div>
+          <span>Bioooooo</span>
+          <br />
+          {/* <span>ggrgrg</span> */}
         </div>
         
         <div className={c.seperator}></div>
