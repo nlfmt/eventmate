@@ -1,5 +1,5 @@
 .menuBar {
-  position: fixed;
+  position: sticky;
   width: 100%;
   height: 4rem;
   background-color:grey;  /*var(--bg)*/
@@ -11,28 +11,18 @@
   font-family: var(--title-font);
   line-height: 1rem;
   display: flex; 
-  justify-content: center; 
+  justify-content: space-between; 
   align-items: center; 
+  padding-top: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-.menuBar span{
-  padding: 0.1rem 1.5rem ;
-}
 
-.svgMenu {
+
+.menuBar header svg {
   fill: white;
   width: 2rem;
   height: 2rem;
-  margin-left: 1rem;
   float: left;
-  margin-top: 1rem;
-}
-
-.svgSearch{
-  fill: white;
-  width: 2rem;
-  height: 2rem;
-  float: right;
-  margin-top: 1rem;
-}
-
+  }

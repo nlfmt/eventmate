@@ -1,6 +1,6 @@
 .sidebar {
     position: fixed;
-    left: 0rem; /*-20rem*/
+    left: 0rem;
     width: 20rem;
     height: 100%;
     background-color:grey;  /*var(--bg)*/
@@ -52,6 +52,24 @@
   align-items: center;
 }
 
+.welcome {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0;
+  padding: 1rem;
+  color: var(--text);
+  font-size: 2rem;
+  font-family: var(--title-font);
+}
+
+.welcome span {
+  font-weight: bold;
+}
+
+.userName {
+  color: var(--green);
+}
+
 
 
 
@@ -68,7 +86,6 @@
   margin: 1rem;
   border-radius: var(--radius);
 }
-
 
 @media screen and (max-width: 500px) {
   .sidebar {
