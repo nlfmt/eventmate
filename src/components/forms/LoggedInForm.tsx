@@ -2,8 +2,6 @@ import { useSession } from "next-auth/react";
 //import c from "./LoggedOutForm.module.scss";
 import c from "@/components/forms/LoggedOutForm2.module.scss";
 
-import LogoImage from "@/assets/images/logo.png";
-import Image from "next/image";
 import {
   AccountCircleRounded,
   AdjustRounded,
