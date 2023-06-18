@@ -27,16 +27,16 @@ model User {
   events        Event[]                  @relation("EventParticipants")
   myEvents      Event[]                  @relation("EventAuthor")
   messages      Message[]                @relation("UserMessages")
-  invitations   EventInvitation[]        @relation("UserInvitations")
+  invitations   Event[]                  @relation("EventInvitations")
   fulfillments  RequirementFulfillment[] @relation("UserFulfillments")
 }
 
 model Event {
-  id           String            @id @default(cuid())
+  id           String        @id @default(cuid())
   authorId     String
-  author       User              @relation("EventAuthor", fields: [authorId], references: [id])
+  author       User          @relation("EventAuthor", fields: [authorId], references: [id])
   capacity     Int?
-  participants User[]            @relation("EventParticipants")
+  participants User[]        @relation("EventParticipants")
   title        String
   date         DateTime
   latitude     Float?
@@ -44,10 +44,10 @@ model Event {
   description  String
   tags         String
   category     String
-  private      Boolean           @default(false)
-  chat         Message[]         @relation("EventChat")
-  requirements Requirement[]     @relation("EventRequirements")
-  invitations  EventInvitation[] @relation("EventInvitations")
+  private      Boolean       @default(false)
+  chat         Message[]     @relation("EventChat")
+  requirements Requirement[] @relation("EventRequirements")
+  invitations  User[]        @relation("EventInvitations")
 
   @@index([authorId], name: "authorId")
 }
@@ -86,15 +86,4 @@ model Message {
 
   @@index([authorId], name: "authorId")
   @@index([eventId], name: "eventId")
-}
-
-model EventInvitation {
-  id      String @id @default(uuid())
-  event   Event  @relation("EventInvitations", fields: [eventId], references: [id])
-  eventId String
-  user    User   @relation("UserInvitations", fields: [userId], references: [id])
-  userId  String
-
-  @@index([eventId], name: "eventId")
-  @@index([userId], name: "userId")
 }

@@ -56,27 +56,31 @@ interface EventSectionProps {
   className?: string;
   wrap?: boolean;
   fill?: boolean;
+  component?: React.ComponentType<{ event: Event & {
+    _count: { participants: number };
+    author: Omit<User, "password">;
+  }}>;
   events:
     | (Event & { _count: { participants: number }; author: User })[]
     | undefined;
 }
 
-export const EventSection = (props: EventSectionProps) => {
+export const EventSection = ({component: MyComp = Card, ...props}: EventSectionProps) => {
   return (
     <div
       className={classes(c.eventSection, props.className)}
       data-wrap={props.wrap}
     >
       {props.title && (
-        <div className={c.sectionTitle}>
+      <div className={c.sectionTitle}>
           <span>{props.title}</span>
           <div />
-        </div>
+      </div>
       )}
       {props.events && props.events.length > 0 ? (
         <div className={c.eventList}>
           {props.events.map((event) => {
-            return <Card key={event.id} event={event} />;
+            return <MyComp key={event.id} event={event} />;
           })}
           {props.fill && <div className={c.filler} />}
         </div>

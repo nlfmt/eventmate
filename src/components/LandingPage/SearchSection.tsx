@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import c from "./SearchSection.module.scss";
 import categories, { type Category } from "@/utils/categories";
@@ -9,9 +9,8 @@ import {
   type CalendarDate,
 } from "@internationalized/date";
 import { ArrowForwardRounded } from "@mui/icons-material";
-import { useRouter } from "next/router";
 import Checkbox from "@/components/Checkbox/Checkbox";
-import { SearchFilter, runSearch } from "@/pages/search";
+import { type SearchFilter, runSearch } from "@/pages/search";
 
 const SearchSection = () => {
   return (
@@ -30,6 +29,7 @@ export interface SearchFilterProps {
     query?: string;
     owned?: boolean;
     joined?: boolean;
+    invited?: boolean;
   };
   onSearch?: () => void;
   submitText?: string;
@@ -44,6 +44,17 @@ export const SearchFilters = ({ defaults, moreFilters, onSearch, submitText, sub
   const [query, setQuery] = React.useState(defaults?.query ?? "");
   const [owned, setOwned] = React.useState(defaults?.owned);
   const [joined, setJoined] = React.useState(defaults?.joined);
+  const [invited, setInvited] = React.useState(defaults?.invited);
+
+  // useEffect(() => {
+  //   // setCategory(defaults?.category ?? "");
+  //   // setDateRange(defaults?.dateRange ?? null);
+  //   // setQuery(defaults?.query ?? "");
+  //   // setOwned(defaults?.owned ?? false);
+  //   // setJoined(defaults?.joined ?? false);
+  //   // setInvited(defaults?.invited ?? false);
+  //   console.log("rerun")
+  // }, [defaults]);
 
   function findEvents(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -58,6 +69,7 @@ export const SearchFilters = ({ defaults, moreFilters, onSearch, submitText, sub
       q: query,
       joined: joined ? "1" : undefined,
       owned: owned ? "1" : undefined,
+      invited: invited ? "1" : undefined,
     });
   }
 
@@ -73,8 +85,9 @@ export const SearchFilters = ({ defaults, moreFilters, onSearch, submitText, sub
             onChange={(e) => setQuery(e.target.value)}
           />
           <div className={c.checkboxes}>
-            <Checkbox className={c.checkbox} label="Owned only" checked={owned} onCheckedChange={setOwned} />
-            <Checkbox className={c.checkbox} label="Joined only" checked={joined} onCheckedChange={setJoined} />
+            <Checkbox className={c.checkbox} label="Owned" checked={owned} onCheckedChange={setOwned} />
+            <Checkbox className={c.checkbox} label="Joined" checked={joined} onCheckedChange={setJoined} />
+            <Checkbox className={c.checkbox} label="Invited" checked={invited} onCheckedChange={setInvited} />
           </div>
         </>
       )}

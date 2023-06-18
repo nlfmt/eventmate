@@ -15,13 +15,13 @@ const Checkbox = ({className, label, ...props}: CheckboxProps) => (
       onCheckedChange={v => props.onCheckedChange?.(v != "indeterminate" && v)}
       {...props}
     >
-      <div className={c.indicator}>
+      <div className={c.indicator} data-indicator>
         <RCheckbox.Indicator>
           <CheckRounded />
         </RCheckbox.Indicator>
       </div>
 
-      {label && <span className={c.label}>{label}</span>}
+      {label && <span data-label>{label}</span>}
       
     </RCheckbox.Root>
 );

@@ -65,12 +65,13 @@ export const eventRouter = createTRPCRouter({
         order: z.enum(["asc", "desc"]).optional().default("asc"),
         joined: z.boolean().optional().default(false),
         owned: z.boolean().optional().default(false),
+        invited: z.boolean().optional().default(false),
       })
     )
     .query(
       async ({
         ctx,
-        input: { category, end, start, query, page, pageSize, order, orderBy, owned, joined },
+        input: { category, end, start, query, page, pageSize, order, orderBy, owned, joined, invited },
       }) => {
 
         let _order: "asc" | "desc" | { _count: "asc" | "desc" } = order;
@@ -84,6 +85,7 @@ export const eventRouter = createTRPCRouter({
           category: category ? category : undefined,
           authorId: owned && ctx.session ? ctx.session.user.id : undefined,
           participants: joined && ctx.session ? { some: { id: ctx.session.user.id } } : undefined,
+          invitations: invited && ctx.session ? { some: { id: ctx.session.user.id } } : undefined,
           date:
             start && end
               ? { gte: new Date(start), lte: new Date(end) }

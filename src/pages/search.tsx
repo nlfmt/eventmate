@@ -13,7 +13,9 @@ import {
   ArrowDownwardRounded,
   ArrowForwardRounded,
   ArrowUpwardRounded,
+  CancelRounded,
   CheckRounded,
+  DoNotDisturbRounded,
   KeyboardArrowDownRounded,
   KeyboardArrowUpRounded,
 } from "@mui/icons-material";
@@ -22,6 +24,8 @@ import Select from "@/components/Select/Select";
 import { type OrderBySchema } from "@/validation/types";
 import ToggleButton from "@/components/ToggleButton/ToggleButton";
 import { SearchFilters } from "@/components/LandingPage/SearchSection";
+import Card, { CardProps } from "@/components/LandingPage/Card";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 
 const orderTypes = [
@@ -43,6 +47,7 @@ export type SearchFilter = Partial<{
   joined: string;
   owned: string;
   page: string;
+  invited: string;
 }>;
 
 const PAGE_SIZE = 12;
@@ -55,6 +60,42 @@ export async function runSearch(filters: SearchFilter) {
     pathname: "/search",
     query: filters_noUndef,
   });
+}
+
+const InvitationCard = (props: CardProps) => {
+
+  const mobile = useMediaQuery("(max-width: 499px)");
+  const [denyStep1, setDenyStep1] = useState(false);
+
+  function deny() {
+    if (!denyStep1) {
+      setDenyStep1(true);
+      setTimeout(() => setDenyStep1(false), 3000);
+      return;
+    }
+    setDenyStep1(false);
+    // TODO: Deny invitation
+  }
+
+  function accept() {
+    // TODO: Accept invitation
+  }
+
+  return (
+    <div className={c.invitationCard}>
+      <Card {...props} />
+      <div className={c.buttonGroup}>
+        <button className={c.acceptBtn} onClick={accept}>
+          <CheckRounded />
+          {mobile && <span>Accept</span>}
+        </button>
+        <button className={c.denyBtn} data-confirm={denyStep1} onClick={deny}>
+          <DoNotDisturbRounded />
+          {mobile && <span>{denyStep1 ? "Confirm" : "Deny"}</span>}
+        </button>
+      </div>
+    </div>
+  )
 }
 
 const SearchPage: NextPage = () => {
@@ -72,8 +113,11 @@ const SearchPage: NextPage = () => {
   const dir = filters.dir === "asc";
   const joined = filters.joined === "1";
   const owned = filters.owned === "1";
+  const invited = filters.invited === "1";
   let page = isNaN(Number(filters.page)) ? 1 : Number(filters.page);
   if (page < 1) page = 1;
+
+  const CardComponent = invited ? InvitationCard : Card;
 
 
   let dateRange: { start: CalendarDate; end: CalendarDate } | null = null;
@@ -94,6 +138,7 @@ const SearchPage: NextPage = () => {
       order: dir ? "asc" : "desc",
       joined,
       owned,
+      invited,
       page,
       pageSize: PAGE_SIZE,
 
@@ -104,6 +149,8 @@ const SearchPage: NextPage = () => {
   if (data && page > data.pageCount) runSearch({ ...filters, page: String(data.pageCount) });
 
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  if (!router.isReady) return null;
 
   return (
     <>
@@ -127,13 +174,13 @@ const SearchPage: NextPage = () => {
                 )}
               </button>
             </header>
-            {router.isReady && <SearchFilters
+            <SearchFilters
               moreFilters
               defaults={{
                 dateRange,
                 category: category as Category,
                 query: q,
-                owned, joined,
+                owned, joined, invited
               }}
               onSearch={() => setFiltersOpen(false)}
               submitText="Apply"
@@ -147,7 +194,7 @@ const SearchPage: NextPage = () => {
                 dir: dir ? "asc" : "desc",
                 page: String(page),
               }}
-            />}
+            />
           </div>
 
           {/* Metadata & sort options */}
@@ -173,7 +220,7 @@ const SearchPage: NextPage = () => {
             </div>
           </div>
 
-          <EventSection fill={true} wrap className={c.results} events={events} />
+          <EventSection fill wrap className={c.results} events={events} component={CardComponent} />
 
           {/* Page Controls */}
           {(data && data.pageCount > 1) && (
