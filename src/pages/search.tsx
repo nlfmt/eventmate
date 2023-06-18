@@ -13,7 +13,6 @@ import {
   ArrowDownwardRounded,
   ArrowForwardRounded,
   ArrowUpwardRounded,
-  CancelRounded,
   CheckRounded,
   DoNotDisturbRounded,
   KeyboardArrowDownRounded,
@@ -21,10 +20,9 @@ import {
 } from "@mui/icons-material";
 import categories, { type Category } from "@/utils/categories";
 import Select from "@/components/Select/Select";
-import { type OrderBySchema } from "@/validation/types";
 import ToggleButton from "@/components/ToggleButton/ToggleButton";
 import { SearchFilters } from "@/components/LandingPage/SearchSection";
-import Card, { CardProps } from "@/components/LandingPage/Card";
+import Card, { type CardProps } from "@/components/LandingPage/Card";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import c from "./SearchSection.module.scss";
 import categories, { type Category } from "@/utils/categories";

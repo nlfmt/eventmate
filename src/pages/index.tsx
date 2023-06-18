@@ -2,7 +2,6 @@ import c from "./index.module.scss";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
-import { MenuOutlined } from "@mui/icons-material";
 
 import { api } from "@/utils/api";
 import Card from "@/components/LandingPage/Card";
@@ -10,7 +9,6 @@ import type { Event, User } from "@prisma/client";
 import SearchSection from "@/components/LandingPage/SearchSection";
 import { classes } from "@/utils/utils";
 
-import Image from "next/image";
 import EventMateLogo from "@/components/EventMateLogo";
 
 export const PlaceHolderSideBar = () => {
