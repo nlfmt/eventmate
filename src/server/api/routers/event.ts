@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
 
 const defaultCountSchema = z
   .object({
@@ -9,6 +10,8 @@ const defaultCountSchema = z
   .default({ count: 10 });
 
 export const eventRouter = createTRPCRouter({
+
+  // get all events owned by the user
   myEvents: protectedProcedure
     .input(defaultCountSchema)
     .query(async ({ ctx, input }) => {
@@ -20,6 +23,7 @@ export const eventRouter = createTRPCRouter({
       });
     }),
 
+  // get all events the user has joined
   joinedEvents: protectedProcedure
     .input(defaultCountSchema)
     .query(async ({ ctx, input }) => {
@@ -32,6 +36,8 @@ export const eventRouter = createTRPCRouter({
         take: input.count,
       });
     }),
+
+  // get new events that the user is not participating in yet
   newEvents: protectedProcedure
     .input(defaultCountSchema)
     .query(async ({ ctx, input }) => {
@@ -41,6 +47,8 @@ export const eventRouter = createTRPCRouter({
         take: input.count,
       });
     }),
+
+  // get all participants of an event
   getParticipants: protectedProcedure
     .input(z.object({ eventId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -49,71 +57,7 @@ export const eventRouter = createTRPCRouter({
       });
     }),
 
-  search: publicProcedure
-    .input(
-      z.object({
-        category: z.string().optional(),
-        start: z.string().optional(),
-        end: z.string().optional(),
-        query: z.string().optional(),
-        pageSize: z.number().min(1).optional().default(15),
-        page: z.number().min(1).optional().default(1),
-        orderBy: z
-          .enum(["date", "title", "capacity", "participants"])
-          .optional()
-          .default("date"),
-        order: z.enum(["asc", "desc"]).optional().default("asc"),
-        joined: z.boolean().optional().default(false),
-        owned: z.boolean().optional().default(false),
-        invited: z.boolean().optional().default(false),
-      })
-    )
-    .query(
-      async ({
-        ctx,
-        input: { category, end, start, query, page, pageSize, order, orderBy, owned, joined, invited },
-      }) => {
-
-        let _order: "asc" | "desc" | { _count: "asc" | "desc" } = order;
-        if (orderBy === "participants") {
-          _order = { _count: order };
-        } else if (["title", "date"].includes(orderBy)) {
-          _order = order === "asc" ? "desc" : "asc";
-        }
-
-        const where = {
-          category: category ? category : undefined,
-          authorId: owned && ctx.session ? ctx.session.user.id : undefined,
-          participants: joined && ctx.session ? { some: { id: ctx.session.user.id } } : undefined,
-          invitations: invited && ctx.session ? { some: { id: ctx.session.user.id } } : undefined,
-          date:
-            start && end
-              ? { gte: new Date(start), lte: new Date(end) }
-              : { gte: new Date() },
-          OR: query
-            ? [{ title: { contains: query } }, { tags: { contains: query } }]
-            : undefined,
-        };
-
-        const [events, count] = await Promise.all([
-          ctx.prisma.event.findMany({
-            where,
-            include: {
-              author: true,
-              _count: { select: { participants: true } },
-            },
-            take: pageSize,
-            skip: (page - 1) * pageSize,
-            orderBy: { [orderBy]: _order },
-          }),
-          ctx.prisma.event.count({ where }),
-        ]);
-
-        const pageCount = Math.ceil(count / pageSize);
-
-        return { events, pageCount, count };
-      }
-    ),
+  // get a single event by id
   get: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -123,5 +67,54 @@ export const eventRouter = createTRPCRouter({
       });
 
       return event;
+    }),
+
+  // join an event
+  join: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input.id },
+        include: { author: true, invitations: true, participants: true },
+      });
+
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found",
+        });
+      }
+
+      // if the user is invited, remove the invitation and add them to the participants
+      if (event.invitations.some((user) => user.id === ctx.session.user.id)) {
+        await ctx.prisma.event.update({
+          where: { id: input.id },
+          data: {
+            participants: {
+              connect: { id: ctx.session.user.id },
+            },
+            invitations: {
+              disconnect: { id: ctx.session.user.id },
+            },
+          },
+        });
+
+      // only if the event is public, add the user to the participants
+      } else if (!event.private && !event.participants.some((user) => user.id === ctx.session.user.id)) {
+        await ctx.prisma.event.update({
+          where: { id: input.id },
+          data: {
+            participants: {
+              connect: { id: ctx.session.user.id },
+            },
+          },
+        });
+      } else {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to join this event",
+        });
+      }
     }),
 });

@@ -6,7 +6,7 @@ import { api } from "@/utils/api";
 import { EventSection, PlaceHolderSideBar } from ".";
 
 import c from "./SearchPage.module.scss";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { type CalendarDate, parseDate } from "@internationalized/date";
 import {
   ArrowBackRounded,
@@ -24,7 +24,12 @@ import ToggleButton from "@/components/ToggleButton/ToggleButton";
 import { SearchFilters } from "@/components/LandingPage/SearchSection";
 import Card, { type CardProps } from "@/components/LandingPage/Card";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 
+
+const SearchPageContext = createContext<{
+  invalidate: () => void;
+} | null>(null);
 
 const orderTypes = [
   { value: "date", label: "Date" },
@@ -62,21 +67,41 @@ export async function runSearch(filters: SearchFilter) {
 
 const InvitationCard = (props: CardProps) => {
 
+  const ctx = useContext(SearchPageContext);
+
   const mobile = useMediaQuery("(max-width: 499px)");
   const [denyStep1, setDenyStep1] = useState(false);
 
-  function deny() {
+  const { mutateAsync: denyInvitation } = api.invitation.deny.useMutation();
+  const { mutateAsync: joinEvent } = api.event.join.useMutation();
+
+  const [loading, setLoading] = useState({ accept: false, deny: false });
+
+
+  async function deny() {
     if (!denyStep1) {
       setDenyStep1(true);
       setTimeout(() => setDenyStep1(false), 3000);
       return;
     }
     setDenyStep1(false);
-    // TODO: Deny invitation
+    setLoading({ ...loading, deny: true });
+
+    await denyInvitation({
+      eventId: props.event.id,
+    });
+
+    ctx?.invalidate();
   }
 
-  function accept() {
-    // TODO: Accept invitation
+  async function accept() {
+    setLoading({ ...loading, accept: true });
+
+    await joinEvent({
+      id: props.event.id,
+    });
+
+    ctx?.invalidate();
   }
 
   return (
@@ -84,11 +109,11 @@ const InvitationCard = (props: CardProps) => {
       <Card {...props} />
       <div className={c.buttonGroup}>
         <button className={c.acceptBtn} onClick={accept}>
-          <CheckRounded />
+          {loading.accept ? <LoadingSpinner /> : <CheckRounded />}
           {mobile && <span>Accept</span>}
         </button>
         <button className={c.denyBtn} data-confirm={denyStep1} onClick={deny}>
-          <DoNotDisturbRounded />
+        {loading.deny ? <LoadingSpinner /> : <DoNotDisturbRounded />}
           {mobile && <span>{denyStep1 ? "Confirm" : "Deny"}</span>}
         </button>
       </div>
@@ -126,7 +151,7 @@ const SearchPage: NextPage = () => {
     };
   }
 
-  const { data } = api.event.search.useQuery(
+  const { data, refetch: invalidate } = api.search.event.useQuery(
     {
       category: category,
       start: start,
@@ -218,7 +243,9 @@ const SearchPage: NextPage = () => {
             </div>
           </div>
 
-          <EventSection fill wrap className={c.results} events={events} component={CardComponent} />
+          <SearchPageContext.Provider value={{ invalidate }}>
+            <EventSection fill wrap className={c.results} events={events} component={CardComponent} />
+          </SearchPageContext.Provider>
 
           {/* Page Controls */}
           {(data && data.pageCount > 1) && (
