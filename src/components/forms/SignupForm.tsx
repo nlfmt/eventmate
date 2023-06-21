@@ -10,6 +10,7 @@ import common from "@/styles/common.module.scss"
 import Link from "next/link";
 import { EmailRounded, KeyRounded, PersonRounded } from "@mui/icons-material";
 
+type SignupFormData = SignupSchema & { password2: string };
 
 const SignupForm = () => {
   const router = useRouter();
@@ -22,8 +23,9 @@ const SignupForm = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     getValues
-  } = useForm<SignupSchema>();
+  } = useForm<SignupFormData>();
 
   const { mutateAsync: signup } = api.auth.signup.useMutation({
     onError: e => {
@@ -54,8 +56,14 @@ const SignupForm = () => {
     }
   });
 
-  const onSubmit: SubmitHandler<SignupSchema> = async (data) => {
+  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     setErrorMessage(undefined);
+
+    if (data.password !== data.password2) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
     try {
       await signup(data);
     } catch (_e) {
@@ -63,37 +71,40 @@ const SignupForm = () => {
   };
 
   return <div>
-    {errorMessage && <p>{errorMessage}</p>}
+    {errorMessage ? <p className={c.errorMessage}>{errorMessage}</p> : (
+      <p>Perfectly planned<br /> - unforgettable experience!</p>
+    )}
     
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form className={c.form} onSubmit={handleSubmit(onSubmit)}>
 
       <div className={c.inputs}>
-        <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+        <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!watch("username")}>
           <PersonRounded />
           <input {...register("username", { required: true })} />
           <label  className={c.label}>Username</label>
         </div>
-        <div className={c.txt_field} data-error={!!errors.email} data-has-text={!!getValues().email}>
+        <div className={c.txt_field} data-error={!!errors.email} data-has-text={!!watch("email")}>
           <EmailRounded />
           <input {...register("email", { required: true })} />
           <label className={c.label}>Email</label>
         </div>
-        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!watch("password")}>
           <KeyRounded />
           <input type="password" {...register("password", { required: true })} />
           <label  className={c.label}>Password</label>
         </div>
-        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+        <div className={c.txt_field} data-error={!!errors.password2} data-has-text={!!watch("password2")}>
           <KeyRounded />
-          <input type="password" {...register("password", { required: true })} />
+          <input type="password" {...register("password2", { required: true })} />
           <label  className={c.label}>Confirm Password</label>
         </div>
       </div>
-      <div style={{ height: "4rem" }}></div>
+      <div style={{ flexGrow: "1" }}></div>
 
       <button type="submit" className={common.submitButton}>Submit</button>
       <div className={c.signin_link}> Already have an account? <Link href="/login" className={c.link}> Log in</Link></div>
       
+      <div style={{ height: "2rem" }}></div>
     </form>
   </div>;
 };
