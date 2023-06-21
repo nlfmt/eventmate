@@ -132,7 +132,7 @@ export const RateLimiter = t.middleware(({ ctx, next }) => {
     const now = Date.now();
     const last = rateLimitMap.get(ip) || 0;
     if (now - last < (15 * 60 * 1000)) {
-      throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "You can't make this many requests in a short period of time." });
+      throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "You can't make this many requests in a short period of time. IP: " + ip });
     }
     rateLimitMap.set(ip, now);
   }
