@@ -61,6 +61,17 @@
   }
 }
 
+.showMore {
+  background: none;
+  color: var(--text);
+
+  @media screen and (min-width: 500px) {
+    &:hover {
+      color: var(--text-darker);
+    }
+  }
+}
+
 .eventList {
   display: flex;
   flex-direction: column;

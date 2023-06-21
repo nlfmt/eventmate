@@ -10,6 +10,7 @@ import SearchSection from "@/components/LandingPage/SearchSection";
 import { classes } from "@/utils/utils";
 
 import EventMateLogo from "@/components/EventMateLogo";
+import { useRouter } from "next/router";
 
 export const PlaceHolderSideBar = () => {
   return (
@@ -61,6 +62,7 @@ interface EventSectionProps {
   events:
     | (Event & { _count: { participants: number }; author: User })[]
     | undefined;
+  onShowMore?: () => void;
 }
 
 export const EventSection = ({component: MyComp = Card, ...props}: EventSectionProps) => {
@@ -73,6 +75,9 @@ export const EventSection = ({component: MyComp = Card, ...props}: EventSectionP
       <div className={c.sectionTitle}>
           <span>{props.title}</span>
           <div />
+          {props.onShowMore && (
+            <button className={c.showMore} onClick={props.onShowMore}>Show More</button>
+          )}
       </div>
       )}
       {props.events && props.events.length > 0 ? (
@@ -92,16 +97,33 @@ export const EventSection = ({component: MyComp = Card, ...props}: EventSectionP
 };
 
 const MyEventsSection = () => {
+  const router = useRouter();
   const { data: events } = api.event.myEvents.useQuery();
-  return <EventSection title="My Events" events={events} />;
+  return <EventSection title="My Events" events={events} onShowMore={() => {
+    router.push({
+      pathname: "/search",
+      query: { owned: 1 }
+    })
+  }} />;
 };
 
 const JoinedEventsSection = () => {
+  const router = useRouter();
   const { data: events } = api.event.joinedEvents.useQuery();
-  return <EventSection title="Joined Events" events={events} />;
+  return <EventSection title="Joined Events" events={events} onShowMore={() => {
+    router.push({
+      pathname: "/search",
+      query: { joined: 1 }
+    })
+  }} />;
 };
 
 const NewEventsSection = () => {
+  const router = useRouter();
   const { data: events } = api.event.newEvents.useQuery();
-  return <EventSection title="New Events" events={events} />;
+  return <EventSection title="New Events" events={events} onShowMore={() => {
+    router.push({
+      pathname: "/search",
+    })
+  }} />;
 };
