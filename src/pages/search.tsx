@@ -110,11 +110,11 @@ const InvitationCard = (props: CardProps) => {
       <div className={c.buttonGroup}>
         <button className={c.acceptBtn} onClick={accept}>
           {loading.accept ? <LoadingSpinner /> : <CheckRounded />}
-          {mobile && <span>Accept</span>}
+          {mobile && <span className={c.buttonLabel}>Accept</span>}
         </button>
         <button className={c.denyBtn} data-confirm={denyStep1} onClick={deny}>
         {loading.deny ? <LoadingSpinner /> : <DoNotDisturbRounded />}
-          {mobile && <span>{denyStep1 ? "Confirm" : "Deny"}</span>}
+          {mobile && <span className={c.buttonLabel}>{denyStep1 ? "Confirm" : "Deny"}</span>}
         </button>
       </div>
     </div>
