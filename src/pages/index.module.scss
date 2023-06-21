@@ -46,13 +46,17 @@
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: var(--text);
   padding: 1rem 1.5rem;
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  @media screen and (min-width: 500px) {
+    font-size: 1.5rem;
+  }
 
   div {
     height: 2px;
@@ -62,8 +66,13 @@
 }
 
 .showMore {
+  padding: 0;
   background: none;
   color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
 
   @media screen and (min-width: 500px) {
     &:hover {

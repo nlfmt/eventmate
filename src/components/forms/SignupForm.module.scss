@@ -1,37 +1,56 @@
 .center {
   width: min(100%, 650px);
+  height: 100%;
+  @media screen and (max-width: 499px) {
+    flex-grow: 1;
+  }
+  display: flex;
+  flex-direction: column;
 
   h1 {
     text-align: center;
+    font-weight: normal;
     
     border-bottom: 2px solid var(--green);
     color: var(--text);
     font-family: var(--title-font);
-    font-size: 4rem;
+    font-size: 3rem;
     margin: 2rem;
     white-space: nowrap;
+    margin-bottom: 0;
   }
 
   p {
     color: var(--bg-white-dark);
     text-align: center;
-    font-size: 1.3rem;
-    padding: 2rem 0;
+    font-size: 1rem;
+    padding: 0 2rem;
+    margin: 2rem 0;
   }
 }
 
+p.errorMessage {
+  color: var(--error);
+}
+
+.center > div {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
 
 .center form {
   padding: 0 2rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .inputs {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 form .txt_field {
@@ -63,7 +82,7 @@ form .txt_field[data-error="true"] {
 .txt_field input {
   width: 100%;
   padding: 0 0.5rem;
-  height: 3rem;
+  height: 2.5rem;
   font-size: 1rem;
   border: none;
   background: none;
@@ -98,19 +117,28 @@ form .txt_field[data-error="true"] {
 
 .txt_field:focus-within label,
 .txt_field[data-has-text="true"] label {
-  top: -0.2rem;
+  top: 0rem;
   color: var(--green);
+  font-size: 0.75rem;
 }
 
 
 .pass {
   padding: 0.5rem;
-  margin-bottom: 3rem;
   color: var(--bg-white-dark);
   cursor: pointer;
-  text-decoration: underline;
   opacity: 0.5;
+  font-size: 0.8rem;
+  text-align: right;
+  
+  @media (hover: hover) {
+    &:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+  }
 }
+
 
 
 .signin_link {

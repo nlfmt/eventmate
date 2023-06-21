@@ -38,11 +38,11 @@ export const eventRouter = createTRPCRouter({
     }),
 
   // get new events that the user is not participating in yet
-  newEvents: protectedProcedure
+  newEvents: publicProcedure
     .input(defaultCountSchema)
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.event.findMany({
-        where: { participants: { none: { id: ctx.session.user.id } } },
+        where: ctx.session ? { participants: { none: { id: ctx.session.user.id } } } : undefined,
         include: { author: true, _count: { select: { participants: true } } },
         take: input.count,
       });

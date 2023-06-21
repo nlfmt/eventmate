@@ -11,6 +11,7 @@ import { classes } from "@/utils/utils";
 
 import EventMateLogo from "@/components/EventMateLogo";
 import { useRouter } from "next/router";
+import { ArrowForwardRounded } from "@mui/icons-material";
 
 export const PlaceHolderSideBar = () => {
   return (
@@ -76,7 +77,10 @@ export const EventSection = ({component: MyComp = Card, ...props}: EventSectionP
           <span>{props.title}</span>
           <div />
           {props.onShowMore && (
-            <button className={c.showMore} onClick={props.onShowMore}>Show More</button>
+            <button className={c.showMore} onClick={props.onShowMore}>
+              <span>Show More</span>
+              <ArrowForwardRounded />
+            </button>
           )}
       </div>
       )}
