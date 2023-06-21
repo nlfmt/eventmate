@@ -2,31 +2,88 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
-}
-
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  provider     = "mysql"
+  // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+  // Further reading:
+  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model User {
-    id            String    @id @default(cuid())
-    username      String?   @unique
-    email         String?   @unique
-    emailVerified DateTime?
-    password      String
-    image         String?
-    createdAt     DateTime  @default(now())
-    updatedAt     DateTime  @updatedAt
+  id            String                   @id @default(cuid())
+  username      String?                  @unique
+  email         String?                  @unique
+  emailVerified DateTime?
+  password      String
+  image         String?
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+  events        Event[]                  @relation("EventParticipants")
+  myEvents      Event[]                  @relation("EventAuthor")
+  messages      Message[]                @relation("UserMessages")
+  invitations   Event[]                  @relation("EventInvitations")
+  fulfillments  RequirementFulfillment[] @relation("UserFulfillments")
+}
+
+model Event {
+  id           String        @id @default(cuid())
+  authorId     String
+  author       User          @relation("EventAuthor", fields: [authorId], references: [id])
+  capacity     Int?
+  participants User[]        @relation("EventParticipants")
+  title        String
+  date         DateTime
+  latitude     Float?
+  longitude    Float?
+  description  String
+  tags         String
+  category     String
+  private      Boolean       @default(false)
+  chat         Message[]     @relation("EventChat")
+  requirements Requirement[] @relation("EventRequirements")
+  invitations  User[]        @relation("EventInvitations")
+
+  @@index([authorId], name: "authorId")
+}
+
+model Requirement {
+  id           String                   @id @default(uuid())
+  description  String
+  count        Int
+  event        Event?                   @relation("EventRequirements", fields: [eventId], references: [id])
+  eventId      String?
+  fulfillments RequirementFulfillment[]
+
+  @@index([eventId], name: "eventId")
+}
+
+model RequirementFulfillment {
+  id            String      @id @default(uuid())
+  quantity      Int
+  user          User        @relation("UserFulfillments", fields: [userId], references: [id])
+  requirementId String
+  requirement   Requirement @relation(fields: [requirementId], references: [id])
+  userId        String
+
+  @@index([requirementId], name: "requirementId")
+  @@index([userId], name: "userId")
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  body      String
+  author    User     @relation("UserMessages", fields: [authorId], references: [id])
+  authorId  String
+  event     Event?   @relation("EventChat", fields: [eventId], references: [id])
+  eventId   String?
+
+  @@index([authorId], name: "authorId")
+  @@index([eventId], name: "eventId")
 }

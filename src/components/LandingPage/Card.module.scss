@@ -1,0 +1,252 @@
+.card {
+    position: relative;
+    z-index: 5;
+    background-color: var(--clr);
+    border-radius: var(--radius-large);
+    width: 100%;
+    height: 13rem;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+
+    box-shadow: var(--shadow1);
+
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+    &::after {
+        content: "";
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 10rem;
+        background-color: var(--clr);
+        border-radius: var(--radius-large);
+        filter: blur(0.5rem);
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    &[data-cat="show"] {
+      --clr: #eaa9ff;
+    }
+    &[data-cat="party"] {
+      --clr: #ccaaff;
+    }
+    &[data-cat="sport"] {
+      --clr: #bde0f7;
+    }
+    &[data-cat="meetup"] {
+      --clr: #b3caff;
+    }
+    &[data-cat="education"] {
+      --clr: #aeffad;
+    }
+    &[data-cat="culture"] {
+      --clr: #ffbdad;
+    }
+    &[data-cat="other"] {
+      --clr: #80e7ae;
+    }
+
+}
+
+.tags {
+    display: flex;
+    gap: 0.5rem;
+    row-gap: 9999999px;
+    padding: 0.5rem;
+    flex-wrap: wrap;
+    height: 2.5rem;
+    overflow: hidden;
+
+    span {
+        background-color: var(--bg);
+        padding: 0.3rem 0.6rem;
+        border-radius: 99999px;
+        font-size: 0.75rem;
+        color: var(--text-dark);
+    }
+}
+
+.title {
+    font-size: 1.2rem;
+    font-weight: 700;
+
+    // This causes the text to be cut off with "..." if it is longer than three lines
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.categoryName {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-inv);
+  opacity: 0.5;
+  height: 1rem;
+}
+
+.middle {
+    overflow: hidden;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 1rem 0.5rem 1rem;
+    width: calc(100% - 4rem);
+}
+
+$info-padding: 1rem;
+
+.info {
+    position: relative;
+    background-color: var(--bg-white);
+    border-radius: var(--radius-large);
+    border-radius: 0 0 var(--radius-large) var(--radius-large);
+    padding: $info-padding;
+    height: 5rem;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+
+    svg {
+        height: 1.2rem;
+        width: 1.2rem;
+        fill: var(--text-inv-light);
+    }
+}
+
+.category {
+    position: absolute;
+    right: 0;
+    transform: translatey(-100%);
+
+    height: 2.5rem;
+    display: flex;
+    align-items: flex-end;
+
+}
+
+.categoryBG {
+    width: 100%;
+    height: 100%;
+}
+
+.categoryIcon {
+    position: absolute;
+    height: 100%;
+    width: 3.5rem;
+    // background-color: red;
+    right: 0;
+
+    display: grid;
+    place-items: center;
+
+    svg {
+        height: 1.4rem;
+        width: 1.4rem;
+        fill: var(--text-inv-light);
+        opacity: 0.8;
+    }
+}
+
+.collapse {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 3rem;
+  padding-right: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+
+  svg {
+    height: 1.5rem;
+    width: 1.5rem;
+    fill: var(--text-inv-light);
+    opacity: 0.8;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  .card {
+    &:hover {
+      transform: scale(1.01);
+      box-shadow: var(--shadow1-dark);
+      &::after {
+        opacity: 0.3;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .collapse {
+    display: flex;
+  }
+  .card[data-small="true"] {
+    height: 4rem;
+    &::after {
+      height: 4rem;
+    }
+    .collapse {
+      display: none;
+    }
+    .tags {
+      display: none;
+    }
+    .middle {
+      padding-bottom: 0;
+      justify-content: center;
+      width: calc(100% - 6rem);
+      .title {
+        -webkit-line-clamp: 2;
+      }
+    }
+    .info {
+      height: 0;
+      padding: 0;
+      .infoItem {
+        display: none;
+      }
+      .category {
+        opacity: 1;
+        height: 4rem;
+        border-radius: 0 var(--radius-large) var(--radius-large) 0;
+        overflow: hidden;
+
+        .categoryBG > * {
+          fill-opacity: 1;
+        }
+
+        .categoryIcon {
+          width: 5rem;
+          svg {
+            height: 2rem;
+            width: 2rem;
+          }
+        }
+      }
+      & > * {
+        opacity: 0;
+      }
+    }
+    .categoryName {
+      height: 0;
+      opacity: 0;
+    }
+  }
+}

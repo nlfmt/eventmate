@@ -1,0 +1,26 @@
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-large);
+  padding: 0;
+  color: var(--text-inv);
+}
+
+.indicator {
+  border-radius: var(--radius-large);
+  background: var(--bg);
+  --indicator: var(--green);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: var(--indicator);
+  }
+}

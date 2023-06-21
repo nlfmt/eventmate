@@ -1,8 +1,13 @@
-import { LoginSchema } from "@/validation/auth";
+import type { LoginSchema } from "@/validation/auth";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
+
+import c from "./SignupForm.module.scss"
+import common from "@/styles/common.module.scss"
+import Link from "next/link";
+import { KeyRounded, PersonRounded } from "@mui/icons-material";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -12,6 +17,7 @@ const LoginForm = () => {
     register, // function to register a form field
     handleSubmit,
     formState: { errors },
+    getValues
   } = useForm<LoginSchema>();
 
 
@@ -32,17 +38,27 @@ const LoginForm = () => {
 
   return <div>
     {errorMessage && <p>{errorMessage}</p>}
+
     <form onSubmit={handleSubmit(onSubmit)}>
 
-      <label>Username</label>
-      <input {...register("username", { required: true })} />
-      {errors.username && <p>This field is required</p>}
+      <div className={c.inputs}>
+        <div className={c.txt_field} data-error={!!errors.username} data-has-text={!!getValues().username}>
+          <PersonRounded />
+          <input {...register("username", { required: true })} />
+          <label>Username</label>
+        </div>
+        
+        <div className={c.txt_field} data-error={!!errors.password} data-has-text={!!getValues().password}>
+          <KeyRounded />
+          <input type="password" {...register("password", { required: true })} />
+          <label>Password</label>
+        </div>
+      </div>
 
-      <label>Password</label>
-      <input type="password" {...register("password", { required: true })} />
-      {errors.password && <p>This field is required</p>}
-
-      <button type="submit">Submit</button>
+      <div className={c.pass}>Forgot Password?</div>
+      <button type="submit" className={common.submitButton}>Submit</button>
+      <div className={c.signin_link}>Don&apos;t have an account? <Link href="/signup" className={c.link}> Signup</Link></div>
+      
     </form>
   </div>;
 };

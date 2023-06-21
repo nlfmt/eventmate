@@ -1,0 +1,111 @@
+.searchSection {
+  width: 100%;
+  background-color: var(--bg-white);
+  padding: 2rem 1rem 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin: 0;
+  }
+}
+
+.searchBar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 30rem;
+}
+
+.checkboxes {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  & > * {
+    flex-grow: 1;
+  }
+}
+
+.checkbox {
+  background-color: var(--bg);
+
+  & > div {
+    border-radius: var(--radius-large) 0 0 var(--radius-large);
+    background-color: var(--bg-light);
+  }
+
+  & > span {
+    color: var(--text)
+  }
+}
+
+.queryInput {
+  border: none;
+  flex-grow: 1;
+  max-width: 30rem;
+  border-radius: var(--radius-large);
+  background-color: var(--bg);
+  padding: 0 1rem;
+  height: 3rem;
+  font-size: 1rem;
+  color: var(--text);
+  font-family: var(--font);
+  box-shadow: var(--shadow1);
+}
+
+.datePicker {
+  box-shadow: var(--shadow1);
+}
+
+.selectBox[data-trigger] {
+  box-shadow: var(--shadow1);
+  flex-grow: 1;
+}
+
+.selectWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.searchButton {
+  all: unset;
+  width: 7rem;
+  border-radius: var(--radius-large);
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--text-inv);
+  background-color: var(--green);
+  box-shadow: var(--shadow1);
+  cursor: pointer;
+
+  span {
+    flex-grow: 1;
+    text-align: center;
+  }
+}
+
+.searchIcon {
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  // height: 100%;
+  background-color: rgba(0,0,0,0.1);
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius);
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: var(--text-inv);
+  }
+}
