@@ -22,6 +22,7 @@ import { prisma } from "@/server/db";
 
 type CreateContextOptions = {
   session: Session | null;
+  req: NextApiRequest;
 };
 
 /**
@@ -37,6 +38,7 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
+    req: opts.req,
     prisma,
   };
 };
@@ -55,6 +57,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
   return createInnerTRPCContext({
     session,
+    req
   });
 };
 
@@ -68,6 +71,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { NextApiRequest } from "next";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -117,6 +121,23 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
       session: { ...ctx.session, user: ctx.session.user },
     },
   });
+});
+
+const rateLimitMap = new Map<string, number>();
+
+export const RateLimiter = t.middleware(({ ctx, next }) => {
+  const ip = ctx.req.headers["x-real-ip"] || ctx.req.socket.remoteAddress;
+
+  if (typeof ip == "string") {
+    const now = Date.now();
+    const last = rateLimitMap.get(ip) || 0;
+    if (now - last < (15 * 60 * 1000)) {
+      throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "You can't make this many requests in a short period of time." });
+    }
+    rateLimitMap.set(ip, now);
+  }
+
+  return next({ ctx });
 });
 
 /**

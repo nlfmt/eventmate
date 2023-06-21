@@ -1,11 +1,11 @@
 import bcrypt from "bcrypt";
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { RateLimiter, createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { signupSchema } from "@/validation/auth";
 import { TRPCError } from "@trpc/server";
 
 export const authRouter = createTRPCRouter({
-  signup: publicProcedure
+  signup: publicProcedure.use(RateLimiter)
     .input(signupSchema)
     .mutation(async ({ ctx, input }) => {
       const salt = await bcrypt.genSalt(10);
