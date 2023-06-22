@@ -17,7 +17,7 @@
 }
 
 .error{
-  color:red;
+  color: var(--error);
   text-align: center;
 }
 
@@ -55,10 +55,6 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
-
-  // div{
-  // background-color: #292929;
-  // }
 }
 
 form .txt_field {
@@ -144,7 +140,6 @@ form div.bio {
   font-family: var(--font);
   color: var(--bg-white-dark);
 }
-
 
 
 .pass {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import c from "./ChangeAccountInfo.module.scss";
 import common from "@/styles/common.module.scss";
@@ -16,6 +16,7 @@ type ChangeAccountInfoSchema = {
 
 const ChangeAccountInfoForm = () => {
   const { data: sessionData } = useSession();
+  const usernameInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -27,6 +28,12 @@ const ChangeAccountInfoForm = () => {
     },
     mode: "onChange",
   });
+
+  useEffect(() => {
+    if (usernameInputRef.current) {
+      usernameInputRef.current.focus();
+    }
+  }, []);
 
   const [username, setUsername] = React.useState(sessionData?.user.name ?? "");
   const [email, setEmail] = React.useState(sessionData?.user.email ?? "");
@@ -75,7 +82,14 @@ const ChangeAccountInfoForm = () => {
     setIsEditingUsername(v => !v);
   }
   const toggleEditEmail = () => {
-    setIsEditingEmail(v => !v);
+    setIsEditingEmail((prevState) => !prevState);
+    setTimeout(() => {
+      const emailInput = document.getElementById("emailInput") as HTMLInputElement;
+      if (emailInput) {
+        emailInput.focus();
+        emailInput.setSelectionRange(0, emailInput.value.length);
+      }
+    }, 0);
   }
   const toggleEditBio = () => {
     setIsEditingBio(v => !v);
@@ -93,6 +107,7 @@ const ChangeAccountInfoForm = () => {
             onChange={handleUsernameChange}
             data-error={!!errors.username}
             placeholder={`${sessionData?.user.name}`}
+            ref={usernameInputRef}
           />
           <div className={c.edit} onClick={toggleEditUsername}>
             {isEditingUsername ? <CheckRounded /> : <EditRounded />}
@@ -102,7 +117,7 @@ const ChangeAccountInfoForm = () => {
         <input
           type="text"
           {...register("email", {
-            required: "Email is required",
+            required: true,
             pattern: {
               value: /\S+@\S+\.\S+/,
               message: "Invalid email address",
@@ -113,6 +128,7 @@ const ChangeAccountInfoForm = () => {
           data-error={!!errors.email}
           placeholder={`${sessionData?.user.email}`}
           disabled={!isEditingEmail}
+          id="emailInput"
         />
         <div className={c.edit} onClick={toggleEditEmail}>
           {isEditingEmail ? <CheckRounded /> : <EditRounded />}
@@ -142,11 +158,9 @@ const ChangeAccountInfoForm = () => {
         )}
         {/* {backendError && <span className={c.error}>{backendError}</span>} */}
 
-        {/* <Link href="/user"> */}
         <button type="submit" className={common.submitButton}>
           Submit
         </button>
-        {/* </Link> */}
       </div>
     </form>
   );

@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 //import c from "./LoggedOutForm.module.scss";
-import c from "@/components/forms/LoggedOutForm2.module.scss";
+import c from "@/components/forms/LoggedInForm.module.scss";
 
 import {
   AccountCircleRounded,
@@ -27,7 +27,6 @@ const LoggedIn = () => {
       <div className={c.edit}>Edit</div>
 
       <main className={c.main}>
-        {/* prostheto container me user info, opou mporo na allakso onoma, mail, bio*/}
         <div className={c.container1}>
           <div>
             <span className={c.name}>{sessionData?.user.name}</span>

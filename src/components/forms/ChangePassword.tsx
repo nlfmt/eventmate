@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import c from "./SignupForm.module.scss";
+import c from "./ChangePassword.module.scss";
 import common from "@/styles/common.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
@@ -19,7 +19,7 @@ const ChangePassword = () => {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
+    watch,
   } = useForm<ChangeAccountInfoSchema>();
 
   const { mutateAsync: changePassword } = api.user.changePassword.useMutation();
@@ -60,36 +60,47 @@ const ChangePassword = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className={c.form}>
+    <form className={c.form} onSubmit={handleSubmit(submitHandler)}>
       <div className={c.inputs}>
-        <div className={c.txt_field}>
+        <div
+          className={c.txt_field}
+          data-error={!!errors.oldPassword}
+          data-has-text={!!watch("oldPassword")}
+        >
           <KeyRounded />
           <input
             type="password"
             {...register("oldPassword", { required: true })}
-            data-error={!!errors.oldPassword}
           />
           <label className={c.label}>Old Password</label>
         </div>
-        <div className={c.txt_field}>
+        <div
+          className={c.txt_field}
+          data-error={!!errors.newPassword}
+          data-has-text={!!watch("newPassword")}
+        >
           <KeyRounded />
           <input
             type="password"
             {...register("newPassword", { required: true })}
-            data-error={!!errors.newPassword}
           />
           <label className={c.label}>New Password</label>
         </div>
-        <div className={c.txt_field}>
+        <div
+          className={c.txt_field}
+          data-error={!!errors.confirmPassword}
+          data-has-text={!!watch("confirmPassword")}
+        >
           <KeyRounded />
           <input
             type="password"
             {...register("confirmPassword", { required: true })}
-            data-error={!!errors.confirmPassword}
           />
           <label className={c.label}>Confirm Password</label>
         </div>
-        {passwordError && <p className={c.error}>{passwordError}</p>}
+        {passwordError && (
+          <p className={`${c.error} ${c.errorMessage}`}>{passwordError}</p>
+        )}
         <button type="submit" className={common.submitButton}>
           Submit
         </button>

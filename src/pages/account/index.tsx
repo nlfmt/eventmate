@@ -17,10 +17,10 @@ const AccountPage: NextPage = () => {
                 <title>Account</title>
             </Head>
             <main className={common.main}> 
-                {!sessionData || true ? (
-                    <LoggedIn />
+                {!sessionData /**|| true**/ ? (
+                    <LoggedOut />
                 ) : (
-                    <LoggedOut/>
+                    <LoggedIn/>
                 )}
             </main>
         </>

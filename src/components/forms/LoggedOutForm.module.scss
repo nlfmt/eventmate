@@ -1,99 +1,42 @@
-
-.userLogoFrame{
-  text-align: center;
-  width: 100px;
-  height: 100px;
-  border-radius: 70%;
-  background-color: var(--green);
- // border: black;
-  background-image: linear-gradient(to right, #63ED60, #4494B7);
-
-
-  svg {
-    width: 6rem;
-    height: 6rem;
-    fill: #232323;
-  }
-
-  .grad{
-    background-image: linear-gradient(#63ED60, #4494B7);
-  }
-}
-
 .main{
   width: 100%;
-  padding-right: 2em;
-  padding-left: 0em;
-  align-items: center;
-}
+  max-width: 30rem;
 
-.container{
-  align-items: left;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  background-color: #292929;
-  height: 100%;
-  width: calc(100% );
-  border-bottom: 2px solid #9000FF;
-  border-top: 2px solid #9000FF;
-  padding: 0.5rem;
-  margin: 2em;
-  justify-content: center;
-
-
-  color: aliceblue;
-}
-/*
-display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  background-color: #292929;
-  height: 100%;
-  width: calc(100% - 2em);
-  border-bottom: 2px solid #9000FF;
-  border-top: 2px solid #9000FF;
-  padding: 0.5rem;
-  margin: 2em;
-  justify-content: space-evenly;
-*/
-
-.edit{
-  color: #9000FF;
-}
-
-.user{
-  //background-color: black;
-  text-align: center;
-  //border-bottom: 2px solid var(--green);
-  color: var(--text);
-  font-size: 4rem;
-  margin: 2rem;
-  white-space: nowrap;
-  color: var(--bg-white-dark);
-  text-align: center;
-  font-size: 1.3rem;
-  padding: 2rem 0;
-  padding: 0 2rem;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-}
-.h1{
-  text-align: center;
-      
-      border-bottom: 2px solid var(--green);
-      margin: 2rem;
-      white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  width: clamp(20rem, 50%, 40rem);
+  padding: 2rem;
+  background: var(--bg-light);
+  border-radius: var(--radius-large);
 }
 
-.about{
-  text-align: left;
-  font-size: small;
-  color: #a2a2a2;
+
+.text{
+  color: var(--text);
+  text-align: center;
+  font-size: 1rem;
+  padding: 0 2rem;
+  margin: 2rem 0;
 }
 
 .button{
-  color: 232323;
-}
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #292929;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
 
+  &:hover{
+    background-color: var(--green);
+    color: #292929;
+  }
+}
