@@ -46,9 +46,12 @@ const EventHeader = (props: HeaderProps) => {
   const CategoryIcon = category?.[1];
 
   return (
-    <div className={c.heading} data-HEADER>
+    <div 
+      className={c.heading} 
+      data-HEADER
+      data-cat={event.category}
+    >
       <div className={c.categories}>
-          {/* Categories */}
           <div className={c.tags}>
             {event.tags.split(";").map((tag) => {
               return <span key={tag}>{tag}</span>;
@@ -58,7 +61,7 @@ const EventHeader = (props: HeaderProps) => {
             <CategoryIcon />
           </div>
       </div>
-      <div className={c.title}>
+      <div className={c.title_Wrapper}>
           {/* Event title */}
           <span className={c.title}>
               {title.split("\n").map((item, key) => {
@@ -72,7 +75,7 @@ const EventHeader = (props: HeaderProps) => {
           </span>
           <span className={c.categoryName}>{categoryName}</span>
       </div>
-      <div className={c.author} style={{ direction: "rtl" }}>
+      <div className={c.author}>
           <span>Erstellt von {event.author.username}</span>
       </div>
     </div>

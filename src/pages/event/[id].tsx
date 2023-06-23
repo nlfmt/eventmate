@@ -2,7 +2,8 @@ import { NextPage } from "next";
 import Head from "next/head";
 import type { Event, User } from "@prisma/client";
 import { api } from "@/utils/api";
-
+import { MenuOutlined } from "@mui/icons-material";
+import { useRouter } from "next/router";
 
 import EventHeader from "@/components/EventOverview/EventHeader";
 import EventInformation from "@/components/EventOverview/EventInformation";
@@ -13,7 +14,6 @@ import EventChat from "@/components/EventOverview/EventChat";
 
 import common from "@/styles/common.module.scss"
 import c from "@/components/eventOverview/eventOverview.module.scss"
-import { useRouter } from "next/router";
 
 
 const Event: NextPage = () => {
@@ -28,8 +28,13 @@ const Event: NextPage = () => {
         {/* ToDo: hier muss eigentlich der Titel bzw. die Id des Events hin */}
         <title>Event</title>
       </Head>
-      <main className={common.main}>
+      <main className={c.main}>
         <div className={c.center}>
+          {/* <SideBar /> */}
+          <header className={c.navbar}>
+            <span>EventMate</span>
+            <MenuOutlined />
+          </header>
           {event ? (
             <>
               <EventHeader event={event} />

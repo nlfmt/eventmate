@@ -1,9 +1,18 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100%;
+  background: var(--bg);
+  font-family: var(--font);
+}
+
 .center {
-  width: min(100%, 650px);
+  width: 100%;
 
   h1 {
     text-align: center;
-    
     border-bottom: 2px solid var(--green);
     color: var(--text);
     font-family: var(--title-font);
@@ -12,38 +21,107 @@
     white-space: nowrap;
   }
 
+  h2 {
+  font-weight: bolder;
+  font-size: 16px;
+  color: var(--text);
+  }
+
   p {
     color: var(--bg-white-dark);
     text-align: center;
     font-size: 1.3rem;
     padding: 2rem 0;
   }
+
+  span {
+    color: var(--text);
+  }
 }
 
-// h2 {
-//   font-weight: bolder;
-//   font-size: 16px;
-// }
-
-
-.header {
+.navbar {
+  background-color: var(--bg);
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem;  
+
+  span {
+    font-family: var(--title-font);
+    color: var(--text);
+    font-size: 2rem;
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    fill: var(--text);
+  }
+}
+
+
+
+// Header ********************************************************
+.heading {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--clr);
+  border-bottom-left-radius: var(--radius-large);
+  border-bottom-right-radius: var(--radius-large);
+  margin-bottom: 2rem;
+
+  &[data-cat="show"] {
+    --clr: #eaa9ff;
+  }
+  &[data-cat="party"] {
+    --clr: #ccaaff;
+  }
+  &[data-cat="sport"] {
+    --clr: #bde0f7;
+  }
+  &[data-cat="meetup"] {
+    --clr: #b3caff;
+  }
+  &[data-cat="education"] {
+    --clr: #aeffad;
+  }
+  &[data-cat="culture"] {
+    --clr: #ffbdad;
+  }
+  &[data-cat="other"] {
+    --clr: #7c698b;
+  }
 }
 
 .categories {
   display: flex;
+  padding: 0 1rem 1rem 0.5rem;
 }
 
-.title {
-  font-size: 1.2rem;
-  font-weight: 700;
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  row-gap: 9999999px;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+  height: 2.5rem;
+  overflow: hidden;
+
+  span {
+      background-color: var(--bg);
+      padding: 0.3rem 0.6rem;
+      border-radius: 99999px;
+      font-size: 0.75rem;
+      color: var(--text-dark);
+  }
 }
 
 .categoryIcon {
   position: absolute;
-  height: 100%;
+  height: 5%;
   width: 3.5rem;
-  right: 0;
+  right: 0rem;
 
   display: grid;
   place-items: center;
@@ -51,14 +129,54 @@
   svg {
       height: 1.4rem;
       width: 1.4rem;
-      fill: var(--text-inv-light);
-      opacity: 0.8;
+      fill: var(--bg);
+  }
+}
+
+.title_Wrapper {
+  padding: 0 1rem 0.5rem 1rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  // This causes the text to be cut off with "..." if it is longer than three lines
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  span {
+    color: var(--bg) !important;
+  }
+}
+
+.categoryName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bg) !important;
+  opacity: 0.5;
+  height: 1rem;
+}
+
+.author {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0 1rem 1rem 1rem;
+
+  span {
+    color: var(--bg) !important;
   }
 }
 
 
+
+// Information ********************************************************
 .information {
   display: flex;
+  justify-content: space-between;
+  padding: 0 1rem 2rem 1rem;
 }
 
 .infoItem {
@@ -66,23 +184,62 @@
   align-items: center;
   gap: 0.3rem;
   font-size: 0.8rem;
+  margin-bottom: 0.5rem;
 
   svg {
     height: 1.2rem;
     width: 1.2rem;
-    fill: var(--text-inv-light);
+    fill: var(--text);
   }
 }
 
-// Invitation
+.infoItem:last-child {
+  margin-bottom: 0;
+}
+
+.map {
+  border-color: white !important;
+  border: solid;
+  border-radius: var(--radius-large);
+  width: 200px;
+  height: 100%;
+  direction: rtl;
+  margin-left: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+
+
+// Invitation ********************************************************
 .invitation {
   display: flex;
   flex-direction: row;
+  padding: 0 1rem 2rem 1rem;
+}
+
+.invitationText {
+  h2 {
+    margin-bottom: 0.25rem;
+    margin-top: 0;
+  }
+}
+
+.participants {
+  font-size: 0.8rem;
 }
 
 .invitationField {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+  
+.tick {
+  position: absolute;
+  top: 23.65rem;
+  right: 8rem;
 }
 
 .tickCircle {
@@ -94,15 +251,15 @@
   place-items: center;
 
   svg {
-      height: 1.4rem;
-      width: 1.4rem;
-      fill: var(--green-light);
+      height: 2.5rem;
+      width: 2.5rem;
+      fill: #DEFFD2;
   }
 }
 
 .tickIcon {
   position: absolute;
-  height: 100%;
+  height: 2.5rem;
   width: 3.5rem;
 
   display: grid;
@@ -111,8 +268,19 @@
   svg {
       height: 1.4rem;
       width: 1.4rem;
-      fill: var(--green-dark);
+      fill: #4D9955;
   }
+}
+
+.tick:hover {
+  cursor: pointer;
+}
+
+
+.cross {
+  position: absolute;
+  top: 23.65rem;
+  right: 5rem;
 }
 
 .crossCircle {
@@ -124,15 +292,15 @@
   place-items: center;
 
   svg {
-      height: 1.4rem;
-      width: 1.4rem;
-      fill: var(--error);
+      height: 2.5rem;
+      width: 2.5rem;
+      fill: #FFDFDF;
   }
 }
 
 .crossIcon {
   position: absolute;
-  height: 100%;
+  height: 2.5rem;
   width: 3.5rem;
 
   display: grid;
@@ -141,21 +309,89 @@
   svg {
       height: 1.4rem;
       width: 1.4rem;
-      fill: #d82e1f;
+      fill: #FF5E5E;
+  }
+}
+
+.cross:hover {
+  cursor: pointer;
+}
+
+
+
+// Description ********************************************************
+.description {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 2rem 1rem;
+
+  h2 {
+    margin-bottom: 0.25rem;
+    margin-top: 0;
+  }
+}
+
+.descriptionText {
+  font-size: 0.8rem;
+}
+
+
+
+// Checklist ********************************************************
+.checklist_Wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 2rem 1rem;
+
+  h2 {
+    margin-bottom: 0.25rem;
+    margin-top: 0;
+  }
+
+  svg {
+    height: 1.4rem;
+    width: 1.4rem;
+    fill: var(--green);
+  }
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+
+.checklistItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+
+  p {
+    font-size: 0.8rem !important;
+    color: var(--text) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  p:last-child {
+    color: var(--text) !important;
+    direction: rtl;
+  }
+
+  svg {
+    height: 1.4rem;
+    width: 1.4rem;
+    fill: var(--text);
   }
 }
 
 
-.description {
-  display: flex;
-}
 
-
-.checklist {
-  display: flex;
-}
-
-
+// Chat ********************************************************
 .chat {
   display: flex;
 }

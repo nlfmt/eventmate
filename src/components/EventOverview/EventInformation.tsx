@@ -20,7 +20,9 @@ export interface InformationProps {
 
 const EventInformation = (props: InformationProps) => {
   const { event } = props;
-  const location = [event.latitude, event.longitude];
+  //const location = [event.latitude, event.longitude];
+  const latitude = event.latitude;
+  const longitude = event.longitude;
 
   return (
       <div className={c.information}>
@@ -38,7 +40,7 @@ const EventInformation = (props: InformationProps) => {
             <WatchLater />
             <span>{dayjs(event.date).format("hh:mm")}</span>
           </div>
-          <div className={c.infoItem} style={{ direction: "rtl" }}>
+          <div className={c.infoItem}>
             <GroupRounded />
             <span>
               {event._count.participants}/{event.capacity}

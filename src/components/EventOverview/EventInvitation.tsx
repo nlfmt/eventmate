@@ -28,7 +28,7 @@ const EventInvitation = (props: InvitationProps) => {
       <div className={c.invitation}>
         <div className={c.invitationText}>
           <h2>Einladung annehmen</h2>
-          <div className={c.infoItem}>
+          <div className={c.participants}>
             {(participants&& participants.length>3)&&(
               <span>
               {participants[0]?.username}, {participants[1]?.username} und {event._count.participants - 2} weitere Teilnehmer.
@@ -37,22 +37,22 @@ const EventInvitation = (props: InvitationProps) => {
           </div>
         </div>
         <div className={c.invitationField}>
-          <div className={c.tick}>
+          <button className={c.tick}>
             <div className={c.tickCircle}>
               <CircleRounded />
             </div>
             <div className={c.tickIcon}>
               <CheckRounded />
             </div>
-          </div>
-          <div className={c.cross}>
+          </button>
+          <button className={c.cross}>
             <div className={c.crossCircle}>
               <CircleRounded />
             </div>
             <div className={c.crossIcon}>
               <NotInterestedRounded />
             </div>
-          </div>
+          </button>
         </div>
       </div>
   );
