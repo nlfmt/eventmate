@@ -4,7 +4,9 @@ import c from "./ChangePassword.module.scss";
 import common from "@/styles/common.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
-import { KeyRounded } from "@mui/icons-material";
+import { ArrowBackRounded, KeyRounded } from "@mui/icons-material";
+import { classes } from "@/utils/utils";
+import Link from "next/link";
 
 type ChangeAccountInfoSchema = {
   oldPassword: string;
@@ -27,7 +29,6 @@ const ChangePassword = () => {
   const submitHandler: SubmitHandler<ChangeAccountInfoSchema> = async (
     data
   ) => {
-    // await changePassword(data);
     setPasswordError("");
 
     if (data.newPassword !== data.confirmPassword) {
@@ -36,31 +37,18 @@ const ChangePassword = () => {
     }
 
     try {
-      const isOldPasswordCorrect = await api.user.checkPassword(
-        data.oldPassword
-      );
-
-      if (!isOldPasswordCorrect) {
-        setPasswordError("Old password is incorrect");
-        return;
-      }
-
-      await api.user.changePassword(data);
+      await changePassword(data);
     } catch (err) {
       setPasswordError("An error occurred while changing your password");
     }
   };
 
-  const validateOldPassword = async (oldPassword: string) => {
-    // const isOldPasswordCorrect = await api.user.checkPassword(oldPassword);
-    // if (isOldPasswordCorrect) {
-    //   return true;
-    // } else {
-    //   return false;
-  };
-
   return (
     <form className={c.form} onSubmit={handleSubmit(submitHandler)}>
+      <Link href="/account" className={c.header}>
+        <ArrowBackRounded />
+        <span>Change Password</span>
+      </Link>
       <div className={c.inputs}>
         <div
           className={c.txt_field}
@@ -99,7 +87,7 @@ const ChangePassword = () => {
           <label className={c.label}>Confirm Password</label>
         </div>
         {passwordError && (
-          <p className={`${c.error} ${c.errorMessage}`}>{passwordError}</p>
+          <p className={classes(c.error, c.errorMessage)}>{passwordError}</p>
         )}
         <button type="submit" className={common.submitButton}>
           Submit

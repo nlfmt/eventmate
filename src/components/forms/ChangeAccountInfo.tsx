@@ -5,8 +5,9 @@ import common from "@/styles/common.module.scss";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
-import { CheckRounded, EditRounded } from "@mui/icons-material";
+import { ArrowBackRounded, CheckRounded, EditRounded } from "@mui/icons-material";
 import Link from "next/link";
+import { classes } from "@/utils/utils";
 
 type ChangeAccountInfoSchema = {
   username: string;
@@ -17,6 +18,19 @@ type ChangeAccountInfoSchema = {
 const ChangeAccountInfoForm = () => {
   const { data: sessionData } = useSession();
   const usernameInputRef = useRef<HTMLInputElement>(null);
+
+  const { data: user } = api.user.get.useQuery({
+    id: sessionData?.user.id ?? "",
+  }, {
+    enabled: !!sessionData?.user.id,
+  });
+
+  useEffect(() => {
+    if (user && user.bio) {
+      setBio(user.bio);
+      setDisplayedBio(user.bio);
+    }
+  }, [user]);
 
   const {
     register,
@@ -37,7 +51,7 @@ const ChangeAccountInfoForm = () => {
 
   const [username, setUsername] = React.useState(sessionData?.user.name ?? "");
   const [email, setEmail] = React.useState(sessionData?.user.email ?? "");
-  const [bio, setBio] = React.useState(sessionData?.user.bio ?? "");
+  const [bio, setBio] = React.useState<string | undefined>("");
   const [isEditingUsername, setIsEditingUsername] = React.useState(false);
   const [displayedUsername, setDisplayedUsername] = React.useState(
     sessionData?.user.name ?? ""
@@ -47,15 +61,14 @@ const ChangeAccountInfoForm = () => {
     sessionData?.user.email ?? ""
   );
   const [isEditingBio, setIsEditingBio] = React.useState(false);
-  const [displayedBio, setDisplayedBio] = React.useState(
-    sessionData?.user.bio ?? ""
+  const [displayedBio, setDisplayedBio] = React.useState<string | undefined>(
+    ""
   );
 
   // update username when sessionData changes
   useEffect(() => {
     setUsername(sessionData?.user.name ?? "");
     setEmail(sessionData?.user.email ?? "");
-    setBio(sessionData?.user.bio ?? "");
   }, [sessionData]);
 
   const { mutateAsync: ChangeAccountInfo } =
@@ -97,6 +110,10 @@ const ChangeAccountInfoForm = () => {
 
   return (
     <form onSubmit={handleSubmit(submitHandler)} className={c.form}>
+      <Link href="/account" className={c.header}>
+        <ArrowBackRounded />
+        <span>Change Account Info</span>
+      </Link>
       <div className={c.inputs}>
         <div className={c.txt_field}>
           <input
@@ -106,7 +123,7 @@ const ChangeAccountInfoForm = () => {
             value={username}
             onChange={handleUsernameChange}
             data-error={!!errors.username}
-            placeholder={`${sessionData?.user.name}`}
+            placeholder={sessionData?.user.name ?? undefined}
             ref={usernameInputRef}
           />
           <div className={c.edit} onClick={toggleEditUsername}>
@@ -126,7 +143,7 @@ const ChangeAccountInfoForm = () => {
           value={email}
           onChange={handleEmailChange}
           data-error={!!errors.email}
-          placeholder={`${sessionData?.user.email}`}
+          placeholder={sessionData?.user.email ?? undefined}
           disabled={!isEditingEmail}
           id="emailInput"
         />
@@ -134,13 +151,13 @@ const ChangeAccountInfoForm = () => {
           {isEditingEmail ? <CheckRounded /> : <EditRounded />}
         </div>
         </div>
-        <div className={c.txt_field + " " + c.bio}>
+        <div className={classes(c.txt_field, c.bio)}>
           <textarea
             {...register("bio", { maxLength: 100 })}
             value={bio}
             onChange={handleBioChange}
             data-error={!!errors.bio}
-            placeholder={sessionData?.user.bio ?? "Write something about yourself"}
+            placeholder={bio}
             disabled={!isEditingBio}
           />
           <div className={c.edit} onClick={toggleEditBio}>

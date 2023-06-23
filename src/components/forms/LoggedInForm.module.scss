@@ -12,7 +12,8 @@
   width: 100px;
   height: 100px;
   border-radius: 70%;
-  background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+  // background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+  background-color: var(--green);
 
 
   svg {
@@ -29,7 +30,8 @@
 }
 
 .outerBorder{
-  background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+  // background-image: linear-gradient(to right, #63ED60, #5a9ec2);
+  // background-color: var(--blue);
   border-radius: 70%;
   padding: 4px;
   margin-bottom: 7px;
@@ -37,13 +39,19 @@
 }
 
 
-.edit{
-  color: #b97af7;
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 0 !important;
+  margin-top: 1rem !important;
+  padding: 0 !important;
 }
+
 
 .main{
   width: 100%;
-  max-width: 30rem;
 
   svg {
     width: 1.2rem;
@@ -54,7 +62,6 @@
   margin: 2rem;
   background: var(--bg-white);
   height: 2px;
-  opacity: 0.5;
   border-radius: 70%;
 }
 
@@ -63,33 +70,40 @@
     color: #ffffff;
     margin: 1.5rem;
     padding: 1rem;
-    gap: 1rem;  
+    // gap: 1rem;  
 
     border-radius: 0.5rem;
-    background-color: #292929;
 }
 
 .container1{
+  background-color: var(--bg-lighter);
   display: flex;
   align-items: center;
   text-align: center;
-  height: 3rem;
   position: relative;
-  border-bottom: 1px solid #5a1e8f;
   justify-content: center;
 
-    svg{
-      margin-left: auto;
-      display: inline-block;
-      position: absolute;
-      right: 1rem;
+  svg{
+    margin-left: auto;
+    display: inline-block;
+    position: absolute;
+    right: 1rem;
+  }
+
+  @media screen and (max-width: 499px) {
+    span {
+      -webkit-line-clamp: 3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
     }
+  }
 
 }
 
 .name{
-  margin-bottom: -17px;
-  font-size: medium;
+  font-size: 1.5rem;
   text-align: center;
 }
 
@@ -99,12 +113,13 @@
 }
 
 .container2{
-  border-bottom: 1px solid #853abf;
-  transition: background-color 0.2s ease-in-out;
+  background-color: var(--bg-lighter);
+  border-left: 2px solid var(--text);
+  transition: background-color 0.2s ease-in-out,
+              border-color 0.2s ease-in-out;
   display: flex;
   align-items: center;
   font-size: medium;
-  height: 3rem;
 
   svg{
     display: inline-block;
@@ -112,18 +127,23 @@
   }
 
   &:hover{
-    background-color: #292929c1;
-    border-bottom: 1px solid #b97af7;
+    background-color: var(--bg);
+    border-color: var(--green);
+
+    svg {
+      fill: var(--green);
+    }
   }
 }
 
 .container3{
-  border-bottom: 1px solid #853abf;
-  transition: background-color 0.2s ease-in-out;
+  background-color: var(--bg-lighter);
+  border-left: 2px solid var(--text);
+  transition: background-color 0.2s ease-in-out,
+              border-color 0.2s ease-in-out;
 
   display: flex;
   align-items: center;
-  height: 4rem;
 
   svg{
     display: inline-block;
@@ -132,8 +152,12 @@
   }
 
   &:hover{
-    background-color: #292929c1;
-    border-bottom: 1px solid #b97af7;
+    background-color: var(--bg);
+    border-color: var(--green);
+
+    svg {
+      fill: var(--green);
+    }
   }
 }
 

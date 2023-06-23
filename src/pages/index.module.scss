@@ -7,28 +7,6 @@
   background: var(--bg);
 }
 
-.navbar {
-  span {
-    color: var(--bg-white);
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  svg {
-    width: 2rem;
-    height: 2rem;
-    fill: var(--text);
-  }
-  background-color: var(--bg);
-
-  display: flex;
-  align-items: center;
-  // justify-content: space-between;
-  gap: 1rem;
-  width: 100%;
-  padding: 1rem;
-  height: 4rem;
-}
-
 .eventSection {
   width: 100%;
   padding: 1rem 0;

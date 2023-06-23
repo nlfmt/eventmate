@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { RateLimiter, createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
   me: protectedProcedure
@@ -21,6 +21,10 @@ export const userRouter = createTRPCRouter({
     }),
 
   get: publicProcedure
+    .use(RateLimiter(
+      100,
+      5000,
+    ))
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.user.findUnique({
@@ -35,5 +39,22 @@ export const userRouter = createTRPCRouter({
     }))
     .mutation(async ({ ctx, input }) => {
       // TODO: implement
-    })
+    }),
+
+  changeAccountInfo: protectedProcedure
+    .input(z.object({
+      username: z.string(),
+      email: z.string(),
+      bio: z.string(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          username: input.username,
+          email: input.email,
+          bio: input.bio,
+        }
+      });
+    }),
 });

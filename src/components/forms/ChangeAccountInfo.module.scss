@@ -16,6 +16,15 @@
   }
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  font-size: 1.2rem;
+  color: var(--text);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
 .error{
   color: var(--error);
   text-align: center;

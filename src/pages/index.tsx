@@ -12,16 +12,8 @@ import { classes } from "@/utils/utils";
 import EventMateLogo from "@/components/EventMateLogo";
 import { useRouter } from "next/router";
 import { ArrowForwardRounded } from "@mui/icons-material";
+import TopBar from "@/components/LandingPage/TopBar";
 
-export const PlaceHolderSideBar = () => {
-  return (
-    <header className={c.navbar}>
-      <EventMateLogo />
-      <span>EventMate</span>
-      
-    </header>
-  );
-};
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -38,7 +30,7 @@ const Home: NextPage = () => {
       </Head>
       <main className={c.main}>
         {/* <SideBar /> */}
-        <PlaceHolderSideBar />
+        <TopBar />
 
         <SearchSection />
         <NewEventsSection />

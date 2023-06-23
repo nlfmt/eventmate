@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 //import c from "./LoggedOutForm.module.scss";
 import c from "@/components/forms/LoggedInForm.module.scss";
 
@@ -9,13 +9,23 @@ import {
   EditRounded,
 } from "@mui/icons-material";
 import Link from "next/link";
+import { api } from "@/utils/api";
+import React from "react";
 
 const LoggedIn = () => {
   const { data: sessionData } = useSession();
 
+  const { data: user } = api.user.get.useQuery({
+    id: sessionData?.user.id ?? "",
+  }, {
+    enabled: !!sessionData?.user.id,
+  });
+
+  const bio = user?.bio?.split("\n");
+
   return (
     <>
-      <header className={c.header}></header>
+      {/* <header className={c.header}></header> */}
 
       <div className={c.outerBorder}>
         <div className={c.innerBorder}>
@@ -24,22 +34,23 @@ const LoggedIn = () => {
           </div>
         </div>
       </div>
-      <div className={c.edit}>Edit</div>
 
       <main className={c.main}>
-        <div className={c.container1}>
-          <div>
-            <span className={c.name}>{sessionData?.user.name}</span>
-            <br />
-            <span className={c.email}>{sessionData?.user.email}</span>
-          </div>
+        <div className={c.info}>
+          <span className={c.name}>{sessionData?.user.name}</span>
+          <span className={c.email}>{sessionData?.user.email}</span>
         </div>
         <div className={c.container1}>
-          <span>Bioooooo</span>
-          <br />
-          {/* <span>ggrgrg</span> */}
+          <span>
+            {bio ? bio.map((line, index) => (
+              <React.Fragment key={index}>
+                {line}
+                {index < bio.length - 1 && <br />}
+              </React.Fragment>
+            )) : <span style={{ opacity: 0.5 }}>Add a Bio below...</span>}
+          </span>
         </div>
-        
+
         <div className={c.seperator}></div>
 
         <Link className={c.container3} href="/account/edit/user">
@@ -56,6 +67,14 @@ const LoggedIn = () => {
           <ArrowForwardIosRounded />
         </Link>
 
+        <div className={c.container2} onClick={() => {
+          signOut({
+            callbackUrl: "/login",
+          });
+        }}>
+          Logout
+          <ArrowForwardIosRounded />
+        </div>
       </main>
     </>
   );
