@@ -3,7 +3,7 @@ import common from "@/styles/common.module.scss";
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
 import { api } from "@/utils/api";
-import { EventSection, PlaceHolderSideBar } from ".";
+import { EventSection } from ".";
 
 import c from "./SearchPage.module.scss";
 import { createContext, useContext, useState } from "react";
@@ -25,6 +25,7 @@ import { SearchFilters } from "@/components/LandingPage/SearchSection";
 import Card, { type CardProps } from "@/components/LandingPage/Card";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
+import TopBar from "@/components/LandingPage/TopBar";
 
 
 const SearchPageContext = createContext<{
@@ -181,7 +182,7 @@ const SearchPage: NextPage = () => {
         <title>{"EventMate - " + (owned ? "My Events" : joined ? "Joined Events" : "Search")}</title>
       </Head>
       <main className={common.main}>
-        <PlaceHolderSideBar />
+        <TopBar />
         <div className={c.searchPage}>
 
           {/* Filters */}

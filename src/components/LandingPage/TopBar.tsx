@@ -17,7 +17,9 @@ const TopBar = (props: TopBarProps) => {
   
   return (
     <header className={c.topbar}>
-      <EventMateLogo />
+      <Link href="/">
+        <EventMateLogo />
+      </Link>
       <span className={c.title}>{props.title ?? "EventMate"}</span>
 
       <span style={{ flexGrow: 1 }} />

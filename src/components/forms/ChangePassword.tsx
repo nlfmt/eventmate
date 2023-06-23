@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import c from "./ChangePassword.module.scss";
 import common from "@/styles/common.module.scss";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
 import { ArrowBackRounded, KeyRounded } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
