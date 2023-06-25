@@ -7,75 +7,34 @@
   background: var(--bg);
 }
 
-.navbar {
-  span {
-    font-family: var(--title-font);
-    color: var(--text);
-    font-size: 2rem;
-  }
-  svg {
-    width: 2rem;
-    height: 2rem;
-    fill: var(--text);
-  }
-  background-color: var(--bg);
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 1rem;
-  
-}
-
-.searchSection {
-  width: 100%;
-  background-color: var(--bg-white);
-  padding: 2rem 1rem 4rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  h1 {
-    text-align: center;
-    font-size: 2rem;
-    margin: 0;
-  }
-}
-
-.searchBar {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  input {
-    outline: none;
-    border: none;
-    background-color: var(--bg);
-    border-radius: var(--radius-large);
-    padding: 1rem 2rem;
-    width: 100%;
-    font-size: 1rem;
-    color: var(--text);
-    font-family: var(--font);
-  }
-}
-
 .eventSection {
   width: 100%;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
+
+  &[data-wrap="true"] .eventList {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.filler {
+  // flex-grow: 1;
 }
 
 .sectionTitle {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
   color: var(--text);
   padding: 1rem 1.5rem;
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  @media screen and (min-width: 500px) {
+    font-size: 1.5rem;
+  }
 
   div {
     height: 2px;
@@ -84,16 +43,37 @@
   }
 }
 
+.showMore {
+  padding: 0;
+  background: none;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+
+  @media screen and (min-width: 500px) {
+    &:hover {
+      color: var(--text-darker);
+    }
+  }
+}
+
 .eventList {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
+}
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
+.noEvents, .loading {
+  height: 5rem;
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-darker);
+  display: grid;
+  place-items: center;
 }
 
 // desktop layout
@@ -105,13 +85,14 @@
 
     // prevent cards from shrinking/growing
     & > div {
+      width: 24rem;
       min-width: 24rem;
-      max-width: 24rem;
     }
   }
 
   .eventSection {
     position: relative;
+    max-width: 76rem;
     &::before, &::after {
       z-index: 6;
       content: "";
@@ -127,6 +108,14 @@
     &::after {
       --dir: to left;
       right: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .eventList {
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 }

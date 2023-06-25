@@ -15,6 +15,7 @@
   --bg-dark: #1a1a1a;
   --bg-white: #f0f0f0;
   --bg-white-dark: #e0e0e0;
+  --bg-white-darker: #d0d0d0;
   --bg-white-light: #ffffff;
 
   --green: #63ed60;
@@ -36,12 +37,16 @@
   --text-inv-light: #1a1a1a;
 
   --error: #e2665b;
+  --error-light: #db7d74;
 
   --font: "Inter", sans-serif;
   --title-font: "LilyScriptOne", sans-serif;
 
   --radius: 0.5rem;
   --radius-large: 1rem;
+
+  --shadow1: 0 0.3rem 0.7rem rgba(0, 0, 0, 0.2), 0 0rem 0.3rem rgba(0, 0, 0, 0.2);
+  --shadow1-dark: 0 0.3rem 0.7rem rgba(0, 0, 0, 0.5), 0 0rem 0.3rem rgba(0, 0, 0, 0.5);
 }
 
 html,
@@ -61,4 +66,30 @@ a {
 
 * {
   box-sizing: border-box;
+  border: none;
+  outline: none;
+  font-family: var(--font);
+
+  // dont show annoying blue highlight on tap on mobile
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+*::-webkit-scrollbar {
+  width: 0.8rem;
+  height: 0.8rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--bg-light);
+  border: 0.2rem solid var(--bg);
+  border-radius: var(--radius);
+
+  &:hover {
+    background: var(--bg-lighter);
+  }
 }

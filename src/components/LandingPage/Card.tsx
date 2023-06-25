@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import c from "./Card.module.scss";
 
 import type { Event, User } from "@prisma/client";
@@ -9,27 +9,13 @@ import {
   GroupRounded,
   EventNoteRounded,
   WatchLater,
-  TheaterComedyRounded,
-  CelebrationRounded,
-  SportsBasketballRounded,
-  SchoolRounded,
-  PaletteRounded,
-  TipsAndUpdatesRounded,
   ExpandLessRounded,
 } from "@mui/icons-material";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { useRouter } from "next/router";
 
-const categories = {
-  show: ["Show", TheaterComedyRounded],
-  party: ["Party", CelebrationRounded],
-  sport: ["Sport", SportsBasketballRounded],
-  education: ["Education", SchoolRounded],
-  culture: ["Culture", PaletteRounded],
-  meetup: ["Meetup", GroupRounded],
-  other: ["Other", TipsAndUpdatesRounded],
-} as const;
-type Category = keyof typeof categories;
+import categories, { type Category } from "@/utils/categories";
+import OverlayContext from "@/contexts/OverlayContext";
 
 export interface CardProps {
   event: Event & {
@@ -44,7 +30,6 @@ const Card = (props: CardProps) => {
   const allowed = 2;
   const titleParts = event.title.split("\n");
   let title = titleParts.slice(0, allowed).join("\n");
-  console.log(title, titleParts);
   if (titleParts.length > 3) title += " " + titleParts.slice(allowed).join(" ");
 
   const category =
@@ -56,7 +41,10 @@ const Card = (props: CardProps) => {
   const desktop = useMediaQuery("(min-width: 500px)");
   const router = useRouter();
 
-  async function onCardClick() {
+  const { overlay } = useContext(OverlayContext);
+
+  const onCardClick: React.MouseEventHandler<HTMLDivElement> = async e => {
+    if (e.defaultPrevented) return;
     if (!desktop && small) return setSmall(false);
     await router.push(`/event/${event.id}`);
   }
@@ -66,11 +54,12 @@ const Card = (props: CardProps) => {
       className={c.card}
       data-cat={event.category}
       data-small={desktop ? false : small}
-      onClick={onCardClick}
+      onClick={overlay ? undefined : onCardClick}
     >
       <div
         className={c.collapse}
-        onClick={(e) => {
+        onClick={overlay ? undefined : (e) => {
+          if (e.defaultPrevented) return;
           e.preventDefault();
           e.stopPropagation();
           setSmall(true);
@@ -107,7 +96,7 @@ const Card = (props: CardProps) => {
           >
             <path
               fill="white"
-              fill-opacity="0.5"
+              fillOpacity="0.5"
               d="M200,100H0C50,100,50,0,100,0H200Z"
             />
           </svg>

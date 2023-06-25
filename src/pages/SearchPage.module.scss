@@ -1,0 +1,205 @@
+@use "@/styles/mixins.scss" as mixins;
+
+.searchPage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-grow: 1;
+  width: 100%;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  max-width: 74rem;
+  
+  color: var(--bg);
+
+  button {
+    @include mixins.btn(var(--bg-white-dark), var(--bg-white-darker), var(--text-inv));
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.results {
+  padding: 0;
+}
+
+@media screen and (max-width: 499px) {
+  .results {
+    flex-grow: 1;
+  }
+}
+
+.filters {
+  background: var(--bg-white);
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  h1 {
+    margin: 0;
+  }
+
+  &[data-filters="false"] > form {
+    display: none;
+  }
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  color: var(--text-darker);
+  justify-content: space-between;
+  width: 100%;
+  max-width: 76rem;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+.pageInfo {
+  font-size: 0.8rem;
+  color: var(--text-darker);
+}
+
+.orderResults {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.orderSelect[data-content] {
+  font-size: 0.8rem;
+
+  svg {
+    width: 1rem;
+  }
+}
+
+.orderSelect[data-trigger] {
+  @include mixins.btn;
+}
+
+.resultCount {
+  font-size: 0.8rem;
+  color: var(--text);
+  background-color: var(--bg-light);
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: var(--radius-large);
+  display: flex;
+  align-items: center;
+}
+
+.pageControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 26rem);
+  padding: 0.5rem 1rem;
+  padding-bottom: 1rem;
+  
+  button {
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    gap: 0.5rem;
+    height: 2.5rem;
+    background-color: var(--bg-light);
+    border-radius: var(--radius-large);
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    svg {
+      width: 1rem;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: unset;
+    }
+
+    &:active {
+      background-color: var(--bg-lighter);
+    }
+  }
+}
+
+.invitationCard {
+  display: flex;
+  position: relative;
+  background-color: var(--bg-lighter);
+  border-radius: var(--radius-large);
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin: 0.5rem;
+  }
+  @media screen and (max-width: 499px) {
+    flex-direction: column;
+    align-items: center;
+
+    button {
+      width: unset;
+      padding: 0 0.5rem;
+    }
+  }
+  
+}
+
+.buttonLabel {
+  padding: 0 0.5rem;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  @media screen and (max-width: 499px) {
+    flex-direction: row;
+    width: 100%;
+  }
+}
+
+.acceptBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--green-light));
+}
+.denyBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--error));
+  
+  &[data-confirm="true"] {
+    @include mixins.btn(var(--error), var(--error-light), var(--text-inv));
+  }
+}
+
+@media (hover: hover) {
+  .pageControls button:hover:not(:disabled) {
+    background-color: var(--bg-lighter);
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .pageControls {
+    width: 100%;
+  }
+}

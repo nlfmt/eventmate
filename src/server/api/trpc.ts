@@ -22,6 +22,8 @@ import { prisma } from "@/server/db";
 
 type CreateContextOptions = {
   session: Session | null;
+  req: NextApiRequest;
+  ip?: string;
 };
 
 /**
@@ -37,6 +39,8 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
+    req: opts.req,
+    ip: opts.ip,
     prisma,
   };
 };
@@ -50,11 +54,17 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts;
 
+  // Get the user's IP address
+  const _ip = req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || req.socket.remoteAddress;
+  const ip = Array.isArray(_ip) ? _ip[0] : _ip;
+
   // Get the session from the server using the getServerSession wrapper function
   const session = await getServerAuthSession({ req, res });
 
   return createInnerTRPCContext({
     session,
+    req,
+    ip
   });
 };
 
@@ -68,6 +78,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { NextApiRequest } from "next";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -118,6 +129,36 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
     },
   });
 });
+
+
+/** Only allow requests every x milliseconds */
+export const RateLimiter = (base = 100, max = 5000, message = "You can't make this many requests in a short period of time.") => {
+
+  let rateLimitMap = new Map<string, { last: number, timeout: number }>();
+
+  // Clear the map every 24 hours
+  setInterval(() => {
+    rateLimitMap = new Map<string, { last: number, timeout: number }>();
+  }, 1000 * 60 * 60 * 24);
+
+  return t.middleware(({ ctx, next }) => {
+    
+    if (ctx.ip) {
+      const now = Date.now();
+      const entry = rateLimitMap.get(ctx.ip);
+      const last = entry?.last || 0;
+      const timeout = entry?.timeout || base;
+      
+      if (now - last < timeout)
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message });
+
+      const newTimeout = Math.min(timeout * 2, max);
+      rateLimitMap.set(ctx.ip, { last: now, timeout: newTimeout });
+    }
+
+    return next({ ctx });
+  })
+};
 
 /**
  * Protected (authenticated) procedure

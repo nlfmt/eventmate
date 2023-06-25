@@ -1,5 +1,5 @@
 import LoginForm from "@/components/forms/LoginForm";
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
 
 import common from "../styles/common.module.scss"
@@ -14,7 +14,7 @@ const LoginPage: NextPage = () => {
       </Head>
       <main className={common.main}>
         <div className={c.center}>
-          <h1>Event Mate</h1>
+          <h1>EventMate</h1>
           <p>
             Perfectly planned
             <br /> - unforgettable experience!
