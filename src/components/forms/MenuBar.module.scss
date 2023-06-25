@@ -3,6 +3,7 @@
   width: 100%;
   height: 4rem;
   background-color:grey;  /*var(--bg)*/
+  z-index: 9999;
 }
 
 .menuBar header{
@@ -17,8 +18,6 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
-
-
 
 .menuBar header svg {
   fill: white;

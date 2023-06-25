@@ -1,15 +1,24 @@
 .sidebar {
-    position: fixed;
-    left: 0rem;
-    width: 20rem;
-    height: 100%;
-    background-color:grey;  /*var(--bg)*/
-    transition: all .5s ease;
-    z-index: 50;
-}
+  
+  position: fixed; /* Position: fixiert am Bildschirm */
+  left: 0rem; 
+  width: 20rem; 
+  height: 100%;
+  background-color: grey; 
+  transition: all .5s ease; /* Übergangseffekt für Animationen */
+  z-index: 50; /* Z-Index für Stapelreihenfolge */
 
+  &.sidebarOpen {
+    /* wenn Sidebar geöffnet ist */
+    display: block; /* Sidebar anzeigen, wenn .sidebarOpen vorhanden */
+  }
 
-.sidebar header{
+  &.sidebarClosed {
+    /* wenn Sidebar geschlossen ist */
+    display: none; /* Sidebar ausblenden, wenn Klasse .sidebarClosed vorhanden */
+  }
+
+  header {
     font-size: 2.5rem;
     color: var(--text);
     text-align: center;
@@ -17,78 +26,82 @@
     margin-bottom: 2rem;
     line-height: 1rem;
     padding-top: 2rem;
+  }
+
+  .link {
+    width: 100%;
+    height: 100%;
+    font-size: 1.5rem;
+    color: var(--text);
+    transition: .2s;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .link a {
+    display: flex;
+    align-items: center;
+    transition: padding-left 200ms ease;
+  }
+
+  .link a:hover {
+    padding-left: 1rem;
+  }
+
+  .link a svg {
+    color: var(--text);
+    margin: 0 1rem;
+    align-items: center;
+  }
+
+  .link span {
+    display: flex;
+    align-items: center;
+  }
+
+  .welcome {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0;
+    padding: 1rem;
+    color: var(--text);
+    font-size: 2rem;
+    font-family: var(--title-font);
+  }
+
+  .welcome span {
+    font-weight: bold;
+  }
+
+  .userName {
+    color: var(--green);
+  }
+
+  .greenBtn {
+    background: var(--green);
+    height: 4rem;
+    margin: 1rem;
+    border-radius: var(--radius);
+  }
+
+  .color {
+    background: var(--bg-light);
+    height: 4rem;
+    margin: 1rem;
+    border-radius: var(--radius);
+  }
+
+  @media screen and (max-width: 500px) {
+    .sidebar {
+      width: 100%;
+    }
+  }
 }
 
-.link{
-  width: 100%;
-  height: 100%;
-  font-size: 1.5rem;
-  color: var(--text);
-  transition: .2s;
-
-  display: flex;
-  align-items: stretch;
-  flex-direction: column;
-}
-
-.link a {
-  display: flex;
-  align-items: center;
-  transition: padding-left 200ms ease;
-}
-
-.link a:hover {
-  padding-left: 1rem;
-}
-
-.link a svg {
+.closeIcon {
   color: var(--text);
   margin: 0 1rem;
   align-items: center;
-}
-
-.link span{
-  display: flex;
-  align-items: center;
-}
-
-.welcome {
-  position: absolute;
-  bottom: 0.5rem;
-  left: 0;
-  padding: 1rem;
-  color: var(--text);
-  font-size: 2rem;
-  font-family: var(--title-font);
-}
-
-.welcome span {
-  font-weight: bold;
-}
-
-.userName {
-  color: var(--green);
-}
-
-
-
-
-.greenBtn{
-  background: var(--green);
-  height: 4rem;
-  margin: 1rem;
-  border-radius: var(--radius);
-}
-
-.color{
-  background: var(--bg-light);
-  height: 4rem;
-  margin: 1rem;
-  border-radius: var(--radius);
-}
-
-@media screen and (max-width: 500px) {
-  .sidebar {
-    width: 100%;
-  }
+  /* Styles noch anpassen */
 }
