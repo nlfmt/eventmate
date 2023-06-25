@@ -10,6 +10,7 @@
 
 .center {
   width: 100%;
+  max-width: 40rem;
 
   h1 {
     text-align: center;
@@ -96,7 +97,9 @@
 
 .categories {
   display: flex;
-  padding: 0 1rem 1rem 0.5rem;
+  padding: 0 0 1rem 0.5rem;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .tags {
@@ -118,7 +121,6 @@
 }
 
 .categoryIcon {
-  position: absolute;
   height: 5%;
   width: 3.5rem;
   right: 0rem;
@@ -185,6 +187,15 @@
   gap: 0.3rem;
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
+
+  p {
+    font-size: 0.8rem !important;
+    color: var(--text) !important;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 !important;
+    text-align: start !important;
+  }
 
   svg {
     height: 1.2rem;
@@ -365,10 +376,14 @@
 .checklistItem {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   gap: 0.3rem;
   margin-bottom: 0.5rem;
+
+  .assignedTo {
+    color: var(--green) !important;
+  }
 
   p {
     font-size: 0.8rem !important;
@@ -386,6 +401,29 @@
     height: 1.4rem;
     width: 1.4rem;
     fill: var(--text);
+  }
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+}
+
+.itemRight {
+  display: flex;
+  align-items: center;
+}
+
+.newItem {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  input {
+    color: var(--text);
+    background-color: var(--bg);
+    opacity: 0.5;
+    border: unset;
   }
 }
 

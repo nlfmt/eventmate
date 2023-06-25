@@ -29,6 +29,7 @@ const EventInformation = (props: InformationProps) => {
         <div className={c.infoText}>
           <div className={c.infoItem}>
             <LocationOnRounded />
+            {/* <span><EventLocation event={event} /></span> */}
             <span>{/* // Location */}location</span>
           </div>
 

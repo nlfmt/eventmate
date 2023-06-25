@@ -41,7 +41,7 @@ const Event: NextPage = () => {
               <EventInformation event={event} />
               <EventInventation event={event} />
               <EventDescription event={event} />
-              <EventChecklist name={""} assignedTo={null} />
+              <EventChecklist />
               {/* <EventChat /> */}
             </>
           ) : (
