@@ -1,3 +1,5 @@
+@use "@/styles/mixins.scss" as mixins;
+
 .main {
   display: flex;
   flex-direction: column;
@@ -40,6 +42,9 @@
   }
 }
 
+
+
+// Navbar ********************************************************
 .navbar {
   background-color: var(--bg);
   display: flex;
@@ -49,9 +54,10 @@
   padding: 1rem;  
 
   span {
-    font-family: var(--title-font);
+    font-family: var(--font);
     color: var(--text);
-    font-size: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
   svg {
@@ -225,6 +231,8 @@
 .invitation {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   padding: 0 1rem 2rem 1rem;
 }
 
@@ -239,93 +247,29 @@
   font-size: 0.8rem;
 }
 
-.invitationField {
+.buttonGroup {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.acceptBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--green-light));
+  display: flex;
   align-items: center;
 }
 
+.denyBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--error));
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
   
-.tick {
-  position: absolute;
-  top: 23.65rem;
-  right: 8rem;
-}
-
-.tickCircle {
-  position: absolute;
-  height: 100%;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 2.5rem;
-      width: 2.5rem;
-      fill: #DEFFD2;
+  &[data-confirm="true"] {
+    @include mixins.btn(var(--error), var(--error-light), var(--text-inv));
   }
-}
-
-.tickIcon {
-  position: absolute;
-  height: 2.5rem;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 1.4rem;
-      width: 1.4rem;
-      fill: #4D9955;
-  }
-}
-
-.tick:hover {
-  cursor: pointer;
-}
-
-
-.cross {
-  position: absolute;
-  top: 23.65rem;
-  right: 5rem;
-}
-
-.crossCircle {
-  position: absolute;
-  height: 100%;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 2.5rem;
-      width: 2.5rem;
-      fill: #FFDFDF;
-  }
-}
-
-.crossIcon {
-  position: absolute;
-  height: 2.5rem;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 1.4rem;
-      width: 1.4rem;
-      fill: #FF5E5E;
-  }
-}
-
-.cross:hover {
-  cursor: pointer;
 }
 
 
@@ -424,7 +368,7 @@
   div {
     border-radius: 0.25rem;
     background: var(--bg);
-    opacity: 0.75;
+    opacity: 0.8;
     --indicator: var(--text);
     width: 1.05rem;
     height: 1.05rem;

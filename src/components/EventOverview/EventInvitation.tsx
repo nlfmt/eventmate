@@ -7,8 +7,12 @@ import { api } from "@/utils/api";
 import {
   CircleRounded,
   CheckRounded,
-  NotInterestedRounded
+  NotInterestedRounded,
+  DoNotDisturbRounded
 } from "@mui/icons-material";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { useState } from "react";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 
 export interface InvitationProps {
@@ -23,6 +27,41 @@ const EventInvitation = (props: InvitationProps) => {
 
   const { data: participants } = api.event.getParticipants.useQuery({ eventId: event.id })
 
+  const [denyStep1, setDenyStep1] = useState(false);
+
+  const { mutateAsync: denyInvitation } = api.invitation.deny.useMutation();
+  const { mutateAsync: joinEvent } = api.event.join.useMutation();
+
+  const [loading, setLoading] = useState({ accept: false, deny: false });
+
+
+  async function deny() {
+    if (!denyStep1) {
+      setDenyStep1(true);
+      setTimeout(() => setDenyStep1(false), 3000);
+      return;
+    }
+    setDenyStep1(false);
+    setLoading({ ...loading, deny: true });
+
+    await denyInvitation({
+      eventId: props.event.id,
+    });
+
+    // ctx?.invalidate();
+  }
+
+  async function accept() {
+    setLoading({ ...loading, accept: true });
+
+    await joinEvent({
+      id: props.event.id,
+    });
+
+    // ctx?.invalidate();
+  }
+
+
 
   return (
       <div className={c.invitation}>
@@ -36,22 +75,14 @@ const EventInvitation = (props: InvitationProps) => {
             )}
           </div>
         </div>
-        <div className={c.invitationField}>
-          <button className={c.tick}>
-            <div className={c.tickCircle}>
-              <CircleRounded />
-            </div>
-            <div className={c.tickIcon}>
-              <CheckRounded />
-            </div>
+        <div className={c.buttonGroup}>
+          <button className={c.acceptBtn} onClick={accept}>
+            {loading.accept ? <LoadingSpinner /> : <CheckRounded />}
+            <span className={c.buttonLabel}>Accept</span>
           </button>
-          <button className={c.cross}>
-            <div className={c.crossCircle}>
-              <CircleRounded />
-            </div>
-            <div className={c.crossIcon}>
-              <NotInterestedRounded />
-            </div>
+          <button className={c.denyBtn} data-confirm={denyStep1} onClick={deny}>
+            {loading.deny ? <LoadingSpinner /> : <DoNotDisturbRounded />}
+            <span className={c.buttonLabel}>{denyStep1 ? "Confirm" : "Deny"}</span>
           </button>
         </div>
       </div>
