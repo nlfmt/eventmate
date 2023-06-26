@@ -12,8 +12,8 @@ import EventDescription from "@/components/EventOverview/EventDescription";
 import EventChecklist from "@/components/EventOverview/EventChecklist";
 import EventChat from "@/components/EventOverview/EventChat";
 
-import common from "@/styles/common.module.scss"
 import c from "@/components/eventOverview/eventOverview.module.scss"
+import TopBar from "@/components/LandingPage/TopBar";
 
 
 const Event: NextPage = () => {
@@ -30,11 +30,17 @@ const Event: NextPage = () => {
       </Head>
       <main className={c.main}>
         <div className={c.center}>
+          <TopBar />
           {/* <SideBar /> */}
-          <header className={c.navbar}>
-            <span>EventMate</span>
-            <MenuOutlined />
-          </header>
+          {/* <header className={c.navbar}>
+            <div className={c.logo}>
+              <Link href="/">
+                <EventMateLogo />
+              </Link>
+              <span>EventMate</span>
+            </div>
+            <MenuOutlined /> 
+          </header> */}
           {event ? (
             <>
               <EventHeader event={event} />

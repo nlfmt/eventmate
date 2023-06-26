@@ -388,6 +388,11 @@
   align-items: center;
 }
 
+.newItemWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .newItem {
   display: flex;
   align-items: center;
@@ -404,6 +409,12 @@
     background-color: var(--bg-lighter);
     border-radius: 0.25rem;
   }
+}
+
+.error {
+  color: var(--error) !important;
+  padding: 0 !important;
+  font-size: 0.8rem !important;
 }
 
 

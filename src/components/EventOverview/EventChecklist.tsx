@@ -80,21 +80,25 @@ const EventChecklist: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className={c.newItem}>
-        <AddBoxRounded onClick={handleAddItem} />
-        <input
-          type="text"
-          placeholder="Neuer Eintrag"
-          value={newItemText}
-          onChange={(e) => setNewItemText(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Person zuweisen (optional)"
-          value={newItemAssignedTo}
-          onChange={(e) => setNewItemAssignedTo(e.target.value)}
-        />
-        {error && <p className={c.error}>{error}</p>}
+      <div className={c.newItemWrapper}>
+        <div className={c.newItem}>
+          <AddBoxRounded onClick={handleAddItem} />
+          <input
+            type="text"
+            placeholder="Neuer Eintrag"
+            value={newItemText}
+            onChange={(e) => setNewItemText(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Person zuweisen (optional)"
+            value={newItemAssignedTo}
+            onChange={(e) => setNewItemAssignedTo(e.target.value)}
+          />
+        </div>
+        <div className={c.error}>
+          {error && <p className={c.error}>{error}</p>}
+        </div>
       </div>
     </div>
   );

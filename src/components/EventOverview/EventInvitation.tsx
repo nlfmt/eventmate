@@ -12,8 +12,6 @@ import {
 } from "@mui/icons-material";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { useState } from "react";
-import useMediaQuery from "@/hooks/useMediaQuery";
-
 
 export interface InvitationProps {
   event: Event & {

@@ -48,7 +48,7 @@ const EventHeader = (props: HeaderProps) => {
   return (
     <div 
       className={c.heading} 
-      data-HEADER
+      data-header
       data-cat={event.category}
     >
       <div className={c.categories}>
