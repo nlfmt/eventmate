@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import type { Event, User } from "@prisma/client";
 import {
   CheckBoxOutlineBlankRounded,
   AddBoxRounded,
   DeleteOutlineRounded
 } from "@mui/icons-material";
 import c from "@/components/EventOverview/eventOverview.module.scss";
+import Checkbox from "../Checkbox/Checkbox";
+
 
 interface ChecklistItem {
   id: number;
@@ -51,6 +54,7 @@ const EventChecklist: React.FC = () => {
     );
   };
 
+
   return (
     <div className={c.checklist_Wrapper}>
       <h2>Was wir brauchen:</h2>
@@ -58,7 +62,7 @@ const EventChecklist: React.FC = () => {
         {checklistItems.map((item) => (
           <div className={c.checklistItem} key={item.id}>
             <div className={c.itemLeft}>
-              <CheckBoxOutlineBlankRounded
+              <Checkbox
                 onClick={() => handleItemToggle(item.id)}
                 className={item.completed ? c.completed : ""}
               />

@@ -363,6 +363,7 @@
     height: 1.4rem;
     width: 1.4rem;
     fill: var(--green);
+    cursor: pointer;
   }
 }
 
@@ -371,7 +372,6 @@
   flex-direction: column;
   width: 100%;
 }
-
 
 .checklistItem {
   display: flex;
@@ -407,6 +407,36 @@
 .itemLeft {
   display: flex;
   align-items: center;
+  gap: 0.3rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 0.25rem;
+    padding: 0;
+    margin: 0 3px;
+    color: var(--text-inv);
+  }
+  
+  div {
+    border-radius: 0.25rem;
+    background: var(--bg);
+    opacity: 0.75;
+    --indicator: var(--text);
+    width: 1.05rem;
+    height: 1.05rem;
+    display: grid;
+    place-items: center;
+  
+    svg {
+      width: 1rem;
+      height: 1rem;
+      fill: var(--indicator);
+    }
+  }
 }
 
 .itemRight {
@@ -424,6 +454,11 @@
     background-color: var(--bg);
     opacity: 0.5;
     border: unset;
+  }
+
+  input:hover {
+    background-color: var(--bg-lighter);
+    border-radius: 0.25rem;
   }
 }
 
