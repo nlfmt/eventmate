@@ -7,6 +7,7 @@ import common from "../styles/common.module.scss";
 import c from "../components/forms/SignupForm.module.scss";
 
 import MenuBar from "@/components/forms/MenuBar";
+import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
 
 const SignupPage: NextPage = () => {
@@ -20,17 +21,17 @@ const SignupPage: NextPage = () => {
 
   return (
     <>
-      <MenuBar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} menuVisible={menuVisible} />
+      {/* <MenuBar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} menuVisible={menuVisible} /> */}
       <Head>
         <title>Sign Up</title>
       </Head>
-      <div className={common.main}>  
+      <PageWithSidebar>  
       <main className={c.center}>
         <h1>EventMate</h1>
         {/* <p>Perfectly planned<br /> - unforgettable experience!</p> */}
         <SignupForm />
       </main>
-      </div>
+      </PageWithSidebar>
     </>
   );
 };
