@@ -17,7 +17,10 @@ type ChangeAccountInfoSchema = {
 
 const ChangeAccountInfoForm = () => {
   const { data: sessionData } = useSession();
+
   const usernameInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const bioInputRef = useRef<HTMLTextAreaElement>(null);
 
   const { data: user } = api.user.get.useQuery({
     id: sessionData?.user.id ?? "",
@@ -43,11 +46,11 @@ const ChangeAccountInfoForm = () => {
     mode: "onChange",
   });
 
-  useEffect(() => {
-    if (usernameInputRef.current) {
-      usernameInputRef.current.focus();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (usernameInputRef.current) {
+  //     usernameInputRef.current.focus();
+  //   }
+  // }, []);
 
   const [username, setUsername] = React.useState(sessionData?.user.name ?? "");
   const [email, setEmail] = React.useState(sessionData?.user.email ?? "");
@@ -91,13 +94,21 @@ const ChangeAccountInfoForm = () => {
     setBio(e.target.value);
   };
 
+
   const toggleEditUsername = () => {
     setIsEditingUsername(v => !v);
+    setTimeout(() => {
+      const nameInput = usernameInputRef.current;
+      if (nameInput) {
+        nameInput.focus();
+        nameInput.setSelectionRange(0, nameInput.value.length);
+      }
+    }, 0);
   }
   const toggleEditEmail = () => {
     setIsEditingEmail((prevState) => !prevState);
     setTimeout(() => {
-      const emailInput = document.getElementById("emailInput") as HTMLInputElement;
+      const emailInput = emailInputRef.current;
       if (emailInput) {
         emailInput.focus();
         emailInput.setSelectionRange(0, emailInput.value.length);
@@ -106,6 +117,13 @@ const ChangeAccountInfoForm = () => {
   }
   const toggleEditBio = () => {
     setIsEditingBio(v => !v);
+    setTimeout(() => {
+      const bioInput = bioInputRef.current;
+      if (bioInput) {
+        bioInput.focus();
+        bioInput.setSelectionRange(0, bioInput.value.length);
+      }
+    }, 0);
   }
 
   return (
@@ -146,6 +164,7 @@ const ChangeAccountInfoForm = () => {
           placeholder={sessionData?.user.email ?? undefined}
           disabled={!isEditingEmail}
           id="emailInput"
+          ref={emailInputRef}
         />
         <div className={c.edit} onClick={toggleEditEmail}>
           {isEditingEmail ? <CheckRounded /> : <EditRounded />}
@@ -157,8 +176,9 @@ const ChangeAccountInfoForm = () => {
             value={bio}
             onChange={handleBioChange}
             data-error={!!errors.bio}
-            placeholder={bio}
+            placeholder={bio || "Enter a bio..."}
             disabled={!isEditingBio}
+            ref={bioInputRef}
           />
           <div className={c.edit} onClick={toggleEditBio}>
             {isEditingBio ? <CheckRounded /> : <EditRounded />}
