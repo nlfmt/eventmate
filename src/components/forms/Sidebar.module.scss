@@ -1,0 +1,135 @@
+.sidebar {
+  
+  // position: fixed; /* Position: fixiert am Bildschirm */
+  background-color: var(--bg-dark);
+  left: 0rem; 
+  width: 14rem;
+  // transition: all .5s ease; /* Übergangseffekt für Animationen */
+  z-index: 50; /* Z-Index für Stapelreihenfolge */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+    height: calc(100% - 4rem);
+    position: fixed;
+  }
+
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    border-radius: 100%;
+    width: calc(var(--radius-large) * 2);
+    height: calc(var(--radius-large) * 2);
+
+    box-shadow: calc(var(--radius-large) * -1) calc(var(--radius-large) * -1) 0 0 var(--bg-dark);
+  }
+
+  &.sidebarOpen {
+    /* wenn Sidebar geöffnet ist */
+    display: flex; /* Sidebar anzeigen, wenn .sidebarOpen vorhanden */
+  }
+
+  &.sidebarClosed {
+    /* wenn Sidebar geschlossen ist */
+    display: none; /* Sidebar ausblenden, wenn Klasse .sidebarClosed vorhanden */
+  }
+
+  header {
+    font-size: 2.5rem;
+    color: var(--text);
+    text-align: center;
+    font-family: var(--title-font);
+    margin-bottom: 2rem;
+    line-height: 1rem;
+    padding-top: 2rem;
+  }
+
+  .divider {
+    height: 1px;
+    width: calc(100% - 2rem);
+    margin: 2rem 1rem;
+    background: var(--text);
+    opacity: 0.5;
+  }
+
+  .link {
+    padding: 1rem;
+    gap: 1rem;
+    width: 100%;
+    font-size: 1rem;
+    color: var(--text);
+    transition: .2s;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .link a {
+    display: flex;
+    align-items: center;
+    transition: padding-left 200ms ease;
+  }
+
+  .link a:hover {
+    padding-left: 1rem;
+  }
+
+  .link a svg {
+    color: var(--text);
+    margin: 0 1rem;
+    align-items: center;
+  }
+
+  .link span {
+    display: flex;
+    align-items: center;
+  }
+
+  .welcome {
+    margin-top: auto;
+    padding: 1rem;
+    color: var(--text);
+    font-size: 2rem;
+    font-family: var(--title-font);
+  }
+
+  .welcome span {
+    font-weight: bold;
+  }
+
+  .userName {
+    color: var(--green);
+  }
+
+  .greenBtn {
+    background: var(--green);
+    height: 4rem;
+    margin: 1rem;
+    border-radius: var(--radius);
+  }
+
+  .color {
+    background: var(--bg-light);
+    height: 3rem;
+    border-radius: var(--radius);
+  }
+
+  @media screen and (max-width: 500px) {
+    .sidebar {
+      width: 100%;
+    }
+  }
+}
+
+.closeIcon {
+  color: var(--text);
+  margin: 0 1rem;
+  align-items: center;
+  /* Styles noch anpassen */
+}
