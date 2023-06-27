@@ -31,16 +31,6 @@ const Event: NextPage = () => {
       <main className={c.main}>
         <div className={c.center}>
           <TopBar />
-          {/* <SideBar /> */}
-          {/* <header className={c.navbar}>
-            <div className={c.logo}>
-              <Link href="/">
-                <EventMateLogo />
-              </Link>
-              <span>EventMate</span>
-            </div>
-            <MenuOutlined /> 
-          </header> */}
           {event ? (
             <>
               <EventHeader event={event} />

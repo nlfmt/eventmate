@@ -23,7 +23,6 @@ export interface InformationProps {
 
 const EventInformation = (props: InformationProps) => {
   const { event } = props;
-  //const location = [event.latitude, event.longitude];
   const latitude = event.latitude;
   const longitude = event.longitude;
 
@@ -33,7 +32,7 @@ const EventInformation = (props: InformationProps) => {
           <div className={c.infoItem}>
             <LocationOnRounded />
             {(latitude && longitude) && <EventLocation latitude={latitude} longitude={longitude} />}
-            <span>{/* // Location */}location</span>
+            <span>location</span>
           </div>
 
           <div className={c.infoItem}>
