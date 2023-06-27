@@ -13,7 +13,7 @@ import EventChecklist from "@/components/EventOverview/EventChecklist";
 import EventChat from "@/components/EventOverview/EventChat";
 
 import common from "@/styles/common.module.scss"
-import c from "@/components/eventOverview/eventOverview.module.scss"
+import c from "@/components/EventOverview/eventOverview.module.scss"
 
 
 const Event: NextPage = () => {
