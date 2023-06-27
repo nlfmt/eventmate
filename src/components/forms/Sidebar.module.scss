@@ -4,6 +4,7 @@
   background-color: var(--bg-dark);
   left: 0rem; 
   width: 14rem;
+  flex-shrink: 0;
   // transition: all .5s ease; /* Übergangseffekt für Animationen */
   z-index: 50; /* Z-Index für Stapelreihenfolge */
 

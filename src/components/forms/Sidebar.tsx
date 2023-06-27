@@ -4,6 +4,7 @@ import c from "./Sidebar.module.scss";
 import { ClearRounded, HomeRounded, InboxRounded } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
 import AppContext from "@/contexts/AppContext";
+import { useSession } from "next-auth/react";
 
 interface SidebarProps {
   sidebarOpen: boolean; // ob Seitenleiste geöffnet ist oder nicht
@@ -12,6 +13,8 @@ interface SidebarProps {
 
 const Sidebar: React.FC = () => {
   const { sidebarOpen, setSidebarOpen } = useContext(AppContext);
+
+  const { data: sessionData } = useSession();
 
   const sidebarClassName = classes(c.sidebar, sidebarOpen ? c.sidebarOpen : c.sidebarClosed);
 
@@ -37,7 +40,7 @@ const Sidebar: React.FC = () => {
       <p className={c.welcome}>
         Welcome Back,
         <br />
-        <span className={c.userName}>Antonia</span>
+        <span className={c.userName}>{sessionData?.user.name}</span>
       </p>
     </div>
   );
