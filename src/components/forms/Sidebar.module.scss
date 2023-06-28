@@ -3,7 +3,7 @@
   // position: fixed; /* Position: fixiert am Bildschirm */
   background-color: var(--bg-dark);
   left: 0rem; 
-  width: 14rem;
+  width: 20rem;
   flex-shrink: 0;
   // transition: all .5s ease; /* Übergangseffekt für Animationen */
   z-index: 50; /* Z-Index für Stapelreihenfolge */
@@ -12,7 +12,7 @@
   flex-direction: column;
   align-items: center;
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1000px) {
     width: 100%;
     height: calc(100% - 4rem);
     position: fixed;
@@ -43,20 +43,43 @@
 
   header {
     font-size: 2.5rem;
+    font-weight: bold;
     color: var(--text);
     text-align: center;
     font-family: var(--title-font);
-    margin-bottom: 2rem;
-    line-height: 1rem;
-    padding-top: 2rem;
+    margin-bottom: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    img {
+      width: 4rem;
+      height: 4rem;
+    }
   }
 
-  .divider {
-    height: 1px;
-    width: calc(100% - 2rem);
-    margin: 2rem 1rem;
-    background: var(--text);
-    opacity: 0.5;
+  .sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    padding: 0 0.5rem;
+
+    span {
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.1rem;
+    }
+
+    & > div {
+      height: 1px;
+      background: var(--text);
+      flex-grow: 1;
+
+    }
   }
 
   .link {
@@ -71,14 +94,64 @@
     flex-direction: column;
   }
 
-  .link a {
+  .sidebarLink {
     display: flex;
     align-items: center;
-    transition: padding-left 200ms ease;
-  }
+    background: var(--bg-light);
+    height: 3rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+  
+    & * {
+      transition: color .1s ease;
+    }
 
-  .link a:hover {
-    padding-left: 1rem;
+    // select every third element
+    &:nth-of-type(3n + 1) {
+      --clr: var(--green);
+    }
+    &:nth-of-type(3n + 2) {
+      --clr: var(--blue);
+    }
+    &:nth-of-type(3n + 3) {
+      --clr: var(--purple-light);
+    }
+
+
+    &:hover:not([data-active="true"]) {
+      * {
+        color: var(--clr);
+      }
+
+      & > svg:nth-of-type(2) {
+        transform: translatex(0);
+        transition-delay: 0s;
+      }
+    }
+
+    & > svg:nth-of-type(2) {
+      margin-left: auto;
+      transform: translatex(3rem);
+      transition: .2s;
+      transition-delay: 0.1s;
+    }
+
+    &[data-active="true"] {
+      border: 2px solid var(--bg-lighter);
+      background-color: transparent;
+      position: relative;
+
+      &::after {
+        content: "CURRENT";
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 1rem;
+        color: var(--green);
+        font-size: 0.6rem;
+        letter-spacing: 0.1rem;
+      }
+    }
   }
 
   .link a svg {
@@ -93,11 +166,14 @@
   }
 
   .welcome {
+    width: 100%;
     margin-top: auto;
     padding: 1rem;
     color: var(--text);
-    font-size: 2rem;
-    font-family: var(--title-font);
+    font-size: 1.5rem;
+    font-family: var(--font);
+    line-height: 1.7rem;
+    letter-spacing: -0.05rem;
   }
 
   .welcome span {
