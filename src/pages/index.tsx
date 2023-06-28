@@ -82,6 +82,7 @@ export const EventSection = ({component: MyComp = Card, ...props}: EventSectionP
             return <MyComp key={event.id} event={event} />;
           })}
           {props.fill && <div className={c.filler} />}
+          {props.fill && <div className={c.filler} />}
         </div>
       ) : props.events && props.events.length === 0 ? (
         <div className={c.noEvents}>No events found</div>
