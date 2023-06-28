@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import c from "./Sidebar.module.scss";
-import { ArrowForwardRounded, ChecklistRounded, ClearRounded, GroupsRounded, HomeRounded, InboxRounded, PersonRemove, PersonRounded, SearchRounded } from "@mui/icons-material";
+import { ArrowForwardRounded, ChecklistRounded, GroupsRounded, HomeRounded, InboxRounded, PersonRounded, SearchRounded } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
 import AppContext from "@/contexts/AppContext";
 import { useSession } from "next-auth/react";
@@ -9,26 +9,17 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import EventMateLogo from "../EventMateLogo";
 import { useRouter } from "next/router";
 
-interface SidebarProps {
-  sidebarOpen: boolean; // ob Seitenleiste geöffnet ist oder nicht
-  toggleSidebar: () => void; // Funktion zum Umschalten der Seitenleiste
-}
 
 const Sidebar: React.FC = () => {
-  const { sidebarOpen: sidebarState, setSidebarOpen } = useContext(AppContext);
+  const { data: sessionData } = useSession();
+  const { sidebarOpen: sidebarState } = useContext(AppContext);
 
   // On desktop, always show sidebar
   const fullSizeSidebar = useMediaQuery("(max-width: 1000px)");
   const sidebarOpen = fullSizeSidebar ? sidebarState : true;
-
-  const { data: sessionData } = useSession();
-
   const sidebarClassName = classes(c.sidebar, sidebarOpen ? c.sidebarOpen : c.sidebarClosed);
 
-  const closeIconClassName = c.closeIcon || ""; // Überprüfung auf undefined
 
-  const router = useRouter();
-  console.log(router.pathname);
 
   return (
     <div className={sidebarClassName}>

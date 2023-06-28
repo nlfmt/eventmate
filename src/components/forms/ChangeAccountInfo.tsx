@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 import c from "./ChangeAccountInfo.module.scss";
 import common from "@/styles/common.module.scss";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { ArrowBackRounded, CheckRounded, EditRounded } from "@mui/icons-material";
