@@ -20,4 +20,11 @@
     border: none;
     font-weight: 700;
     cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:disabled {
+      background: var(--bg-lighter);
+      color: rgba(255,255,255,0.2);
+      cursor: not-allowed;
+    }
 }

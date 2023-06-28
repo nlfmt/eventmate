@@ -92,6 +92,7 @@
     display: flex;
     align-items: stretch;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   .sidebarLink {
@@ -174,6 +175,32 @@
     font-family: var(--font);
     line-height: 1.7rem;
     letter-spacing: -0.05rem;
+  }
+
+  .createEvent {
+    background-color: var(--green);
+    --clr: var(--text-inv) !important;
+    transition: background-color .2s ease;
+    font-weight: 600;
+
+    & svg {
+      transition: transform .4s ease;
+      transform: scale(1.1);
+
+      &:nth-of-type(2) {
+        display: none;
+      }
+    }
+
+    &:hover {
+      background-color: var(--green-light);
+      svg {
+        transform: rotate(180deg) scale(1.2);
+      }
+    }
+    & * {
+      color: var(--text-inv);
+    }
   }
 
   .welcome span {

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Link from "next/link";
 import c from "./Sidebar.module.scss";
-import { ArrowForwardRounded, ChecklistRounded, GroupsRounded, HomeRounded, InboxRounded, PersonRounded, SearchRounded } from "@mui/icons-material";
+import { AddRounded, ArrowForwardRounded, ChecklistRounded, GroupsRounded, HomeRounded, InboxRounded, PersonRounded, SearchRounded } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
 import AppContext from "@/contexts/AppContext";
 import { useSession } from "next-auth/react";
@@ -66,12 +66,22 @@ const Sidebar: React.FC = () => {
           text="Joined Events"
           activatable={false}
         />
+        {fullSizeSidebar && <div style={{ flexGrow: 1 }} />}
+        <SidebarLink
+          href="/event/create"
+          icon={<AddRounded />}
+          text="Create Event"
+          activatable={false}
+          className={c.createEvent}
+        />
       </nav>
-      <p className={c.welcome}>
-        Welcome back,
-        <br />
-        <span className={c.userName}>{sessionData?.user.name}</span>
-      </p>
+      {!fullSizeSidebar && (
+        <p className={c.welcome}>
+          Welcome back,
+          <br />
+          <span className={c.userName}>{sessionData?.user.name}</span>
+        </p>
+      )}
     </div>
   );
 };
@@ -91,12 +101,13 @@ const SidebarLink = (props: {
   text: string;
   href: string;
   activatable?: boolean;
+  className?: string;
 }) => {
   const { pathname } = useRouter();
   const activatable = props.activatable ?? true;
 
   return (
-    <Link href={props.href} className={c.sidebarLink} data-active={activatable ? pathname === props.href : false}>
+    <Link href={props.href} className={classes(c.sidebarLink, props.className)} data-active={activatable ? pathname === props.href : false}>
       {props.icon}
       <span>{props.text}</span>
       <ArrowForwardRounded />

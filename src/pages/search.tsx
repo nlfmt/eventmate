@@ -153,6 +153,7 @@ const SearchPage: NextPage = () => {
     };
   }
 
+
   const { data, refetch: invalidate } = api.search.event.useQuery(
     {
       category: category,

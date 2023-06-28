@@ -117,4 +117,42 @@ export const eventRouter = createTRPCRouter({
         });
       }
     }),
+
+  create: protectedProcedure
+    .input(z.object({
+      name: z.string(),
+      location: z.string(),
+      date: z.date(),
+      tags: z.string(),
+      eventInfo: z.string(),
+      numberMin: z.number(),
+      numberMax: z.number(),
+      contribution: z.string(),
+      price: z.string(),
+      private: z.boolean(),
+      category: z.string(),
+    }))
+    .mutation(async ({ ctx, input  }) => {
+      const event = await ctx.prisma.event.create({
+        data: {
+          title: input.name,
+          category: input.category,
+          author: { connect: { id: ctx.session.user.id } },
+          // location: input.location,
+          // latitude: 0,
+          // longitude: 0,
+          date: input.date, // TODO: add time?
+          // appt: input.appt,
+          tags: input.tags,
+          description: input.eventInfo,
+          capacity: input.numberMax,
+          // numberMax: input.numberMax,
+          // contribution: input.contribution,
+          // price: input.price,
+          private: input.private,
+        }
+    });
+
+    return event;
+  }),
 });
