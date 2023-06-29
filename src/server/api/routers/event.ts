@@ -63,10 +63,27 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: true, _count: { select: { participants: true } }, participants: true, invitations: true },
       });
 
-      return event;
+      if (!event) throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Event not found",
+      });
+
+      const isParticipant = event.participants.some((user) => user.id === ctx.session?.user.id);
+      const isInvited = event.invitations.some((user) => user.id === ctx.session?.user.id);
+      const isAuthor = event.authorId === ctx.session?.user.id;
+
+
+      if (event.private && !isParticipant && !isInvited && !isAuthor) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to view this event",
+        });
+      }
+
+      return { event, isParticipant, isInvited, isAuthor };
     }),
 
   // join an event

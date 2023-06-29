@@ -103,11 +103,20 @@ const SidebarLink = (props: {
   activatable?: boolean;
   className?: string;
 }) => {
+  const { setSidebarOpen } = useContext(AppContext);
   const { pathname } = useRouter();
   const activatable = props.activatable ?? true;
+  const current = activatable ? pathname === props.href : false;
 
   return (
-    <Link href={props.href} className={classes(c.sidebarLink, props.className)} data-active={activatable ? pathname === props.href : false}>
+    <Link
+      onClick={() => {
+        if (!current) setSidebarOpen(false)
+      }}
+      href={props.href}
+      className={classes(c.sidebarLink, props.className)}
+      data-active={current}
+    >
       {props.icon}
       <span>{props.text}</span>
       <ArrowForwardRounded />

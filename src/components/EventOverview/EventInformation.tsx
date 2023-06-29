@@ -1,5 +1,7 @@
 import common from "@/styles/common.module.scss"
 import c from "@/components/EventOverview/eventOverview.module.scss"
+import React from 'react';
+
 
 import dayjs from "dayjs";
 import type { Event, User } from "@prisma/client";
@@ -9,6 +11,7 @@ import {
   EventNoteRounded,
   WatchLater
 } from "@mui/icons-material";
+import EventLocation from "./EventLocation";
 
 
 export interface InformationProps {
@@ -20,7 +23,6 @@ export interface InformationProps {
 
 const EventInformation = (props: InformationProps) => {
   const { event } = props;
-  //const location = [event.latitude, event.longitude];
   const latitude = event.latitude;
   const longitude = event.longitude;
 
@@ -29,7 +31,8 @@ const EventInformation = (props: InformationProps) => {
         <div className={c.infoText}>
           <div className={c.infoItem}>
             <LocationOnRounded />
-            <span>{/* // Location */}location</span>
+            {(latitude && longitude) && <EventLocation latitude={latitude} longitude={longitude} />}
+            <span>location</span>
           </div>
 
           <div className={c.infoItem}>
