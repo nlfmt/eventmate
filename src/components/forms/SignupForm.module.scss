@@ -13,8 +13,9 @@
     
     border-bottom: 2px solid var(--green);
     color: var(--text);
-    font-family: var(--title-font);
-    font-size: 3rem;
+    font-family: var(--font);
+    font-size: 2.5rem;
+    font-weight: bold;
     margin: 2rem;
     white-space: nowrap;
     margin-bottom: 0;
@@ -121,7 +122,6 @@ form .txt_field[data-error="true"] {
   color: var(--green);
   font-size: 0.75rem;
 }
-
 
 .pass {
   padding: 0.5rem;

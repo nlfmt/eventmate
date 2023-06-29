@@ -63,10 +63,27 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: true, _count: { select: { participants: true } }, participants: true, invitations: true },
       });
 
-      return event;
+      if (!event) throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Event not found",
+      });
+
+      const isParticipant = event.participants.some((user) => user.id === ctx.session?.user.id);
+      const isInvited = event.invitations.some((user) => user.id === ctx.session?.user.id);
+      const isAuthor = event.authorId === ctx.session?.user.id;
+
+
+      if (event.private && !isParticipant && !isInvited && !isAuthor) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to view this event",
+        });
+      }
+
+      return { event, isParticipant, isInvited, isAuthor };
     }),
 
   // join an event
@@ -117,4 +134,42 @@ export const eventRouter = createTRPCRouter({
         });
       }
     }),
+
+  create: protectedProcedure
+    .input(z.object({
+      name: z.string(),
+      location: z.string(),
+      date: z.date(),
+      tags: z.string(),
+      eventInfo: z.string(),
+      numberMin: z.number(),
+      numberMax: z.number(),
+      contribution: z.string(),
+      price: z.string(),
+      private: z.boolean(),
+      category: z.string(),
+    }))
+    .mutation(async ({ ctx, input  }) => {
+      const event = await ctx.prisma.event.create({
+        data: {
+          title: input.name,
+          category: input.category,
+          author: { connect: { id: ctx.session.user.id } },
+          // location: input.location,
+          // latitude: 0,
+          // longitude: 0,
+          date: input.date, // TODO: add time?
+          // appt: input.appt,
+          tags: input.tags,
+          description: input.eventInfo,
+          capacity: input.numberMax,
+          // numberMax: input.numberMax,
+          // contribution: input.contribution,
+          // price: input.price,
+          private: input.private,
+        }
+    });
+
+    return event;
+  }),
 });

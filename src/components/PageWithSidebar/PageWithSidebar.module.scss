@@ -1,0 +1,24 @@
+.container {
+  flex-grow: 1;
+  width: 100%;
+
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.siteContent {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    @media screen and (max-width: 499px) {
+      // hide scrollbars on mobile
+      display: none;
+    }
+  }
+}

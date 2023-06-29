@@ -7,11 +7,13 @@ import { api } from "@/utils/api";
 import "@/styles/globals.scss";
 import OverlayContext from "@/contexts/OverlayContext";
 import { useState } from "react";
+import AppContext from "@/contexts/AppContext";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [overlayCount, setOverlayCount] = useState<number>(0);
 
   function addOverlay() {
@@ -21,16 +23,18 @@ const MyApp: AppType<{ session: Session | null }> = ({
     setOverlayCount((v) => v - 1);
   }
   function setOverlay(v: boolean) {
-    setOverlayCount((v) => (v ? v + 1 : v - 1));
+    setOverlayCount((prev) => (v ? prev + 1 : prev - 1));
   }
 
   return (
     <SessionProvider session={session}>
-      <OverlayContext.Provider
-        value={{ overlay: !!overlayCount, addOverlay, rmOverlay, setOverlay }}
-      >
-        <Component {...pageProps} />
-      </OverlayContext.Provider>
+      <AppContext.Provider value={{ setSidebarOpen, sidebarOpen }}>
+        <OverlayContext.Provider
+          value={{ overlay: !!overlayCount, addOverlay, rmOverlay, setOverlay }}
+        >
+          <Component {...pageProps} />
+        </OverlayContext.Provider>
+      </AppContext.Provider>
     </SessionProvider>
   );
 };

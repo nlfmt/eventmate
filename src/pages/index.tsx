@@ -1,4 +1,5 @@
 import c from "./index.module.scss";
+import common from "@/styles/common.module.scss";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
@@ -12,16 +13,10 @@ import { classes } from "@/utils/utils";
 import EventMateLogo from "@/components/EventMateLogo";
 import { useRouter } from "next/router";
 import { ArrowForwardRounded } from "@mui/icons-material";
+import TopBar from "@/components/LandingPage/TopBar";
+import Sidebar from "@/components/forms/Sidebar";
+import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
-export const PlaceHolderSideBar = () => {
-  return (
-    <header className={c.navbar}>
-      <EventMateLogo />
-      <span>EventMate</span>
-      
-    </header>
-  );
-};
 
 const Home: NextPage = () => {
   const session = useSession();
@@ -36,15 +31,12 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={c.main}>
-        {/* <SideBar /> */}
-        <PlaceHolderSideBar />
-
+      <PageWithSidebar>
         <SearchSection />
         <NewEventsSection />
         {session.data && <JoinedEventsSection />}
         {session.data && <MyEventsSection />}
-      </main>
+      </PageWithSidebar>
     </>
   );
 };
@@ -89,6 +81,7 @@ export const EventSection = ({component: MyComp = Card, ...props}: EventSectionP
           {props.events.map((event) => {
             return <MyComp key={event.id} event={event} />;
           })}
+          {props.fill && <div className={c.filler} />}
           {props.fill && <div className={c.filler} />}
         </div>
       ) : props.events && props.events.length === 0 ? (

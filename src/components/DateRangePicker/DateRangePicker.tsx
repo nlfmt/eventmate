@@ -1,5 +1,5 @@
 import { I18nProvider, SSRProvider } from "react-aria";
-import { CalendarDate } from "@internationalized/date";
+import { type CalendarDate } from "@internationalized/date";
 import {
   Button,
   CalendarCell,

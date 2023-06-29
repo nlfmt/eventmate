@@ -1,0 +1,430 @@
+@use "@/styles/mixins.scss" as mixins;
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100%;
+  background: var(--bg);
+  font-family: var(--font);
+}
+
+.center {
+  width: 100%;
+  max-width: 40rem;
+
+  h1 {
+    text-align: center;
+    border-bottom: 2px solid var(--green);
+    color: var(--text);
+    font-family: var(--title-font);
+    font-size: 4rem;
+    margin: 2rem;
+    white-space: nowrap;
+  }
+
+  h2 {
+  font-weight: bolder;
+  font-size: 16px;
+  color: var(--text);
+  }
+
+  p {
+    color: var(--bg-white-dark);
+    text-align: center;
+    font-size: 1.3rem;
+    padding: 2rem 0;
+  }
+
+  color: var(--text);
+}
+
+
+
+// Navbar ********************************************************
+.navbar {
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem;  
+
+  span {
+    font-family: var(--font);
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    fill: var(--text);
+  }
+}
+
+
+
+// Header ********************************************************
+.heading {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--clr);
+  border-bottom-left-radius: var(--radius-large);
+  border-bottom-right-radius: var(--radius-large);
+  margin-bottom: 2rem;
+
+  &[data-cat="show"] {
+    --clr: #eaa9ff;
+  }
+  &[data-cat="party"] {
+    --clr: #ccaaff;
+  }
+  &[data-cat="sport"] {
+    --clr: #bde0f7;
+  }
+  &[data-cat="meetup"] {
+    --clr: #b3caff;
+  }
+  &[data-cat="education"] {
+    --clr: #aeffad;
+  }
+  &[data-cat="culture"] {
+    --clr: #ffbdad;
+  }
+  &[data-cat="other"] {
+    --clr: #7c698b;
+  }
+}
+
+.categories {
+  display: flex;
+  padding: 0 0 1rem 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  row-gap: 9999999px;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+  height: 2.5rem;
+  overflow: hidden;
+
+  span {
+      background-color: var(--bg);
+      padding: 0.3rem 0.6rem;
+      border-radius: 99999px;
+      font-size: 0.75rem;
+      color: var(--text-dark);
+  }
+}
+
+.categoryIcon {
+  height: 5%;
+  width: 3.5rem;
+  right: 0rem;
+
+  display: grid;
+  place-items: center;
+
+  svg {
+      height: 1.4rem;
+      width: 1.4rem;
+      fill: var(--bg);
+  }
+}
+
+.title_Wrapper {
+  padding: 0 1rem 0.5rem 1rem;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+
+  // This causes the text to be cut off with "..." if it is longer than three lines
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  span {
+    color: var(--bg) !important;
+  }
+}
+
+.categoryName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--bg) !important;
+  opacity: 0.5;
+  height: 1rem;
+}
+
+.author {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0 1rem 1rem 1rem;
+
+  span {
+    color: var(--bg) !important;
+  }
+}
+
+
+
+// Information ********************************************************
+.information {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem 2rem 1rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+
+  p {
+    font-size: 0.8rem !important;
+    color: var(--text) !important;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 !important;
+    text-align: start !important;
+  }
+
+  svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    fill: var(--text);
+  }
+}
+
+.infoItem:last-child {
+  margin-bottom: 0;
+}
+
+.map {
+  border-color: white !important;
+  border: solid;
+  border-radius: var(--radius-large);
+  width: 200px;
+  height: 100%;
+  direction: rtl;
+  margin-left: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+
+
+// Invitation ********************************************************
+.invitation {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem 2rem 1rem;
+}
+
+.invitationText {
+  h2 {
+    margin-bottom: 0.25rem;
+    margin-top: 0;
+  }
+}
+
+.participants {
+  font-size: 0.8rem;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+
+.acceptBtn, .denyBtn, .leaveBtn, .joinBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    fill: currentColor;
+  }
+}
+
+.acceptBtn, .joinBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--green));
+}
+
+.leaveBtn, .denyBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--error));
+  &[data-confirm="true"] {
+    @include mixins.btn(var(--error), var(--error-light), var(--text-inv));
+  }
+}
+
+
+// Description ********************************************************
+.description {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 2rem 1rem;
+
+  h2 {
+    margin-bottom: 0.25rem;
+    margin-top: 0;
+  }
+}
+
+.descriptionText {
+  font-size: 0.8rem;
+}
+
+
+
+// Checklist ********************************************************
+.checklist_Wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 0 1rem 2rem 1rem;
+
+  h2 {
+    margin-bottom: 0.25rem;
+    margin-top: 0;
+  }
+
+  svg {
+    height: 1.4rem;
+    width: 1.4rem;
+    fill: var(--green);
+    cursor: pointer;
+  }
+}
+
+.checklist {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.checklistItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+
+  .assignedTo {
+    color: var(--green) !important;
+  }
+
+  p {
+    font-size: 0.8rem !important;
+    color: var(--text) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  p:last-child {
+    color: var(--text) !important;
+    direction: rtl;
+  }
+
+  svg {
+    height: 1.4rem;
+    width: 1.4rem;
+    fill: var(--text);
+  }
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 0.25rem;
+    padding: 0;
+    margin: 0 3px;
+    color: var(--text-inv);
+  }
+  
+  div {
+    border-radius: 0.25rem;
+    background: var(--bg);
+    opacity: 0.8;
+    --indicator: var(--text);
+    width: 1.05rem;
+    height: 1.05rem;
+    display: grid;
+    place-items: center;
+  
+    svg {
+      width: 1rem;
+      height: 1rem;
+      fill: var(--indicator);
+    }
+  }
+}
+
+.itemRight {
+  display: flex;
+  align-items: center;
+}
+
+.newItemWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.newItem {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  input {
+    color: var(--text);
+    background-color: var(--bg);
+    opacity: 0.5;
+    border: unset;
+  }
+
+  input:hover {
+    background-color: var(--bg-lighter);
+    border-radius: 0.25rem;
+  }
+}
+
+.error {
+  color: var(--error) !important;
+  padding: 0 !important;
+  font-size: 0.8rem !important;
+}
+
+
+
+// Chat ********************************************************
+.chat {
+  display: flex;
+}
+
