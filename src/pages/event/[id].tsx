@@ -12,7 +12,7 @@ import EventDescription from "@/components/EventOverview/EventDescription";
 import EventChecklist from "@/components/EventOverview/EventChecklist";
 import EventChat from "@/components/EventOverview/EventChat";
 
-import c from "@/components/eventOverview/eventOverview.module.scss"
+import c from "@/components/EventOverview/eventOverview.module.scss"
 import TopBar from "@/components/LandingPage/TopBar";
 import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
