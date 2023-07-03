@@ -16,11 +16,12 @@ import { useRouter } from "next/router";
 
 import categories, { type Category } from "@/utils/categories";
 import OverlayContext from "@/contexts/OverlayContext";
+import { FilteredUser } from "@/utils/utils";
 
 export interface CardProps {
   event: Event & {
     _count: { participants: number };
-    author: Omit<User, "password">;
+    author: FilteredUser;
   };
 }
 

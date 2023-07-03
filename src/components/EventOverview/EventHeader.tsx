@@ -13,6 +13,7 @@ import {
   PaletteRounded,
   TipsAndUpdatesRounded,
 } from "@mui/icons-material";
+import { FilteredUser } from "@/utils/utils";
 
 const categories = {
   show: ["Show", TheaterComedyRounded],
@@ -27,7 +28,7 @@ type Category = keyof typeof categories;
 
 export interface HeaderProps {
   event: Event & {
-    author: Omit<User, "password">;
+    author: FilteredUser;
   };
 }
 

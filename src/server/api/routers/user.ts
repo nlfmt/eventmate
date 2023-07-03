@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcrypt";
 import { UserFilter } from "@/utils/utils";
+import mailer from "@/server/mail";
 
 export const userRouter = createTRPCRouter({
   me: protectedProcedure
@@ -55,6 +56,24 @@ export const userRouter = createTRPCRouter({
           password: await bcrypt.hash(input.newPassword, 10)
         },
       });
+
+      const msg = `Hello ${user.username},\n\nYour EventMate password has been changed. If you did not request this change, please contact us immediately.\n\nBest regards,\nEventMate`;
+
+      mailer.sendMail({
+        from: {
+          name: "EventMate",
+          address: "info@eventmate.tech"
+        },
+        to: user.email,
+        subject: "Security Warning",
+        text: msg,
+        html: msg.replace(/\n/g, "<br>"),
+      });
+
+      return {
+        email: user.email,
+        username: user.username,
+      }
     }),
 
   changeAccountInfo: protectedProcedure
