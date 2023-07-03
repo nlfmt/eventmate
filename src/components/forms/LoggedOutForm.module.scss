@@ -1,3 +1,5 @@
+@use "@/styles/mixins.scss" as mixins;
+
 .main{
   width: 100%;
   max-width: 30rem;
@@ -24,19 +26,11 @@
 }
 
 .button{
+  @include mixins.btn(var(--green), var(--green-light), var(--text-inv));
+
   width: 100%;
   padding: 1rem;
-  border-radius: 0.5rem;
-  background-color: #292929;
-  color: #ffffff;
+  height: unset;
   font-size: 1rem;
   font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-
-  &:hover{
-    background-color: var(--green);
-    color: #292929;
-  }
 }

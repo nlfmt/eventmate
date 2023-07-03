@@ -1,6 +1,7 @@
 
 import z from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { UserFilter } from "@/utils/utils";
 
 export const searchRouter = createTRPCRouter({
   // search for events
@@ -54,7 +55,7 @@ export const searchRouter = createTRPCRouter({
           ctx.prisma.event.findMany({
             where,
             include: {
-              author: true,
+              author: { select: UserFilter },
               _count: { select: { participants: true } },
             },
             take: pageSize,

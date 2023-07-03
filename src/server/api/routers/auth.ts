@@ -3,14 +3,15 @@ import bcrypt from "bcrypt";
 import { RateLimiter, createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { signupSchema } from "@/validation/auth";
 import { TRPCError } from "@trpc/server";
+import { UserFilter } from "@/utils/utils";
 
 export const authRouter = createTRPCRouter({
   signup: publicProcedure
-    // .use(RateLimiter(
-    //   5 * 60 * 1000,
-    //   300 * 60 * 1000,
-    //   "You can't create new accounts this often."
-    // ))
+    .use(RateLimiter({
+      max: 2,
+      windowMs: 24 * 60 * 60 * 1000,
+      message: (remaining) => `Too many signups, please try again in ${remaining}`,
+    }))
     .input(signupSchema)
     .mutation(async ({ ctx, input }) => {
       const salt = await bcrypt.genSalt(10);
@@ -23,6 +24,7 @@ export const authRouter = createTRPCRouter({
             password: hash,
             username: input.username,
           },
+          select: UserFilter
         });
         return user;
       } catch (error) {

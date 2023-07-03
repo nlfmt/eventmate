@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { RateLimiter, createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { TRPCError } from "@trpc/server";
+import bcrypt from "bcrypt";
+import { UserFilter } from "@/utils/utils";
 
 export const userRouter = createTRPCRouter({
   me: protectedProcedure
@@ -21,10 +24,6 @@ export const userRouter = createTRPCRouter({
     }),
 
   get: publicProcedure
-    .use(RateLimiter(
-      100,
-      5000,
-    ))
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.user.findUnique({
@@ -38,7 +37,24 @@ export const userRouter = createTRPCRouter({
       confirmPassword: z.string()
     }))
     .mutation(async ({ ctx, input }) => {
-      // TODO: implement
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+      });
+      if (!user) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
+      }
+      if (input.newPassword !== input.confirmPassword) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Passwords do not match" });
+      }
+      if (!await bcrypt.compare(input.oldPassword, user.password)) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: "Old password is incorrect" });
+      }
+      await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          password: await bcrypt.hash(input.newPassword, 10)
+        },
+      });
     }),
 
   changeAccountInfo: protectedProcedure
@@ -54,7 +70,8 @@ export const userRouter = createTRPCRouter({
           username: input.username,
           email: input.email,
           bio: input.bio,
-        }
+        },
+        select: UserFilter
       });
     }),
 });

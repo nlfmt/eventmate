@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { UserFilter } from "@/utils/utils";
 
 const defaultCountSchema = z
   .object({
@@ -18,7 +19,7 @@ export const eventRouter = createTRPCRouter({
       return await ctx.prisma.event.findMany({
         // select: { _count: { select: { participants: true } } },
         where: { authorId: ctx.session.user.id },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true } } },
         take: input.count,
       });
     }),
@@ -32,7 +33,7 @@ export const eventRouter = createTRPCRouter({
           participants: { some: { id: ctx.session.user.id } },
           authorId: { not: ctx.session.user.id },
         },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true } } },
         take: input.count,
       });
     }),
@@ -43,7 +44,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.event.findMany({
         where: ctx.session ? { participants: { none: { id: ctx.session.user.id } } } : undefined,
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true} } },
         take: input.count,
       });
     }),
@@ -54,6 +55,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.user.findMany({
         where: { events: { some: { id: input.eventId } } },
+        select: UserFilter,
       });
     }),
 
@@ -63,7 +65,12 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, _count: { select: { participants: true } }, participants: true, invitations: true },
+        include: {
+          author: { select: UserFilter },
+          _count: { select: { participants: true } },
+          participants: { select: UserFilter },
+          invitations: true
+        },
       });
 
       if (!event) throw new TRPCError({
@@ -93,7 +100,7 @@ export const eventRouter = createTRPCRouter({
 
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, invitations: true, participants: true },
+        include: { author: { select: UserFilter }, invitations: true, participants: { select: UserFilter } },
       });
 
       if (!event) {

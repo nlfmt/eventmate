@@ -75,11 +75,11 @@ const Sidebar: React.FC = () => {
           className={c.createEvent}
         />
       </nav>
-      {!fullSizeSidebar && (
+      {(!fullSizeSidebar && sessionData) && (
         <p className={c.welcome}>
           Welcome back,
           <br />
-          <span className={c.userName}>{sessionData?.user.name}</span>
+          <span className={c.userName}>{sessionData.user.name}</span>
         </p>
       )}
     </div>
