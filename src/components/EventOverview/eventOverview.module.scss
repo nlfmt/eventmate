@@ -1,3 +1,5 @@
+@use "@/styles/mixins.scss" as mixins;
+
 .main {
   display: flex;
   flex-direction: column;
@@ -10,6 +12,7 @@
 
 .center {
   width: 100%;
+  max-width: 40rem;
 
   h1 {
     text-align: center;
@@ -34,11 +37,12 @@
     padding: 2rem 0;
   }
 
-  span {
-    color: var(--text);
-  }
+  color: var(--text);
 }
 
+
+
+// Navbar ********************************************************
 .navbar {
   background-color: var(--bg);
   display: flex;
@@ -48,9 +52,10 @@
   padding: 1rem;  
 
   span {
-    font-family: var(--title-font);
+    font-family: var(--font);
     color: var(--text);
-    font-size: 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
   svg {
@@ -96,7 +101,9 @@
 
 .categories {
   display: flex;
-  padding: 0 1rem 1rem 0.5rem;
+  padding: 0 0 1rem 0.5rem;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .tags {
@@ -118,7 +125,6 @@
 }
 
 .categoryIcon {
-  position: absolute;
   height: 5%;
   width: 3.5rem;
   right: 0rem;
@@ -186,6 +192,15 @@
   font-size: 0.8rem;
   margin-bottom: 0.5rem;
 
+  p {
+    font-size: 0.8rem !important;
+    color: var(--text) !important;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0 !important;
+    text-align: start !important;
+  }
+
   svg {
     height: 1.2rem;
     width: 1.2rem;
@@ -214,6 +229,8 @@
 .invitation {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   padding: 0 1rem 2rem 1rem;
 }
 
@@ -228,95 +245,37 @@
   font-size: 0.8rem;
 }
 
-.invitationField {
+.buttonGroup {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
+
+.acceptBtn, .denyBtn, .leaveBtn, .joinBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   
-.tick {
-  position: absolute;
-  top: 23.65rem;
-  right: 8rem;
-}
-
-.tickCircle {
-  position: absolute;
-  height: 100%;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
   svg {
-      height: 2.5rem;
-      width: 2.5rem;
-      fill: #DEFFD2;
+    height: 1.2rem;
+    width: 1.2rem;
+    fill: currentColor;
   }
 }
 
-.tickIcon {
-  position: absolute;
-  height: 2.5rem;
-  width: 3.5rem;
+.acceptBtn, .joinBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--green));
+}
 
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 1.4rem;
-      width: 1.4rem;
-      fill: #4D9955;
+.leaveBtn, .denyBtn {
+  @include mixins.btn(var(--bg-lighter), var(--bg-light), var(--text), var(--error));
+  &[data-confirm="true"] {
+    @include mixins.btn(var(--error), var(--error-light), var(--text-inv));
   }
 }
-
-.tick:hover {
-  cursor: pointer;
-}
-
-
-.cross {
-  position: absolute;
-  top: 23.65rem;
-  right: 5rem;
-}
-
-.crossCircle {
-  position: absolute;
-  height: 100%;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 2.5rem;
-      width: 2.5rem;
-      fill: #FFDFDF;
-  }
-}
-
-.crossIcon {
-  position: absolute;
-  height: 2.5rem;
-  width: 3.5rem;
-
-  display: grid;
-  place-items: center;
-
-  svg {
-      height: 1.4rem;
-      width: 1.4rem;
-      fill: #FF5E5E;
-  }
-}
-
-.cross:hover {
-  cursor: pointer;
-}
-
 
 
 // Description ********************************************************
@@ -352,6 +311,7 @@
     height: 1.4rem;
     width: 1.4rem;
     fill: var(--green);
+    cursor: pointer;
   }
 }
 
@@ -361,14 +321,17 @@
   width: 100%;
 }
 
-
 .checklistItem {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   gap: 0.3rem;
   margin-bottom: 0.5rem;
+
+  .assignedTo {
+    color: var(--green) !important;
+  }
 
   p {
     font-size: 0.8rem !important;
@@ -387,6 +350,75 @@
     width: 1.4rem;
     fill: var(--text);
   }
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 0.25rem;
+    padding: 0;
+    margin: 0 3px;
+    color: var(--text-inv);
+  }
+  
+  div {
+    border-radius: 0.25rem;
+    background: var(--bg);
+    opacity: 0.8;
+    --indicator: var(--text);
+    width: 1.05rem;
+    height: 1.05rem;
+    display: grid;
+    place-items: center;
+  
+    svg {
+      width: 1rem;
+      height: 1rem;
+      fill: var(--indicator);
+    }
+  }
+}
+
+.itemRight {
+  display: flex;
+  align-items: center;
+}
+
+.newItemWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.newItem {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  input {
+    color: var(--text);
+    background-color: var(--bg);
+    opacity: 0.5;
+    border: unset;
+  }
+
+  input:hover {
+    background-color: var(--bg-lighter);
+    border-radius: 0.25rem;
+  }
+}
+
+.error {
+  color: var(--error) !important;
+  padding: 0 !important;
+  font-size: 0.8rem !important;
 }
 
 

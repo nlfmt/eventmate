@@ -26,6 +26,7 @@ import Card, { type CardProps } from "@/components/LandingPage/Card";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 import TopBar from "@/components/LandingPage/TopBar";
+import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
 
 const SearchPageContext = createContext<{
@@ -152,6 +153,7 @@ const SearchPage: NextPage = () => {
     };
   }
 
+
   const { data, refetch: invalidate } = api.search.event.useQuery(
     {
       category: category,
@@ -181,8 +183,7 @@ const SearchPage: NextPage = () => {
       <Head>
         <title>{"EventMate - " + (owned ? "My Events" : joined ? "Joined Events" : "Search")}</title>
       </Head>
-      <main className={common.main}>
-        <TopBar />
+      <PageWithSidebar>
         <div className={c.searchPage}>
 
           {/* Filters */}
@@ -268,7 +269,7 @@ const SearchPage: NextPage = () => {
             </footer>
           )}
         </div>
-      </main>
+      </PageWithSidebar>
     </>
   );
 };

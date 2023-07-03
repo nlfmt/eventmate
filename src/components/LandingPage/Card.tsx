@@ -68,7 +68,7 @@ const Card = (props: CardProps) => {
         <ExpandLessRounded />
       </div>
       <div className={c.tags}>
-        {event.tags.split(";").map((tag) => {
+        {event.tags && event.tags.split(";").map((tag) => {
           return <span key={tag}>{tag}</span>;
         })}
       </div>

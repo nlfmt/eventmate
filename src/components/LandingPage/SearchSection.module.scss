@@ -7,6 +7,8 @@
   align-items: center;
   gap: 1rem;
 
+  border-radius: var(--radius-large) var(--radius-large) 0 0;
+
   h1 {
     text-align: center;
     font-size: 2rem;

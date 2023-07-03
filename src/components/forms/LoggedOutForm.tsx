@@ -9,7 +9,7 @@ const LoggedOut = () => {
           <div className={c.text}>You are not logged in</div>
           <div>
             <Link href="/login">
-              <button className={c.button}>Login</button>
+              <button className={c.button}>Go to Login</button>
             </Link>
           </div>
         </div>

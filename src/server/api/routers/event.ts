@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { UserFilter } from "@/utils/utils";
 
 const defaultCountSchema = z
   .object({
@@ -18,7 +19,7 @@ export const eventRouter = createTRPCRouter({
       return await ctx.prisma.event.findMany({
         // select: { _count: { select: { participants: true } } },
         where: { authorId: ctx.session.user.id },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true } } },
         take: input.count,
       });
     }),
@@ -32,7 +33,7 @@ export const eventRouter = createTRPCRouter({
           participants: { some: { id: ctx.session.user.id } },
           authorId: { not: ctx.session.user.id },
         },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true } } },
         take: input.count,
       });
     }),
@@ -43,7 +44,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.event.findMany({
         where: ctx.session ? { participants: { none: { id: ctx.session.user.id } } } : undefined,
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true} } },
         take: input.count,
       });
     }),
@@ -54,6 +55,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.user.findMany({
         where: { events: { some: { id: input.eventId } } },
+        select: UserFilter,
       });
     }),
 
@@ -63,10 +65,32 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: {
+          author: { select: UserFilter },
+          _count: { select: { participants: true } },
+          participants: { select: UserFilter },
+          invitations: true
+        },
       });
 
-      return event;
+      if (!event) throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Event not found",
+      });
+
+      const isParticipant = event.participants.some((user) => user.id === ctx.session?.user.id);
+      const isInvited = event.invitations.some((user) => user.id === ctx.session?.user.id);
+      const isAuthor = event.authorId === ctx.session?.user.id;
+
+
+      if (event.private && !isParticipant && !isInvited && !isAuthor) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to view this event",
+        });
+      }
+
+      return { event, isParticipant, isInvited, isAuthor };
     }),
 
   // join an event
@@ -76,7 +100,7 @@ export const eventRouter = createTRPCRouter({
 
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, invitations: true, participants: true },
+        include: { author: { select: UserFilter }, invitations: true, participants: { select: UserFilter } },
       });
 
       if (!event) {
@@ -117,4 +141,42 @@ export const eventRouter = createTRPCRouter({
         });
       }
     }),
+
+  create: protectedProcedure
+    .input(z.object({
+      name: z.string(),
+      location: z.string(),
+      date: z.date(),
+      tags: z.string(),
+      eventInfo: z.string(),
+      numberMin: z.number(),
+      numberMax: z.number(),
+      contribution: z.string(),
+      price: z.string(),
+      private: z.boolean(),
+      category: z.string(),
+    }))
+    .mutation(async ({ ctx, input  }) => {
+      const event = await ctx.prisma.event.create({
+        data: {
+          title: input.name,
+          category: input.category,
+          author: { connect: { id: ctx.session.user.id } },
+          // location: input.location,
+          // latitude: 0,
+          // longitude: 0,
+          date: input.date, // TODO: add time?
+          // appt: input.appt,
+          tags: input.tags,
+          description: input.eventInfo,
+          capacity: input.numberMax,
+          // numberMax: input.numberMax,
+          // contribution: input.contribution,
+          // price: input.price,
+          private: input.private,
+        }
+    });
+
+    return event;
+  }),
 });
