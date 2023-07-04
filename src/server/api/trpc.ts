@@ -19,6 +19,7 @@ import { type Session } from "next-auth";
 
 import { getServerAuthSession } from "@/server/nextauth";
 import { prisma } from "@/server/db";
+import { redis } from "@/server/redis";
 
 type CreateContextOptions = {
   session: Session | null;
@@ -40,6 +41,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
     session: opts.session,
     req: opts.req,
     prisma,
+    redis
   };
 };
 
@@ -128,6 +130,29 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
+/** Reusable middleware that enforces users have a verified email before running the procedure. */
+const enforceUserEmailIsVerified = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  const user = await ctx.prisma.user.findUnique({
+    where: { id: ctx.session.user.id },
+    select: { emailVerified: true },
+  });
+
+  if (!user?.emailVerified) {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Email not verified" });
+  }
+
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  });
+})
+
 
 // Rate Limiting using Upstash Redis
 
@@ -182,3 +207,14 @@ export const RateLimiter = (opts?: { windowMs?: number, max?: number, message?: 
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+
+
+/**
+ * Verified procedure
+ * 
+ * If you want a query or mutation to ONLY be accessible to logged in users with a verified email, use this. It verifies
+ * the session is valid and guarantees `ctx.session.user` is not null and that the user has a verified email.
+ * 
+ * @see https://trpc.io/docs/procedures
+ */
+export const verifiedProcedure = t.procedure.use(enforceUserEmailIsVerified);

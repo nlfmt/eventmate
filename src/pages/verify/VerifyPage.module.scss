@@ -1,0 +1,36 @@
+.main {
+  color: var(--text);
+  height: 100%;
+  display: grid;
+  place-items: center;
+
+  
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    background-color: var(--bg-light);
+    border-radius: var(--radius-large);
+
+    @media screen and (max-width: 499px) {
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      letter-spacing: -0.05rem;
+      margin: 0;
+      text-align: center;
+    }
+  
+    p {
+      font-size: 1rem;
+      margin: 0;
+      opacity: 0.75;
+      text-align: center;
+    }
+  }
+}

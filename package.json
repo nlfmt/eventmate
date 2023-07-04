@@ -28,6 +28,7 @@
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "@types/googlemaps": "^3.43.3",
+    "@upstash/redis": "^1.22.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "dayjs": "^1.11.7",
@@ -43,6 +44,7 @@
     "react-hook-form": "^7.43.9",
     "sass": "^1.60.0",
     "superjson": "1.12.2",
+    "uuid": "^9.0.0",
     "zod": "^3.21.4"
   },
   "devDependencies": {
@@ -52,6 +54,7 @@
     "@types/nodemailer": "^6.4.8",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/uuid": "^9.0.2",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "eslint": "^8.36.0",
