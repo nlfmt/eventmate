@@ -78,6 +78,7 @@ export const searchRouter = createTRPCRouter({
       const [users, count] = await Promise.all([
         ctx.prisma.user.findMany({
           where: query ? { username: { contains: query } } : undefined,
+          select: UserFilter,
           take: pageSize,
           skip: (page - 1) * pageSize,
         }),
