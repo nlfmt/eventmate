@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import c from "@/components/EventOverview/eventOverview.module.scss";
 import { HomeRounded, LocationCityRounded, PublicRounded, StreetviewRounded } from "@mui/icons-material";
 
-interface Address {
+export interface Address {
   house_number: string;
   road: string;
   city_district: string;
@@ -16,7 +16,7 @@ interface Address {
   country_code: string;
 }
 
-interface ReverseGeocodingResult {
+export interface ReverseGeocodingResult {
   address: Address;
 }
 
