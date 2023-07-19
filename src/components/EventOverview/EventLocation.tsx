@@ -1,9 +1,23 @@
-import { Component } from 'react';
+import EventOverviewContext from "@/contexts/EventOverviewContext";
+import { useContext, useEffect, useState } from "react";
+
+import c from "@/components/EventOverview/eventOverview.module.scss";
+import { HomeRounded, LocationCityRounded, PublicRounded, StreetviewRounded } from "@mui/icons-material";
+
+interface Address {
+  house_number: string;
+  road: string;
+  city_district: string;
+  village: string;
+  county: string;
+  state: string;
+  postcode: string;
+  country: string;
+  country_code: string;
+}
 
 interface ReverseGeocodingResult {
-  address: string;
-  city: string;
-  country: string;
+  address: Address;
 }
 
 interface ReverseGeocodingProps {
@@ -11,63 +25,53 @@ interface ReverseGeocodingProps {
   longitude: number;
 }
 
-interface ReverseGeocodingState {
-  isLoading: boolean;
-  address: string;
-  city: string;
-  country: string;
-}
+const EventLocation = () => {
+  const {
+    event: { latitude, longitude },
+  } = useContext(EventOverviewContext);
+  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<Address | null>(null);
 
-class EventLocation extends Component<
-  ReverseGeocodingProps,
-  ReverseGeocodingState
-> {
-  constructor(props: ReverseGeocodingProps) {
-    super(props);
-    this.state = {
-      isLoading: true,
-      address: '',
-      city: '',
-      country: '',
-    };
-  }
+  useEffect(() => {
+    if (!latitude || !longitude) return;
 
-  componentDidMount() {
-    const { latitude, longitude } = this.props;
     const apiUrl = `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}`;
 
     fetch(apiUrl)
       .then((response) => response.json())
       .then((data) => {
-        const { address, city, country } = data as ReverseGeocodingResult;
-        this.setState({
-          isLoading: false,
-          address,
-          city,
-          country,
-        });
+        setLocation((data as ReverseGeocodingResult).address);
+        setLoading(false);
       })
       .catch((error) => {
-        console.error('Reverse geocoding API error:', error);
-        this.setState({ isLoading: false });
+        console.error("Reverse geocoding API error:", error);
+        setLoading(false);
       });
+  }, [latitude, longitude]);
+
+  if (loading || !location) {
+    return <div>Loading...</div>;
   }
-
-  render() {
-    const { isLoading, address, city, country } = this.state;
-
-    if (isLoading) {
-      return <div>Loading...</div>;
-    }
-
-    return (
-      <div>
-        <div>Address: {address}</div>
-        <div>City: {city}</div>
-        <div>Country: {country}</div>
+  
+  return (
+    <div className={c.location}>
+      <div className={c.infoItem}>
+        <span>{location.road} {location.house_number}</span>
+        <HomeRounded />
       </div>
-    );
-  }
-}
+      <div className={c.infoItem}>
+        <span>{
+          [location.postcode, ...(location.city_district ? [location.city_district, location.village] : [location.village, location.county])]
+            .filter(Boolean).join(", ")
+        }</span>
+        <LocationCityRounded />
+      </div>
+      <div className={c.infoItem}>
+        <span>{location.country}</span>
+        <PublicRounded />
+      </div>
+    </div>
+  );
+};
 
 export default EventLocation;

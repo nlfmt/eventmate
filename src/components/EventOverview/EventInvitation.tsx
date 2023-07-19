@@ -10,34 +10,28 @@ import {
   NotInterestedRounded,
   DoNotDisturbRounded,
   PlusOneRounded,
-  AddRounded
+  AddRounded,
+  EditRounded
 } from "@mui/icons-material";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import { useState } from "react";
-
-export interface InvitationProps {
-  event: Event & {
-    _count: { participants: number };
-  };
-  isInvited: boolean;
-  isParticipant: boolean;
-  isAuthor: boolean;
-}
+import { useContext, useState } from "react";
+import EventOverviewContext from "@/contexts/EventOverviewContext";
 
 
-const EventInvitation = (props: InvitationProps) => {
-  const { event } = props;
 
-  const { data: participants } = api.event.getParticipants.useQuery({ eventId: event.id })
-
+const EventInvitation = () => {
+  const ctx = useContext(EventOverviewContext);
+  
+  
   const [denyStep1, setDenyStep1] = useState(false);
-
+  
   const { mutateAsync: denyInvitation } = api.invitation.deny.useMutation();
-  const { mutateAsync: joinEvent } = api.event.join.useMutation();
+  const { mutateAsync: _joinEvent } = api.event.join.useMutation();
+  const { mutateAsync: _leaveEvent } = api.event.leave.useMutation();
 
+  
   const [loading, setLoading] = useState({ accept: false, deny: false });
-
-
+  
   async function deny() {
     if (!denyStep1) {
       setDenyStep1(true);
@@ -48,39 +42,61 @@ const EventInvitation = (props: InvitationProps) => {
     setLoading({ ...loading, deny: true });
 
     await denyInvitation({
-      eventId: props.event.id,
+      eventId: ctx.event.id,
     });
 
-    // ctx?.invalidate();
+    ctx.invalidate();
   }
 
   async function accept() {
     setLoading({ ...loading, accept: true });
 
-    await joinEvent({
-      id: props.event.id,
+    await _joinEvent({
+      id: ctx.event.id,
     });
 
-    // ctx?.invalidate();
+    ctx.invalidate();
   }
 
+  async function leaveEvent() {
+    if (!denyStep1) {
+      setDenyStep1(true);
+      setTimeout(() => setDenyStep1(false), 3000);
+      return;
+    }
+    setDenyStep1(false);
+    setLoading({ ...loading, accept: true });
 
+    await _leaveEvent({
+      id: ctx.event.id,
+    });
+
+    ctx.invalidate();
+    setLoading({ ...loading, accept: false });
+  }
+
+  async function joinEvent() {
+    setLoading({ ...loading, accept: true });
+
+    await _joinEvent({
+      id: ctx.event.id,
+    });
+
+    ctx.invalidate();
+    setLoading({ ...loading, accept: false });
+  }
+
+  async function editEvent() {
+    // TODO: implement
+  }
 
   return (
     <div className={c.invitation}>
       <div className={c.invitationText}>
-        <h2>Einladung annehmen</h2>
-        <div className={c.participants}>
-          {participants && participants.length > 3 && (
-            <span>
-              {participants[0]?.username}, {participants[1]?.username} und{" "}
-              {event._count.participants - 2} weitere Teilnehmer.
-            </span>
-          )}
-        </div>
+        { ctx.isAuthor ? "You are the author" : ctx.isInvited ? "Accept Invite" : (ctx.isParticipant ? "You are participating" : "You are not participating") }
       </div>
       <div className={c.buttonGroup}>
-        {props.isInvited ? (
+        {ctx.isInvited ? (
           <>
             <button className={c.acceptBtn} onClick={accept}>
               {loading.accept ? <LoadingSpinner /> : <CheckRounded />}
@@ -98,18 +114,24 @@ const EventInvitation = (props: InvitationProps) => {
             </button>
           </>
         ) : (
-          !props.isAuthor &&
-          (props.isParticipant ? (
-            <button className={c.leaveBtn}>
-              <NotInterestedRounded />
-              <span className={c.buttonLabel}>Leave</span>
-            </button>
+          !ctx.isAuthor ? (
+            ctx.isParticipant ? (
+              <button className={c.leaveBtn} onClick={leaveEvent} data-confirm={denyStep1}>
+                {loading.accept ? <LoadingSpinner /> : <NotInterestedRounded />}
+                <span className={c.buttonLabel}>{denyStep1 ? "Confirm" : "Leave"}</span>
+              </button>
+            ) : (
+              <button className={c.joinBtn} onClick={joinEvent}>
+                {loading.accept ? <LoadingSpinner /> : <AddRounded />}
+                <span className={c.buttonLabel}>Join</span>
+              </button>
+            )
           ) : (
-            <button className={c.joinBtn}>
-              <AddRounded />
-              <span className={c.buttonLabel}>Join</span>
+            <button className={c.joinBtn} onClick={editEvent}>
+              {loading.accept ? <LoadingSpinner /> : <EditRounded />}
+              <span className={c.buttonLabel}>Edit Event</span>
             </button>
-          ))
+          )
         )}
       </div>
     </div>

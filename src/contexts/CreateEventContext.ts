@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction, createContext } from "react";
-import internal from "stream";
+import { type Dispatch, type SetStateAction, createContext } from "react";
 
 export type FullEventInfo = {
   name: string 

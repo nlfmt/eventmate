@@ -142,6 +142,47 @@ export const eventRouter = createTRPCRouter({
       }
     }),
 
+  // leave an event
+  leave: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input.id },
+        include: { author: { select: { id: true } }, participants: { select: { id: true } } },
+      });
+
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found",
+        });
+      }
+
+      if (event.author.id === ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to leave your own event",
+        });
+      }
+
+      if (event.participants.some((user) => user.id === ctx.session.user.id)) {
+        await ctx.prisma.event.update({
+          where: { id: input.id },
+          data: {
+            participants: {
+              disconnect: { id: ctx.session.user.id },
+            },
+          },
+        });
+      } else {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to leave this event",
+        });
+      }
+    }),
+
   create: protectedProcedure
     .input(z.object({
       name: z.string(),

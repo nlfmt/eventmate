@@ -57,7 +57,7 @@ const EventChecklist: React.FC = () => {
 
   return (
     <div className={c.checklist_Wrapper}>
-      <h2>Was wir brauchen:</h2>
+      <h2>What we need:</h2>
       <div className={c.checklist}>
         {checklistItems.map((item) => (
           <div className={c.checklistItem} key={item.id}>
