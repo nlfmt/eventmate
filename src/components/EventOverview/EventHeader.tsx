@@ -31,7 +31,7 @@ const EventHeader = () => {
     <div className={c.heading} data-header data-cat={event.category}>
       <div className={c.categories}>
         <div className={c.tags}>
-          {event.tags.split(";").map((tag) => {
+          {event.tags && event.tags.split(";").map((tag) => {
             return <span key={tag}>{tag}</span>;
           })}
         </div>
