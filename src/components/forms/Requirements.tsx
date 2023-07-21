@@ -6,7 +6,7 @@ import { classes } from "@/utils/utils";
 
 function Requirements({ click }: { click: MouseEventHandler }) {
   const ctx = useContext(CreateEventContext);
-  const isFilledOut = ctx?.state?.numberMin && ctx?.state?.numberMax && ctx?.state?.contribution && ctx?.state?.price;
+  const isFilledOut = ctx?.state?.numberMax && ctx?.state?.contribution && ctx?.state?.price;
   const isButtonDisabled = (!isFilledOut);
   
   if (!ctx) return null;
@@ -18,24 +18,8 @@ function Requirements({ click }: { click: MouseEventHandler }) {
         <form className={c.form}>
           <input
             type="number"
-            name="numberMin"
-            placeholder="Member Minimum"
-            min="1"
-            max="1000"
-            required
-            value={ctx.state.numberMin}
-            onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
-                numberMin: parseInt(e.target.value, 10),
-              })
-            }
-          />
-          <input
-            type="number"
             name="numberMax"
             placeholder="Member Maximum"
-            min="1"
             max="1000"
             required
             value={ctx.state.numberMax}

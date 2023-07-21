@@ -1,9 +1,23 @@
+@use "@/styles/mixins.scss" as mixins;
+
 .name {
   text-align: left;
   color: var(--text);
   font-size: 1.3rem;
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+}
+
+button.customTrigger{
+  @include mixins.btn(var(--bg), var(--bg-lighter));
+  div{
+    display: flex;
+    align-items: center;
+    width:100%;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
 }
 
 .background {

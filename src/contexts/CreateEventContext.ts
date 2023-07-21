@@ -1,13 +1,13 @@
+import { Location } from "@/components/LocationSelectDialog/LocationSelectDialog";
 import { type Dispatch, type SetStateAction, createContext } from "react";
 
 export type FullEventInfo = {
   name: string 
-  location: string
+  location: Location
   date: string
   appt: string
   tags: string
   eventInfo: string
-  numberMin: number
   numberMax: number
   contribution: string
   price: string

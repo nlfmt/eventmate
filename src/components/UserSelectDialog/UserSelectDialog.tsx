@@ -10,7 +10,7 @@ interface UserSelectDialogProps {
   /** If you can select multiple users in the dialog */
   multiple?: boolean;
   /** The text to show on the trigger when nothing is selected */
-  emptyText?: string;
+  emptyText?: React.ReactNode;
   /** An array of selected usernames */
   selected: string[];
   /** A function to set the selected usernames */

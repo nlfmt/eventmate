@@ -7,11 +7,12 @@ import Select from "@/components/Select/Select";
 
 import categories, { type Category } from "@/utils/categories";
 import { classes } from "@/utils/utils";
+import LocationSelectDialog, { Location } from "../LocationSelectDialog/LocationSelectDialog";
 
 function EventDetails({ click }: { click: MouseEventHandler }) {
   const ctx = useContext(CreateEventContext)
  
-  const isFilledOut = ctx?.state?.name && ctx?.state?.location && ctx?.state?.date && ctx?.state?.appt && ctx?.state?.category;
+  const isFilledOut = ctx?.state?.name && ctx?.state?.date && ctx?.state?.appt && ctx?.state?.category;
   const isButtonDisabled = (!isFilledOut);
  
  
@@ -25,17 +26,17 @@ function EventDetails({ click }: { click: MouseEventHandler }) {
           <input type="text" name="name" placeholder="Event name" value={ctx.state.name} required onChange={e => ctx.setState({
             ...ctx.state, name: e.target.value
           })}/>
-          <input type="text" name="location" placeholder="Location" value={ctx.state.location} required onChange={e => ctx.setState({
-            ...ctx.state, location: e.target.value
-          })}/>
+          <LocationSelectDialog className={c.customTrigger}selected={null} setSelected={function (selected: Location): void {
+            throw new Error("Function not implemented.");
+          } }/>
           <div className={c.time}>
             <input
               type="date"
               id="start"
-              name="date"
+              name="datebutton.UserSelectDialog_trigger__P08Te"
               placeholder="2018-07-22"
               min={today.toString()}
-              max="9999-31-12"
+              max="9999-12-31"
               required
               value={ctx.state.date} 
               onChange={e => ctx.setState({

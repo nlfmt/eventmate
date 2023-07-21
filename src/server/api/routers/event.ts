@@ -186,11 +186,14 @@ export const eventRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({
       name: z.string(),
-      location: z.string(),
+      location: z.object({
+        display_name: z.string(),
+        lat: z.number(),
+        lon: z.number(),
+      }),
       date: z.date(),
       tags: z.string(),
       eventInfo: z.string(),
-      numberMin: z.number(),
       numberMax: z.number(),
       contribution: z.string(),
       price: z.string(),
@@ -204,8 +207,8 @@ export const eventRouter = createTRPCRouter({
           category: input.category,
           author: { connect: { id: ctx.session.user.id } },
           // location: input.location,
-          // latitude: 0,
-          // longitude: 0,
+          latitude: input.location.lat,
+          longitude: input.location.lon,
           date: input.date, // TODO: add time?
           // appt: input.appt,
           tags: input.tags,

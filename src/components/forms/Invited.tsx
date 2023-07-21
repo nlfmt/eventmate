@@ -1,12 +1,19 @@
 import { PersonAddRounded } from "@mui/icons-material";
 import c from "./createEvent.module.scss";
-import cs from "@/styles/common.module.scss"
+import cs from "@/styles/common.module.scss";
 import { MouseEventHandler, useContext } from "react";
 import CreateEventContext from "@/contexts/CreateEventContext";
 import Checkbox from "@/components/Checkbox/Checkbox";
 import { classes } from "@/utils/utils";
+import UserSelectDialog from "../UserSelectDialog/UserSelectDialog";
 
-function Invited({click, createEvent }: { click: MouseEventHandler, createEvent: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
+function Invited({
+  click,
+  createEvent,
+}: {
+  click: MouseEventHandler;
+  createEvent: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}) {
   const ctx = useContext(CreateEventContext);
   if (!ctx) return null;
   return (
@@ -26,7 +33,19 @@ function Invited({click, createEvent }: { click: MouseEventHandler, createEvent:
             }}
           />
         </div>
-        <button type="button" className={classes(c.submitButton, c.formSubmitButton)}>
+        <UserSelectDialog
+          className={c.customTrigger}
+          selected={[]}
+          multiple
+          emptyText={<div><PersonAddRounded/> Select Participants</div>}
+          setSelected={function (selected: string[]): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
+        <button
+          type="button"
+          className={classes(c.submitButton, c.formSubmitButton)}
+        >
           <PersonAddRounded /> Invite a friend
         </button>
         <button
