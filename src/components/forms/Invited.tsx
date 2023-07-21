@@ -43,12 +43,6 @@ function Invited({
           }}
         />
         <button
-          type="button"
-          className={classes(c.submitButton, c.formSubmitButton)}
-        >
-          <PersonAddRounded /> Invite a friend
-        </button>
-        <button
           className={classes(cs.submitButton, c.formSubmitButton)}
           onClick={createEvent}
         >
