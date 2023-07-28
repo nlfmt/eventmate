@@ -17,9 +17,9 @@ datasource db {
 
 model User {
   id            String                   @id @default(cuid())
-  username      String?                  @unique
-  email         String?                  @unique
-  emailVerified DateTime?
+  username      String                   @unique
+  email         String                   @unique
+  emailVerified Boolean                  @default(false)
   password      String
   image         String?
   bio           String?
@@ -57,8 +57,8 @@ model Requirement {
   id           String                   @id @default(uuid())
   description  String
   count        Int
-  event        Event?                   @relation("EventRequirements", fields: [eventId], references: [id])
-  eventId      String?
+  event        Event                    @relation("EventRequirements", fields: [eventId], references: [id])
+  eventId      String
   fulfillments RequirementFulfillment[]
 
   @@index([eventId], name: "eventId")
@@ -79,7 +79,7 @@ model RequirementFulfillment {
 model Message {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
-  body      String
+  body      String   @db.Text
   author    User     @relation("UserMessages", fields: [authorId], references: [id])
   authorId  String
   event     Event?   @relation("EventChat", fields: [eventId], references: [id])

@@ -18,14 +18,18 @@ const TopBar = (props: TopBarProps) => {
   const session = useSession();
   const { setSidebarOpen } = useContext(AppContext);
 
-  const fullSizeSidebar = useMediaQuery("(max-width: 800px)");
+  const fullSizeSidebar = useMediaQuery("(max-width: 1000px)");
   
   return (
     <header className={c.topbar}>
-      <Link href="/">
-        <EventMateLogo />
-      </Link>
-      <span className={c.title}>{props.title ?? "EventMate"}</span>
+      {fullSizeSidebar && (
+        <>
+          <Link href="/">
+            <EventMateLogo />
+          </Link>
+          <span className={c.title}>{props.title ?? "EventMate"}</span>
+        </>
+      )}
 
       <span style={{ flexGrow: 1 }} />
 

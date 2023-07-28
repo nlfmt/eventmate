@@ -2,8 +2,8 @@ import LoginForm from "@/components/forms/LoginForm";
 import { type NextPage } from "next";
 import Head from "next/head";
 
-import common from "../styles/common.module.scss"
 import c from "../components/forms/SignupForm.module.scss"
+import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
 const LoginPage: NextPage = () => {
 
@@ -12,7 +12,7 @@ const LoginPage: NextPage = () => {
       <Head>
         <title>Login</title>
       </Head>
-      <main className={common.main}>
+      <PageWithSidebar>
         <div className={c.center}>
           <h1>EventMate</h1>
           <p>
@@ -21,7 +21,7 @@ const LoginPage: NextPage = () => {
           </p>
           <LoginForm />
         </div>
-      </main>
+      </PageWithSidebar>
     </>
   );
 };

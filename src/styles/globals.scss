@@ -75,10 +75,20 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
 
 *::-webkit-scrollbar {
-  width: 0.8rem;
-  height: 0.8rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 *::-webkit-scrollbar-track {
@@ -86,11 +96,11 @@ a {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--bg-light);
-  border: 0.2rem solid var(--bg);
+  background: var(--bg-lighter);
+  border: 0.3rem solid var(--bg);
   border-radius: var(--radius);
 
   &:hover {
-    background: var(--bg-lighter);
+    background: var(--bg-white);
   }
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import c from "./Card.module.scss";
 
-import type { Event, User } from "@prisma/client";
+import type { Event } from "@prisma/client";
 import dayjs from "dayjs";
 
 import {
@@ -16,11 +16,12 @@ import { useRouter } from "next/router";
 
 import categories, { type Category } from "@/utils/categories";
 import OverlayContext from "@/contexts/OverlayContext";
+import { type FilteredUser } from "@/utils/utils";
 
 export interface CardProps {
   event: Event & {
     _count: { participants: number };
-    author: Omit<User, "password">;
+    author: FilteredUser;
   };
 }
 
@@ -68,7 +69,7 @@ const Card = (props: CardProps) => {
         <ExpandLessRounded />
       </div>
       <div className={c.tags}>
-        {event.tags.split(";").map((tag) => {
+        {event.tags && event.tags.split(";").map((tag) => {
           return <span key={tag}>{tag}</span>;
         })}
       </div>

@@ -14,4 +14,11 @@
   align-items: center;
   max-height: 100%;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    @media screen and (max-width: 499px) {
+      // hide scrollbars on mobile
+      display: none;
+    }
+  }
 }

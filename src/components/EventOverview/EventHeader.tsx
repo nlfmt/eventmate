@@ -1,43 +1,22 @@
-import common from "@/styles/common.module.scss"
 import c from "@/components/EventOverview/eventOverview.module.scss"
-import type { Event, User } from "@prisma/client";
 
 
 
-import {
-  GroupRounded,
-  TheaterComedyRounded,
-  CelebrationRounded,
-  SportsBasketballRounded,
-  SchoolRounded,
-  PaletteRounded,
-  TipsAndUpdatesRounded,
-} from "@mui/icons-material";
+import { useContext } from "react";
+import EventOverviewContext from "@/contexts/EventOverviewContext";
 
-const categories = {
-  show: ["Show", TheaterComedyRounded],
-  party: ["Party", CelebrationRounded],
-  sport: ["Sport", SportsBasketballRounded],
-  education: ["Education", SchoolRounded],
-  culture: ["Culture", PaletteRounded],
-  meetup: ["Meetup", GroupRounded],
-  other: ["Other", TipsAndUpdatesRounded],
-} as const;
-type Category = keyof typeof categories;
+import categories, { type Category } from "@/utils/categories";
 
-export interface HeaderProps {
-  event: Event & {
-    author: Omit<User, "password">;
-  };
-}
 
-const EventHeader = (props: HeaderProps) => {
-  const { event } = props;
+const EventHeader = () => {
+  const { event } = useContext(EventOverviewContext);
+
+  const { participants } = event;
 
   const allowed = 2;
   const titleParts = event.title.split("\n");
   let title = titleParts.slice(0, allowed).join("\n");
-  console.log(title, titleParts);
+  
   if (titleParts.length > 3) title += " " + titleParts.slice(allowed).join(" ");
 
   const category =
@@ -46,37 +25,47 @@ const EventHeader = (props: HeaderProps) => {
   const CategoryIcon = category?.[1];
 
   return (
-    <div 
-      className={c.heading} 
-      data-HEADER
-      data-cat={event.category}
-    >
+    <div className={c.heading} data-header data-cat={event.category}>
       <div className={c.categories}>
-          <div className={c.tags}>
-            {event.tags.split(";").map((tag) => {
-              return <span key={tag}>{tag}</span>;
-            })}
-          </div>
-          <div className={c.categoryIcon}>
-            <CategoryIcon />
-          </div>
+        <div className={c.tags}>
+          {event.tags && event.tags.split(";").map((tag) => {
+            return <span key={tag}>{tag}</span>;
+          })}
+        </div>
+        <div className={c.categoryIcon}>
+          <CategoryIcon />
+          <span>{categoryName}</span>
+        </div>
       </div>
       <div className={c.title_Wrapper}>
-          {/* Event title */}
-          <span className={c.title}>
-              {title.split("\n").map((item, key) => {
-                return (
-                  <span key={key}>
-                    {item}
-                    <br />
-                  </span>
-                );
-              })}
-          </span>
-          <span className={c.categoryName}>{categoryName}</span>
+        {/* Event title */}
+        <span className={c.title}>
+          {title.split("\n").map((item, key) => {
+            return (
+              <span key={key}>
+                {item}
+                <br />
+              </span>
+            );
+          })}
+        </span>
       </div>
       <div className={c.author}>
-          <span>Erstellt von {event.author.username}</span>
+        <span>by <b>{event.author.username}</b></span>
+        {participants.length > 3 ? (
+          <span>
+            Joined by{" "}
+            <b>
+              {participants[0]?.username}, {participants[1]?.username}
+            </b>{" "}
+            and <b>{event._count.participants - 2} more.</b>
+          </span>
+        ) : (
+          <span>
+            Joined by{" "}
+            <b>{participants?.map((user) => user.username).join(", ")}</b>
+          </span>
+        )}
       </div>
     </div>
   ); 

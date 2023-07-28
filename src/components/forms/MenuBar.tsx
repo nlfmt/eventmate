@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import c from "./MenuBar.module.scss";
 import { ClearRounded, MenuRounded, SearchRounded } from "@mui/icons-material";

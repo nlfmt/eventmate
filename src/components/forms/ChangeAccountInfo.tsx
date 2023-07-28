@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 import c from "./ChangeAccountInfo.module.scss";
 import common from "@/styles/common.module.scss";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { api } from "@/utils/api";
 import { useSession } from "next-auth/react";
 import { ArrowBackRounded, CheckRounded, EditRounded } from "@mui/icons-material";
@@ -31,7 +31,6 @@ const ChangeAccountInfoForm = () => {
   useEffect(() => {
     if (user && user.bio) {
       setBio(user.bio);
-      setDisplayedBio(user.bio);
     }
   }, [user]);
 
@@ -56,17 +55,8 @@ const ChangeAccountInfoForm = () => {
   const [email, setEmail] = React.useState(sessionData?.user.email ?? "");
   const [bio, setBio] = React.useState<string | undefined>("");
   const [isEditingUsername, setIsEditingUsername] = React.useState(false);
-  const [displayedUsername, setDisplayedUsername] = React.useState(
-    sessionData?.user.name ?? ""
-  );
   const [isEditingEmail, setIsEditingEmail] = React.useState(false);
-  const [displayedEmail, setDisplayedEmail] = React.useState(
-    sessionData?.user.email ?? ""
-  );
   const [isEditingBio, setIsEditingBio] = React.useState(false);
-  const [displayedBio, setDisplayedBio] = React.useState<string | undefined>(
-    ""
-  );
 
   // update username when sessionData changes
   useEffect(() => {
@@ -81,7 +71,6 @@ const ChangeAccountInfoForm = () => {
     data
   ) => {
     await ChangeAccountInfo(data);
-    setDisplayedEmail(data.email);
   };
 
   const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

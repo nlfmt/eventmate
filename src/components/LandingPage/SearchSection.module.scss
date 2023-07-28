@@ -36,6 +36,8 @@
 
 .checkbox {
   background-color: var(--bg);
+  font-size: 0.8rem;
+  gap: 0.5rem !important;
 
   & > div {
     border-radius: var(--radius-large) 0 0 var(--radius-large);

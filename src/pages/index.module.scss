@@ -10,10 +10,6 @@
   }
 }
 
-.filler {
-  // flex-grow: 1;
-}
-
 .sectionTitle {
   font-size: 1.3rem;
   font-weight: bold;
@@ -55,6 +51,7 @@
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
+  justify-content: flex-start;
 }
 
 .noEvents, .loading {

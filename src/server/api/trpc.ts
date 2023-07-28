@@ -23,7 +23,6 @@ import { prisma } from "@/server/db";
 type CreateContextOptions = {
   session: Session | null;
   req: NextApiRequest;
-  ip?: string;
 };
 
 /**
@@ -40,7 +39,6 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     req: opts.req,
-    ip: opts.ip,
     prisma,
   };
 };
@@ -54,17 +52,12 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts;
 
-  // Get the user's IP address
-  const _ip = req.headers["x-forwarded-for"] || req.headers["x-real-ip"] || req.socket.remoteAddress;
-  const ip = Array.isArray(_ip) ? _ip[0] : _ip;
-
   // Get the session from the server using the getServerSession wrapper function
   const session = await getServerAuthSession({ req, res });
 
   return createInnerTRPCContext({
     session,
     req,
-    ip
   });
 };
 
@@ -78,7 +71,12 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { NextApiRequest } from "next";
+import { type NextApiRequest } from "next";
+import { createTRPCUpstashLimiter } from "@trpc-limiter/upstash";
+import duration from "dayjs/plugin/duration";
+import dayjs from "dayjs";
+import { formatDuration } from "@/utils/utils";
+dayjs.extend(duration);
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -131,33 +129,48 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 });
 
 
-/** Only allow requests every x milliseconds */
-export const RateLimiter = (base = 100, max = 5000, message = "You can't make this many requests in a short period of time.") => {
+// Rate Limiting using Upstash Redis
 
-  let rateLimitMap = new Map<string, { last: number, timeout: number }>();
+/**
+ * Get the fingerprint of the request (IP address)
+ * @param req The request
+ * @returns The fingerprint (IP address)
+ */
+const getFingerprint = (req: NextApiRequest) => {
+  const forwarded = req.headers["x-forwarded-for"]
+  const ip = forwarded
+    ? (typeof forwarded === "string" ? forwarded : forwarded[0])?.split(/, /)[0]
+    : req.socket.remoteAddress
+  return ip || "127.0.0.1"
+}
 
-  // Clear the map every 24 hours
-  setInterval(() => {
-    rateLimitMap = new Map<string, { last: number, timeout: number }>();
-  }, 1000 * 60 * 60 * 24);
+type HitInfo = { limit: number; remaining: number; reset: number };
 
-  return t.middleware(({ ctx, next }) => {
-    
-    if (ctx.ip) {
-      const now = Date.now();
-      const entry = rateLimitMap.get(ctx.ip);
-      const last = entry?.last || 0;
-      const timeout = entry?.timeout || base;
-      
-      if (now - last < timeout)
-        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message });
+/**
+ * Rate limiter middleware
+ */
+export const RateLimiter = (opts?: { windowMs?: number, max?: number, message?: string | ((remaining: string, hitInfo: HitInfo) => string) }) => {
 
-      const newTimeout = Math.min(timeout * 2, max);
-      rateLimitMap.set(ctx.ip, { last: now, timeout: newTimeout });
+  let msg: string | ((hitInfo: HitInfo) => string) = "Too many requests, please try again later. {{remaining}}";
+
+  if (typeof opts?.message === "string") {
+    msg = opts.message;
+  } else if (opts && opts.message && typeof opts?.message === "function") {
+    const fn = opts.message;
+    msg = (hitInfo: HitInfo) => {
+      const remaining = formatDuration(hitInfo.reset - Date.now());
+      return fn(remaining, hitInfo);
     }
-
-    return next({ ctx });
-  })
+  }
+  
+  return createTRPCUpstashLimiter({
+    root: t,
+    fingerprint: (ctx, _input) => getFingerprint(ctx.req),
+    windowMs: 60 * 60 * 1000,
+    max: 4,
+    ...opts,
+    message: msg
+  });
 };
 
 /**
