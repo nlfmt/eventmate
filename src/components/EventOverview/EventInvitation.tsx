@@ -125,7 +125,7 @@ const EventInvitation = () => {
           ) : (
             <button className={c.joinBtn} onClick={editEvent}>
               {loading.accept ? <LoadingSpinner /> : <EditRounded />}
-              <span className={c.buttonLabel}>Edit Event</span>
+              {/* <span className={c.buttonLabel}>Edit Event</span> */}
             </button>
           )
         )}
