@@ -1,13 +1,20 @@
-import React, { useState } from "react";
-import type { Event, User } from "@prisma/client";
+import React, { useContext, useState } from "react";
+import type { Event, Requirement, RequirementFulfillment, User } from "@prisma/client";
 import {
   CheckBoxOutlineBlankRounded,
   AddBoxRounded,
-  DeleteOutlineRounded
+  DeleteOutlineRounded,
+  AddRounded,
+  RemoveRounded
 } from "@mui/icons-material";
-import c from "@/components/EventOverview/eventOverview.module.scss";
+import c from "@/components/EventOverview/EventChecklist.module.scss";
 import Checkbox from "../Checkbox/Checkbox";
+import EventOverviewContext from "@/contexts/EventOverviewContext";
+import { api } from "@/utils/api";
+import { classes } from "@/utils/utils";
+import { useSession } from "next-auth/react";
 
+const ChecklistContext = React.createContext<(() => void)>(() => {});
 
 interface ChecklistItem {
   id: number;
@@ -17,91 +24,201 @@ interface ChecklistItem {
 }
 
 const EventChecklist: React.FC = () => {
-  const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([]);
-  const [newItemText, setNewItemText] = useState("");
-  const [newItemAssignedTo, setNewItemAssignedTo] = useState("");
-  const [error, setError] = useState("");
 
-  const handleAddItem = () => {
-    if (newItemText.trim() !== "") {
-      const newItem: ChecklistItem = {
-        id: checklistItems.length + 1,
-        text: newItemText,
-        completed: false,
-        assignedTo: newItemAssignedTo.trim() !== "" ? newItemAssignedTo : null
-      };
+  const { event, isAuthor } = useContext(EventOverviewContext);
+  const [open, setOpen] = useState<string | null>(null);
 
-      setChecklistItems((prevItems) => [...prevItems, newItem]);
-      setNewItemText("");
-      setNewItemAssignedTo("");
-      setError("");
-    } else {
-      setError("Bitte geben Sie einen Namen für den neuen Eintrag ein.");
-    }
-  };
-
-  const handleItemToggle = (itemId: number) => {
-    setChecklistItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, completed: !item.completed } : item
-      )
-    );
-  };
-
-  const handleDeleteItem = (itemId: number) => {
-    setChecklistItems((prevItems) =>
-      prevItems.filter((item) => item.id !== itemId)
-    );
-  };
-
+  const { data: requirements, refetch } = api.requirement.get.useQuery({ eventId: event.id });
 
   return (
-    <div className={c.checklist_Wrapper}>
-      <h2>What we need:</h2>
-      <div className={c.checklist}>
-        {checklistItems.map((item) => (
-          <div className={c.checklistItem} key={item.id}>
-            <div className={c.itemLeft}>
-              <Checkbox
-                onClick={() => handleItemToggle(item.id)}
-                className={item.completed ? c.completed : ""}
-              />
-              <p>{item.text}</p>
-            </div>
-            <div className={c.itemRight}>
-              {item.assignedTo && (
-                <p className={c.assignedTo}>{item.assignedTo}</p>
-              )}
-              <DeleteOutlineRounded
-                onClick={() => handleDeleteItem(item.id)}
-                className={c.deleteIcon}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className={c.newItemWrapper}>
-        <div className={c.newItem}>
-          <AddBoxRounded onClick={handleAddItem} />
-          <input
-            type="text"
-            placeholder="Neuer Eintrag"
-            value={newItemText}
-            onChange={(e) => setNewItemText(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Person zuweisen (optional)"
-            value={newItemAssignedTo}
-            onChange={(e) => setNewItemAssignedTo(e.target.value)}
-          />
+    <ChecklistContext.Provider value={refetch}>
+      <div className={c.wrapper}>
+        <h2>Checklist</h2>
+        <div className={c.checklist}>
+          {!requirements ? (
+            <p>Loading</p>
+          ) : (
+            requirements.length === 0 ? (
+              <p>No requirements</p>
+            ) : requirements.map((req) => (
+              <Requirement key={req.id} requirement={req} open={open} setOpen={setOpen} />
+            ))
+          )}
+          {isAuthor && (<>
+            <div className={c.placeholder} />
+            <AddRequirementForm />
+          </>)}
         </div>
-        <div className={c.error}>
-          {error && <p className={c.error}>{error}</p>}
+      </div>
+    </ChecklistContext.Provider>
+  );
+};
+
+const AddRequirementForm = () => {
+  const { event } = useContext(EventOverviewContext);
+  const [amount, setAmount] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+
+  const disabled = !amount || !description;
+
+  const { mutateAsync: addRequirement } = api.requirement.create.useMutation();
+  const refetchRequirements = useContext(ChecklistContext);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    await addRequirement({
+      eventId: event.id,
+      count: parseInt(amount),
+      description
+    });
+
+    refetchRequirements();
+
+    setAmount("");
+    setDescription("");
+  }
+
+  return (
+    <form className={classes(c.addForm, c.addRequirement)} onSubmit={onSubmit}>
+      <input
+        className={c.amount}
+        data-small={!!amount}
+        type="number"
+        min="1"
+        placeholder="Amount"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+      />
+      <input
+        className={c.description}
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+      />
+      <button type="submit" disabled={disabled}>Add</button>
+    </form>
+  );
+}
+
+
+type Fulfillment = { quantity: number, user: { username: string }, id: string };
+interface RequirementProps {
+  requirement: Requirement & {
+    fulfillments: Fulfillment[]
+  },
+  open: string | null,
+  setOpen: (v: string | null) => void,
+}
+
+const Requirement = ({ requirement, open, setOpen }: RequirementProps) => {
+  const provided = requirement.fulfillments.reduce((acc, f) => acc + f.quantity, 0);
+  const fulfilled = provided === requirement.count;
+  const isOpen = open === requirement.id;
+
+  const { isParticipant, isAuthor } = useContext(EventOverviewContext);
+  const { mutateAsync: removeRequirement } = api.requirement.delete.useMutation();
+  const refetchRequirements = useContext(ChecklistContext);
+
+  async function remove() {
+    await removeRequirement({ requirementId: requirement.id });
+    refetchRequirements();
+  }
+
+  return (
+    <div className={c.item}>
+      <div className={c.info} onClick={() => {
+        setOpen(isOpen ? null : requirement.id);
+      }}>
+        <span className={c.count} data-fulfilled={fulfilled}>
+          <span className={c.l}>{provided}</span>
+          <span>/</span>
+          <span className={c.n}>{requirement.count}</span>
+        </span>
+        <span className={c.description}>{requirement.description}</span>
+        {isAuthor && (
+          <button className={c.removeBtn} onClick={remove}>Remove</button>
+        )}
+        {isOpen ? <RemoveRounded /> : <AddRounded />}
+      </div>
+
+      <div className={c.fulfillments} data-open={isOpen}>
+        <div className={c.fullfillmentWrapper}>
+          {requirement.fulfillments.map((f) => (
+            <Fulfillment key={f.user.username} fulfillment={f} />
+          ))}
+          {!fulfilled && isParticipant && <AddFulfillmentForm requirementId={requirement.id} />}
         </div>
       </div>
     </div>
   );
-};
+}
+
+
+const AddFulfillmentForm = ({ requirementId }: { requirementId: string }) => {
+  const { event } = useContext(EventOverviewContext);
+  const [amount, setAmount] = useState<string>("");
+  const refetchRequirements = useContext(ChecklistContext);
+
+  const disabled = !amount;
+
+  const { mutateAsync: addFulfillment } = api.requirement.addFulfillment.useMutation();
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    await addFulfillment({
+      requirementId,
+      quantity: parseInt(amount)
+    });
+
+    refetchRequirements();
+
+    setAmount("");
+  }
+
+  return (
+    <form className={classes(c.addForm, c.addFulfillment)} onSubmit={onSubmit}>
+      <input
+        type="number"
+        min="1"
+        placeholder="Amount"
+        value={amount}
+        onChange={(e) => setAmount(e.target.value)}
+      />
+      <button type="submit" disabled={disabled}>Provide</button>
+    </form>
+  );
+}
+
+
+interface FulfillmentProps {
+  fulfillment: Fulfillment
+}
+
+const Fulfillment = ({ fulfillment }: FulfillmentProps) => {
+  const { user, quantity } = fulfillment;
+  const { data: session } = useSession();
+
+  const { mutateAsync: removeFulfillment } = api.requirement.removeFulfillment.useMutation();
+  const refetchRequirements = useContext(ChecklistContext);
+
+  async function remove() {
+    await removeFulfillment({ fulfillmentId: fulfillment.id });
+    refetchRequirements();
+  }
+
+  return (
+    <div className={c.fulfillment}>
+      <span className={c.quantity}>{quantity}</span>
+      <span>from</span>
+      <span className={c.username}>{user.username}</span>
+      {session?.user?.name === user.username && (
+        <button className={c.removeBtn} onClick={remove}>Remove</button>
+      )}
+    </div>
+  );
+}
 
 export default EventChecklist;
