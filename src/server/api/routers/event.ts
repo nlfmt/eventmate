@@ -190,7 +190,7 @@ export const eventRouter = createTRPCRouter({
         display_name: z.string(),
         lat: z.number(),
         lon: z.number(),
-      }),
+      }).optional(),
       date: z.date(),
       tags: z.string(),
       eventInfo: z.string(),
@@ -199,18 +199,19 @@ export const eventRouter = createTRPCRouter({
       price: z.string(),
       private: z.boolean(),
       category: z.string(),
+      participants: z.array(z.string()).optional().default([]),
     }))
     .mutation(async ({ ctx, input  }) => {
+      
+
       const event = await ctx.prisma.event.create({
         data: {
           title: input.name,
           category: input.category,
           author: { connect: { id: ctx.session.user.id } },
-          // location: input.location,
-          latitude: input.location.lat,
-          longitude: input.location.lon,
-          date: input.date, // TODO: add time?
-          // appt: input.appt,
+          latitude: input.location?.lat ?? null,
+          longitude: input.location?.lon ?? null,
+          date: input.date,
           tags: input.tags,
           description: input.eventInfo,
           capacity: input.numberMax,
@@ -218,6 +219,8 @@ export const eventRouter = createTRPCRouter({
           // contribution: input.contribution,
           // price: input.price,
           private: input.private,
+          invitations: { connect: input.participants.map((username) => ({ username })) },
+          participants: { connect: { id: ctx.session.user.id } }
         }
     });
 

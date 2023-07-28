@@ -1,7 +1,6 @@
-import DotNavigation from "../DotNavigation";
 import c from "./createEvent.module.scss";
 
-const CreateEventHeading = ({ count }: { count: number }) => {
+const CreateEventHeading = () => {
   return (
     <div className={c.center}>
       <h1 className={c.heading}>Create Event</h1>

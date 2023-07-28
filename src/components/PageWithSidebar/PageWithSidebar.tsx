@@ -1,5 +1,5 @@
 import React from "react";
-import TopBar, { TopBarProps } from "@/components/LandingPage/TopBar";
+import TopBar, { type TopBarProps } from "@/components/LandingPage/TopBar";
 import Sidebar from "@/components/forms/Sidebar";
 
 import common from "@/styles/common.module.scss";

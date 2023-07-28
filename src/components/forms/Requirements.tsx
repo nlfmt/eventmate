@@ -1,4 +1,4 @@
-import { MouseEventHandler, useContext } from "react";
+import { type MouseEventHandler, useContext } from "react";
 import c from "./createEvent.module.scss";
 import CreateEventContext from "@/contexts/CreateEventContext";
 import cs from "@/styles/common.module.scss";
@@ -24,8 +24,7 @@ function Requirements({ click }: { click: MouseEventHandler }) {
             required
             value={ctx.state.numberMax}
             onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
+              ctx.updateState({
                 numberMax: parseInt(e.target.value, 10),
               })
             }
@@ -36,8 +35,7 @@ function Requirements({ click }: { click: MouseEventHandler }) {
             placeholder="Contribution"
             value={ctx.state.contribution}
             onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
+              ctx.updateState({
                 contribution: e.target.value,
               })
             }
@@ -48,13 +46,16 @@ function Requirements({ click }: { click: MouseEventHandler }) {
             placeholder="5€"
             value={ctx.state.price}
             onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
-                price: e.target.value,
-              })
+              ctx.updateState({ price: e.target.value })
             }
           />
-           <button className={classes(cs.submitButton, c.formSubmitButton)} onClick={click} disabled={isButtonDisabled}>Next</button>
+          <button
+            className={classes(cs.submitButton, c.formSubmitButton)}
+            onClick={click}
+            disabled={isButtonDisabled}
+          >
+            Next
+          </button>
         </form>
       </div>
     </>

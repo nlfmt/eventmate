@@ -1,27 +1,18 @@
 import React, { useContext, useState } from "react";
-import type { Event, Requirement, RequirementFulfillment, User } from "@prisma/client";
+import { Requirement } from "@prisma/client";
 import {
-  CheckBoxOutlineBlankRounded,
-  AddBoxRounded,
-  DeleteOutlineRounded,
   AddRounded,
   RemoveRounded
 } from "@mui/icons-material";
 import c from "@/components/EventOverview/EventChecklist.module.scss";
-import Checkbox from "../Checkbox/Checkbox";
 import EventOverviewContext from "@/contexts/EventOverviewContext";
 import { api } from "@/utils/api";
 import { classes } from "@/utils/utils";
 import { useSession } from "next-auth/react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const ChecklistContext = React.createContext<(() => void)>(() => {});
 
-interface ChecklistItem {
-  id: number;
-  text: string;
-  completed: boolean;
-  assignedTo: string | null;
-}
 
 const EventChecklist: React.FC = () => {
 
@@ -146,7 +137,7 @@ const Requirement = ({ requirement, open, setOpen }: RequirementProps) => {
       <div className={c.fulfillments} data-open={isOpen}>
         <div className={c.fullfillmentWrapper}>
           {requirement.fulfillments.map((f) => (
-            <Fulfillment key={f.user.username} fulfillment={f} />
+            <Fulfillment key={f.id} fulfillment={f} />
           ))}
           {!fulfilled && isParticipant && <AddFulfillmentForm requirementId={requirement.id} />}
         </div>
@@ -157,7 +148,6 @@ const Requirement = ({ requirement, open, setOpen }: RequirementProps) => {
 
 
 const AddFulfillmentForm = ({ requirementId }: { requirementId: string }) => {
-  const { event } = useContext(EventOverviewContext);
   const [amount, setAmount] = useState<string>("");
   const refetchRequirements = useContext(ChecklistContext);
 
@@ -212,7 +202,7 @@ const Fulfillment = ({ fulfillment }: FulfillmentProps) => {
   return (
     <div className={c.fulfillment}>
       <span className={c.quantity}>{quantity}</span>
-      <span>from</span>
+      <span>by</span>
       <span className={c.username}>{user.username}</span>
       {session?.user?.name === user.username && (
         <button className={c.removeBtn} onClick={remove}>Remove</button>

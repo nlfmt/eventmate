@@ -2,7 +2,7 @@ import EventOverviewContext from "@/contexts/EventOverviewContext";
 import { useContext, useEffect, useState } from "react";
 
 import c from "@/components/EventOverview/eventOverview.module.scss";
-import { HomeRounded, LocationCityRounded, PublicRounded, StreetviewRounded } from "@mui/icons-material";
+import { HomeRounded, LocationCityRounded, PublicRounded } from "@mui/icons-material";
 
 export interface Address {
   house_number: string;
@@ -18,11 +18,6 @@ export interface Address {
 
 export interface ReverseGeocodingResult {
   address: Address;
-}
-
-interface ReverseGeocodingProps {
-  latitude: number;
-  longitude: number;
 }
 
 const EventLocation = () => {

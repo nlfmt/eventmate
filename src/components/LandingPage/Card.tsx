@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import c from "./Card.module.scss";
 
-import type { Event, User } from "@prisma/client";
+import type { Event } from "@prisma/client";
 import dayjs from "dayjs";
 
 import {
@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 
 import categories, { type Category } from "@/utils/categories";
 import OverlayContext from "@/contexts/OverlayContext";
-import { FilteredUser } from "@/utils/utils";
+import { type FilteredUser } from "@/utils/utils";
 
 export interface CardProps {
   event: Event & {

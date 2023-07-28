@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 import { type Event } from "@prisma/client"
-import { FilteredUser } from "@/utils/utils";
+import { type FilteredUser } from "@/utils/utils";
 
 export interface EventOverviewContext {
   event: Event & {

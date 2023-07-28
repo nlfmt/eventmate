@@ -1,8 +1,6 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
-import type { Event, User } from "@prisma/client";
 import { api } from "@/utils/api";
-import { MenuOutlined } from "@mui/icons-material";
 import { useRouter } from "next/router";
 
 import EventHeader from "@/components/EventOverview/EventHeader";
@@ -10,10 +8,8 @@ import EventInformation from "@/components/EventOverview/EventInformation";
 import EventInvitation from "@/components/EventOverview/EventInvitation";
 import EventDescription from "@/components/EventOverview/EventDescription";
 import EventChecklist from "@/components/EventOverview/EventChecklist";
-import EventChat from "@/components/EventOverview/EventChat";
 
 import c from "@/components/EventOverview/eventOverview.module.scss"
-import TopBar from "@/components/LandingPage/TopBar";
 import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 import EventOverviewContext from "@/contexts/EventOverviewContext";
 

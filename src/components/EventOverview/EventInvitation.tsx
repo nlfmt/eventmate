@@ -1,15 +1,11 @@
-import common from "@/styles/common.module.scss"
 import c from "@/components/EventOverview/eventOverview.module.scss"
-import type { Event, User } from "@prisma/client";
 import { api } from "@/utils/api";
 
 
 import {
-  CircleRounded,
   CheckRounded,
   NotInterestedRounded,
   DoNotDisturbRounded,
-  PlusOneRounded,
   AddRounded,
   EditRounded
 } from "@mui/icons-material";

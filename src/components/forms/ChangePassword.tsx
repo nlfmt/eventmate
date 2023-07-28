@@ -7,7 +7,6 @@ import { api } from "@/utils/api";
 import { ArrowBackRounded, KeyRounded } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 
 type ChangeAccountInfoSchema = {
@@ -17,7 +16,6 @@ type ChangeAccountInfoSchema = {
 };
 
 const ChangePassword = () => {
-  const router = useRouter();
   const [passwordError, setPasswordError] = useState("");
 
   const {

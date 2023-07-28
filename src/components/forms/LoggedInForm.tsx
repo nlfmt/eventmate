@@ -4,9 +4,7 @@ import c from "@/components/forms/LoggedInForm.module.scss";
 
 import {
   AccountCircleRounded,
-  AdjustRounded,
   ArrowForwardIosRounded,
-  EditRounded,
 } from "@mui/icons-material";
 import Link from "next/link";
 import { api } from "@/utils/api";

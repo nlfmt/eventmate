@@ -1,12 +1,9 @@
-import common from "@/styles/common.module.scss"
 import c from "@/components/EventOverview/eventOverview.module.scss"
 import React, { useContext } from 'react';
 
 
 import dayjs from "dayjs";
-import type { Event, User } from "@prisma/client";
 import {
-  LocationOnRounded,
   GroupRounded,
   EventNoteRounded,
   WatchLater
@@ -37,7 +34,7 @@ const EventInformation = () => {
             </div>
             <div className={c.infoItem}>
               <WatchLater />
-              <span>{dayjs(event.date).format("hh:mm")}</span>
+              <span>{dayjs(event.date).format("HH:mm")}</span>
             </div>
             <div className={c.infoItem}>
               <GroupRounded />

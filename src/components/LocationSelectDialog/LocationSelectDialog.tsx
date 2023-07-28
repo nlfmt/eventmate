@@ -7,14 +7,17 @@ import {
   ManageSearchRounded,
 } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
-import { Address } from "../EventOverview/EventLocation";
 
 export interface Location {
   lat: number;
   lon: number;
   display_name: string;
 }
-type LocationSearchResult = Location[];
+type LocationSearchResult = {
+  lat: string;
+  lon: string;
+  display_name: string;
+}[];
 
 export interface LocationSelectDialogProps {
   /** The title to show in the dialog */
@@ -22,7 +25,7 @@ export interface LocationSelectDialogProps {
   /** The text to show on the trigger when nothing is selected */
   emptyText?: string;
   /** The selected location */
-  selected: Location | null;
+  selected: Location | null | undefined;
   /** A function to set the selected usernames */
   setSelected: (selected: Location) => void;
   className?: string;
@@ -109,7 +112,11 @@ const LocationSelectDialog = ({
                 <div
                   key={`${l.lat}:${l.lon}`}
                   onClick={() => {
-                    setSelected(l);
+                    setSelected({
+                      lat: parseFloat(l.lat),
+                      lon: parseFloat(l.lon),
+                      display_name: l.display_name,
+                    });
                     setOpen(false);
                   }}
                 >

@@ -52,6 +52,29 @@ export const requirementRouter = createTRPCRouter({
     .input(z.object({ requirementId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       // delete requirement and all connected fulfillments
+      const requirement = await ctx.prisma.requirement.findUnique({
+        where: { id: input.requirementId },
+        include: {
+          event: { select: { authorId: true } },
+          fulfillments: { select: { id: true } }
+        },
+      });
+
+      if (!requirement) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Requirement not found" });
+      }
+
+      if (requirement.event.authorId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to delete this requirement",
+        });
+      }
+
+      await ctx.prisma.requirementFulfillment.deleteMany({
+        where: { requirementId: input.requirementId },
+      });
+
       return await ctx.prisma.requirement.delete({
         where: { id: input.requirementId },
         include: { fulfillments: true },
