@@ -16,6 +16,7 @@ import { ArrowForwardRounded } from "@mui/icons-material";
 import TopBar from "@/components/LandingPage/TopBar";
 import Sidebar from "@/components/forms/Sidebar";
 import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
+import Footer from "@/components/Footer/Footer";
 
 
 const Home: NextPage = () => {
@@ -36,6 +37,7 @@ const Home: NextPage = () => {
         <NewEventsSection />
         {session.data && <JoinedEventsSection />}
         {session.data && <MyEventsSection />}
+        <Footer/>
       </PageWithSidebar>
     </>
   );

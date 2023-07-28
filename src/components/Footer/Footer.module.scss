@@ -1,0 +1,15 @@
+$footer-bg-color: #2e2e2e;
+$footer-text-color: #a5f3a5;
+$footer-padding: 20px;
+
+.footer {
+  background-color: $footer-bg-color;
+  padding: $footer-padding;
+  text-align: center;
+  color: $footer-text-color;
+  width: 100%;
+  
+  p {
+    margin: 0;
+  }
+}
