@@ -112,6 +112,16 @@
   margin-bottom: 1rem;
 }
 
+.button {
+  display: flex;
+  align-items: center;
+  padding-left: 0.7rem;
+}
+
+.backButton {
+  color: black;
+}
+
 .tags {
   display: flex;
   gap: 0.5rem;

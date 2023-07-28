@@ -1,7 +1,7 @@
 import c from "@/components/EventOverview/eventOverview.module.scss"
 
-
-
+import { ArrowBackRounded} from "@mui/icons-material";
+import Link from "next/link";
 import { useContext } from "react";
 import EventOverviewContext from "@/contexts/EventOverviewContext";
 
@@ -27,10 +27,15 @@ const EventHeader = () => {
   return (
     <div className={c.heading} data-header data-cat={event.category}>
       <div className={c.categories}>
-        <div className={c.tags}>
-          {event.tags && event.tags.split(";").map((tag) => {
-            return <span key={tag}>{tag}</span>;
-          })}
+        <div className={c.button}>
+          <Link href="/" className={c.backButton}>
+            <ArrowBackRounded />
+          </Link>
+          <div className={c.tags}>
+            {event.tags && event.tags.split(";").map((tag) => {
+              return <span key={tag}>{tag}</span>;
+            })}
+          </div>
         </div>
         <div className={c.categoryIcon}>
           <CategoryIcon />
