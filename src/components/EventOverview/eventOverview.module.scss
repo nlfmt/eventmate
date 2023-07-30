@@ -182,7 +182,7 @@
 .title_Wrapper {
   padding-left: 1rem;
   display: flex;
-  flex-direction: row-reverse;
+  // flex-direction: row-reverse;
   align-items: center;
   gap: 1rem;
   justify-content: space-between;
@@ -261,8 +261,11 @@
     text-align: start !important;
   }
 
-  span {
-    text-align: right;
+  // span {
+  //   text-align: right;
+  // }
+  & > div {
+    justify-content: flex-end;
   }
 
   svg {
@@ -288,9 +291,9 @@
 
 .infoItem {
   display: flex;
-  flex-direction: row-reverse;
+  // flex-direction: row-reverse;
   align-items: center;
-  justify-content: space-between;
+  // justify-content: space-between;
   gap: 0.5rem;
   font-size: 0.8rem;
   font-weight: 300;
@@ -447,23 +450,61 @@
   resize: vertical;
   height: 100px;
   padding: 1rem;
-  margin-bottom: 10px;
-  background-color: var(--bg-lighter);
+  background-color: var(--bg);
   color: var(--text);
-  border-radius: var(--radius-large);
-
-  @media (hover: hover) {
-    &:hover {
-      background-color: var(--bg-light);
-    }
-  }
+  border-radius: var(--radius);
+  outline: none;
+  resize: none;
+  flex-grow: 1;
 }
 
 .descriptionButtons {
   display: flex;
   gap: 1rem;
+  justify-content: flex-end;
 }
 
+.submitButton {
+  @include mixins.btn(var(--bg-white), var(--green), var(--text-inv));
+
+  &[disabled="true"] {
+
+  }
+}
+
+.cancelButton {
+  @include mixins.btn(var(--bg-lighter), var(--error), var(--text), var(--text-inv));
+}
+
+.submitButton, .cancelButton {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  svg { width: 1.2rem }
+}
+
+.dialogForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dialogInput {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    padding-left: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-dark);
+  }
+}
+
+.categorySelect {
+  border-radius: var(--radius);
+}
 
 
 // Checklist ********************************************************
@@ -598,3 +639,12 @@
   display: flex;
 }
 
+.input {
+  background-color: var(--bg);
+  color: var(--text);
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: var(--radius);
+  outline: none;
+  border: none;
+}

@@ -5,19 +5,20 @@ import { classes } from '@/utils/utils';
 import c from "./Modal.module.scss"
 import { CloseRounded } from '@mui/icons-material';
 
-interface ModalProps {
+export interface ModalProps {
   children: React.ReactNode;
   triggerContent?: React.ReactNode;
   triggerClass?: string;
   className?: string;
+  onClose?: () => void;
 }
 
-const ModalContext = React.createContext<{ close: () => void, open: () => void }>({
+export const ModalContext = React.createContext<{ close: () => void, open: () => void }>({
   close: () => {},
   open: () => {},
 });
 
-const Modal = ({ children, className, triggerClass, triggerContent }: ModalProps) => {
+const Modal = ({ children, className, triggerClass, triggerContent, onClose }: ModalProps) => {
 
   const [open, setOpen] = useState(false);
 
@@ -37,18 +38,22 @@ const Modal = ({ children, className, triggerClass, triggerContent }: ModalProps
       <Dialog.Portal>
         <Dialog.Overlay className={c.overlay} />
         <Dialog.Content className={classes(c.content, className)}>
-
           <ModalContext.Provider
-            value={{ close: () => setOpen(false), open: () => setOpen(true) }}
+            value={{
+              close: () => {
+                setOpen(false);
+                onClose?.();
+              },
+              open: () => setOpen(true),
+            }}
           >
             <Dialog.Close asChild>
               <button className={c.iconButton} aria-label="Close">
                 <CloseRounded />
               </button>
-          </Dialog.Close>
+            </Dialog.Close>
             {children}
           </ModalContext.Provider>
-
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

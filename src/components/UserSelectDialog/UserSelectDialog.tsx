@@ -74,7 +74,7 @@ const UserSelectDialog = ({ multiple, selected, setSelected, emptyText, classNam
               <button className={c.iconButton} aria-label="Close">
                 <CloseRounded />
               </button>
-          </Dialog.Close>
+            </Dialog.Close>
           </header>
           {/* <Dialog.Description className={c.description}>
             Search for users to select them

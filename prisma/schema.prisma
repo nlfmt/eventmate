@@ -37,6 +37,7 @@ model Event {
   authorId     String
   author       User          @relation("EventAuthor", fields: [authorId], references: [id])
   capacity     Int?
+  price        Float?
   participants User[]        @relation("EventParticipants")
   title        String
   date         DateTime

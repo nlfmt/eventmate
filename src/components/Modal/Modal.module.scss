@@ -12,6 +12,7 @@
 
 .content {
   z-index: 10000;
+  position: relative;
   background-color: var(--bg-light);
   border-radius: var(--radius-large);
   box-shadow: var(--shadow1);
@@ -21,7 +22,7 @@
   transform: translate(-50%, -50%);
   width: 90vw;
   max-width: 30rem;
-  max-height: 75vh;
+  // max-height: 75vh;
   min-height: 50vh;
   padding: 25px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -46,6 +47,10 @@
   border-radius: var(--radius);
   display: grid;
   place-items: center;
+
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 
 

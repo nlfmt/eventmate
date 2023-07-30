@@ -222,8 +222,65 @@ export const eventRouter = createTRPCRouter({
           invitations: { connect: input.participants.map((username) => ({ username })) },
           participants: { connect: { id: ctx.session.user.id } }
         }
-    });
+      });
 
-    return event;
-  }),
+      return event;
+    }),
+
+  update: protectedProcedure
+    .input(z.object({
+      id: z.string(),
+      title: z.string().optional(),
+      location: z.object({
+        display_name: z.string(),
+        lat: z.number(),
+        lon: z.number(),
+      }).optional(),
+      date: z.date().optional(),
+      tags: z.string().optional(),
+      description: z.string().optional(),
+      capacity: z.number().optional(),
+      price: z.number().optional(),
+      private: z.boolean().optional(),
+      category: z.string().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+        
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input.id },
+        include: { author: { select: { id: true } } },
+      });
+
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found",
+        });
+      }
+
+      if (event.author.id !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to update this event",
+        });
+      }
+
+      const updatedEvent = await ctx.prisma.event.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          category: input.category,
+          latitude: input.location?.lat,
+          longitude: input.location?.lon,
+          date: input.date,
+          tags: input.tags,
+          description: input.description,
+          capacity: input.capacity,
+          price: input.price,
+          private: input.private,
+        }
+      });
+
+      return updatedEvent;
+    }),
 });

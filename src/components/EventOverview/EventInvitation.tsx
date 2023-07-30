@@ -12,6 +12,8 @@ import {
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { useContext, useState } from "react";
 import EventOverviewContext from "@/contexts/EventOverviewContext";
+import Modal from "../Modal/Modal";
+import EditEventInfo from "./dialog/EditEventInfo";
 
 
 
@@ -89,10 +91,26 @@ const EventInvitation = () => {
   return (
     <div className={c.invitation}>
       <div className={c.invitationText}>
-        { ctx.isAuthor ? "You are the author" : ctx.isInvited ? "Accept Invite" : (ctx.isParticipant ? "You are participating" : "You are not participating") }
+        { !ctx.isAuthor && (ctx.isInvited ? "Accept Invite" : (ctx.isParticipant ? "You are participating" : "You are not participating")) }
       </div>
       <div className={c.buttonGroup}>
-        {ctx.isInvited ? (
+        {/* Buttons to edit event */}
+        {ctx.isAuthor && (
+          <>
+            <Modal triggerContent="Edit Date & Location">
+              <EditEventInfo onSubmit={ctx.invalidate} />
+            </Modal>
+            <Modal triggerContent="Edit Event Settings">
+              <EditEventInfo onSubmit={ctx.invalidate} />
+            </Modal>
+            <Modal triggerContent="Edit Event Details">
+              <EditEventInfo onSubmit={ctx.invalidate} />
+            </Modal>
+          </>
+        )}
+
+        {/* Accept Invite / Join / Leave Button */}
+        {!ctx.isAuthor && (ctx.isInvited ? (
           <>
             <button className={c.acceptBtn} onClick={accept}>
               {loading.accept ? <LoadingSpinner /> : <CheckRounded />}
@@ -110,25 +128,18 @@ const EventInvitation = () => {
             </button>
           </>
         ) : (
-          !ctx.isAuthor ? (
-            ctx.isParticipant ? (
-              <button className={c.leaveBtn} onClick={leaveEvent} data-confirm={denyStep1}>
-                {loading.accept ? <LoadingSpinner /> : <NotInterestedRounded />}
-                <span className={c.buttonLabel}>{denyStep1 ? "Confirm" : "Leave"}</span>
-              </button>
-            ) : (
-              <button className={c.joinBtn} onClick={joinEvent}>
-                {loading.accept ? <LoadingSpinner /> : <AddRounded />}
-                <span className={c.buttonLabel}>Join</span>
-              </button>
-            )
+          ctx.isParticipant ? (
+            <button className={c.leaveBtn} onClick={leaveEvent} data-confirm={denyStep1}>
+              {loading.accept ? <LoadingSpinner /> : <NotInterestedRounded />}
+              <span className={c.buttonLabel}>{denyStep1 ? "Confirm" : "Leave"}</span>
+            </button>
           ) : (
-            <button className={c.joinBtn} onClick={editEvent}>
-              {loading.accept ? <LoadingSpinner /> : <EditRounded />}
-              {/* <span className={c.buttonLabel}>Edit Event</span> */}
+            <button className={c.joinBtn} onClick={joinEvent}>
+              {loading.accept ? <LoadingSpinner /> : <AddRounded />}
+              <span className={c.buttonLabel}>Join</span>
             </button>
           )
-        )}
+        ))}
       </div>
     </div>
   );
