@@ -7,6 +7,7 @@ import { api } from "@/utils/api";
 import { ArrowBackRounded, KeyRounded } from "@mui/icons-material";
 import { classes } from "@/utils/utils";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 type ChangeAccountInfoSchema = {
   oldPassword: string;
@@ -26,7 +27,7 @@ const ChangePassword = () => {
 
   const { mutateAsync: changePassword } = api.user.changePassword.useMutation();
 
-  const submitHandler: SubmitHandler<ChangeAccountInfoSchema> = async (
+  const submitHandler: SubmitHandler<ChangeAccountInfoSchema> = (
     data
   ) => {
     setPasswordError("");
@@ -36,11 +37,18 @@ const ChangePassword = () => {
       return;
     }
 
-    try {
-      await changePassword(data);
-    } catch (err) {
-      setPasswordError("An error occurred while changing your password");
-    }
+    changePassword(data, {
+      onError: (err) => {
+        setPasswordError(err.message);
+      },
+      onSuccess: (d) => {
+        signIn("credentials", {
+          callbackUrl: "/account",
+          email: d.email,
+          password: data.newPassword,
+        });
+      }
+    });
   };
 
   return (

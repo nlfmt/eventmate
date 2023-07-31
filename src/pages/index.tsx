@@ -1,20 +1,16 @@
 import c from "./index.module.scss";
-import common from "@/styles/common.module.scss";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useSession } from "next-auth/react";
 
 import { api } from "@/utils/api";
 import Card from "@/components/LandingPage/Card";
-import type { Event, User } from "@prisma/client";
+import type { Event } from "@prisma/client";
 import SearchSection from "@/components/LandingPage/SearchSection";
-import { classes } from "@/utils/utils";
+import { type FilteredUser, classes } from "@/utils/utils";
 
-import EventMateLogo from "@/components/EventMateLogo";
 import { useRouter } from "next/router";
 import { ArrowForwardRounded } from "@mui/icons-material";
-import TopBar from "@/components/LandingPage/TopBar";
-import Sidebar from "@/components/forms/Sidebar";
 import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
 
@@ -50,10 +46,10 @@ interface EventSectionProps {
   fill?: boolean;
   component?: React.ComponentType<{ event: Event & {
     _count: { participants: number };
-    author: Omit<User, "password">;
+    author: FilteredUser;
   }}>;
   events:
-    | (Event & { _count: { participants: number }; author: User })[]
+    | (Event & { _count: { participants: number }; author: FilteredUser })[]
     | undefined;
   onShowMore?: () => void;
 }

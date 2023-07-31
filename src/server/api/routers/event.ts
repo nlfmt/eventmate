@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { UserFilter } from "@/utils/utils";
 
 const defaultCountSchema = z
   .object({
@@ -18,7 +19,7 @@ export const eventRouter = createTRPCRouter({
       return await ctx.prisma.event.findMany({
         // select: { _count: { select: { participants: true } } },
         where: { authorId: ctx.session.user.id },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true } } },
         take: input.count,
       });
     }),
@@ -32,7 +33,7 @@ export const eventRouter = createTRPCRouter({
           participants: { some: { id: ctx.session.user.id } },
           authorId: { not: ctx.session.user.id },
         },
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true } } },
         take: input.count,
       });
     }),
@@ -43,7 +44,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.event.findMany({
         where: ctx.session ? { participants: { none: { id: ctx.session.user.id } } } : undefined,
-        include: { author: true, _count: { select: { participants: true } } },
+        include: { author: { select: UserFilter }, _count: { select: { participants: true} } },
         take: input.count,
       });
     }),
@@ -54,6 +55,7 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.user.findMany({
         where: { events: { some: { id: input.eventId } } },
+        select: UserFilter,
       });
     }),
 
@@ -63,7 +65,12 @@ export const eventRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, _count: { select: { participants: true } }, participants: true, invitations: true },
+        include: {
+          author: { select: UserFilter },
+          _count: { select: { participants: true } },
+          participants: { select: UserFilter },
+          invitations: true
+        },
       });
 
       if (!event) throw new TRPCError({
@@ -93,7 +100,7 @@ export const eventRouter = createTRPCRouter({
 
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.id },
-        include: { author: true, invitations: true, participants: true },
+        include: { author: { select: UserFilter }, invitations: true, participants: { select: UserFilter } },
       });
 
       if (!event) {
@@ -135,31 +142,76 @@ export const eventRouter = createTRPCRouter({
       }
     }),
 
+  // leave an event
+  leave: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input.id },
+        include: { author: { select: { id: true } }, participants: { select: { id: true } } },
+      });
+
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found",
+        });
+      }
+
+      if (event.author.id === ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to leave your own event",
+        });
+      }
+
+      if (event.participants.some((user) => user.id === ctx.session.user.id)) {
+        await ctx.prisma.event.update({
+          where: { id: input.id },
+          data: {
+            participants: {
+              disconnect: { id: ctx.session.user.id },
+            },
+          },
+        });
+      } else {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to leave this event",
+        });
+      }
+    }),
+
   create: protectedProcedure
     .input(z.object({
       name: z.string(),
-      location: z.string(),
+      location: z.object({
+        display_name: z.string(),
+        lat: z.number(),
+        lon: z.number(),
+      }).optional(),
       date: z.date(),
       tags: z.string(),
       eventInfo: z.string(),
-      numberMin: z.number(),
       numberMax: z.number(),
       contribution: z.string(),
       price: z.string(),
       private: z.boolean(),
       category: z.string(),
+      participants: z.array(z.string()).optional().default([]),
     }))
     .mutation(async ({ ctx, input  }) => {
+      
+
       const event = await ctx.prisma.event.create({
         data: {
           title: input.name,
           category: input.category,
           author: { connect: { id: ctx.session.user.id } },
-          // location: input.location,
-          // latitude: 0,
-          // longitude: 0,
-          date: input.date, // TODO: add time?
-          // appt: input.appt,
+          latitude: input.location?.lat ?? null,
+          longitude: input.location?.lon ?? null,
+          date: input.date,
           tags: input.tags,
           description: input.eventInfo,
           capacity: input.numberMax,
@@ -167,9 +219,68 @@ export const eventRouter = createTRPCRouter({
           // contribution: input.contribution,
           // price: input.price,
           private: input.private,
+          invitations: { connect: input.participants.map((username) => ({ username })) },
+          participants: { connect: { id: ctx.session.user.id } }
         }
-    });
+      });
 
-    return event;
-  }),
+      return event;
+    }),
+
+  update: protectedProcedure
+    .input(z.object({
+      id: z.string(),
+      title: z.string().optional(),
+      location: z.object({
+        display_name: z.string(),
+        lat: z.number(),
+        lon: z.number(),
+      }).optional(),
+      date: z.date().optional(),
+      tags: z.string().optional(),
+      description: z.string().optional(),
+      capacity: z.number().optional(),
+      price: z.number().optional(),
+      private: z.boolean().optional(),
+      category: z.string().optional(),
+    }))
+    .mutation(async ({ ctx, input }) => {
+        
+      const event = await ctx.prisma.event.findUnique({
+        where: { id: input.id },
+        include: { author: { select: { id: true } } },
+      });
+
+      if (!event) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Event not found",
+        });
+      }
+
+      if (event.author.id !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not allowed to update this event",
+        });
+      }
+
+      const updatedEvent = await ctx.prisma.event.update({
+        where: { id: input.id },
+        data: {
+          title: input.title,
+          category: input.category,
+          latitude: input.location?.lat,
+          longitude: input.location?.lon,
+          date: input.date,
+          tags: input.tags,
+          description: input.description,
+          capacity: input.capacity,
+          price: input.price,
+          private: input.private,
+        }
+      });
+
+      return updatedEvent;
+    }),
 });

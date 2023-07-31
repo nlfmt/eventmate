@@ -1,12 +1,17 @@
 import { PersonAddRounded } from "@mui/icons-material";
 import c from "./createEvent.module.scss";
-import cs from "@/styles/common.module.scss"
-import { MouseEventHandler, useContext } from "react";
+import cs from "@/styles/common.module.scss";
+import { useContext } from "react";
 import CreateEventContext from "@/contexts/CreateEventContext";
 import Checkbox from "@/components/Checkbox/Checkbox";
 import { classes } from "@/utils/utils";
+import UserSelectDialog from "../UserSelectDialog/UserSelectDialog";
 
-function Invited({click, createEvent }: { click: MouseEventHandler, createEvent: (e: React.MouseEvent<HTMLButtonElement>) => void }) {
+function Invited({
+  createEvent,
+}: {
+  createEvent: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}) {
   const ctx = useContext(CreateEventContext);
   if (!ctx) return null;
   return (
@@ -18,17 +23,20 @@ function Invited({click, createEvent }: { click: MouseEventHandler, createEvent:
             label="Private"
             className={c.checkbox}
             checked={ctx.state.private}
-            onCheckedChange={(v) => {
-              ctx.setState({
-                ...ctx.state,
-                private: v,
-              });
-            }}
+            onCheckedChange={(v) => ctx.updateState({ private: v })}
           />
         </div>
-        <button type="button" className={classes(c.submitButton, c.formSubmitButton)}>
-          <PersonAddRounded /> Invite a friend
-        </button>
+        <UserSelectDialog
+          className={c.customTrigger}
+          selected={ctx.state.participants || []}
+          multiple
+          emptyText={
+            <div>
+              <PersonAddRounded /> Select Participants
+            </div>
+          }
+          setSelected={s => ctx.updateState({ participants: s })}
+        />
         <button
           className={classes(cs.submitButton, c.formSubmitButton)}
           onClick={createEvent}

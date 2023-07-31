@@ -1,4 +1,4 @@
-import { MouseEventHandler, useContext } from "react";
+import { type MouseEventHandler, useContext } from "react";
 import c from "./createEvent.module.scss";
 import CreateEventContext from "@/contexts/CreateEventContext";
 import cs from "@/styles/common.module.scss";
@@ -6,7 +6,7 @@ import { classes } from "@/utils/utils";
 
 function Requirements({ click }: { click: MouseEventHandler }) {
   const ctx = useContext(CreateEventContext);
-  const isFilledOut = ctx?.state?.numberMin && ctx?.state?.numberMax && ctx?.state?.contribution && ctx?.state?.price;
+  const isFilledOut = ctx?.state?.numberMax && ctx?.state?.contribution && ctx?.state?.price;
   const isButtonDisabled = (!isFilledOut);
   
   if (!ctx) return null;
@@ -18,30 +18,13 @@ function Requirements({ click }: { click: MouseEventHandler }) {
         <form className={c.form}>
           <input
             type="number"
-            name="numberMin"
-            placeholder="Member Minimum"
-            min="1"
-            max="1000"
-            required
-            value={ctx.state.numberMin}
-            onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
-                numberMin: parseInt(e.target.value, 10),
-              })
-            }
-          />
-          <input
-            type="number"
             name="numberMax"
             placeholder="Member Maximum"
-            min="1"
             max="1000"
             required
             value={ctx.state.numberMax}
             onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
+              ctx.updateState({
                 numberMax: parseInt(e.target.value, 10),
               })
             }
@@ -52,8 +35,7 @@ function Requirements({ click }: { click: MouseEventHandler }) {
             placeholder="Contribution"
             value={ctx.state.contribution}
             onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
+              ctx.updateState({
                 contribution: e.target.value,
               })
             }
@@ -64,13 +46,16 @@ function Requirements({ click }: { click: MouseEventHandler }) {
             placeholder="5€"
             value={ctx.state.price}
             onChange={(e) =>
-              ctx.setState({
-                ...ctx.state,
-                price: e.target.value,
-              })
+              ctx.updateState({ price: e.target.value })
             }
           />
-           <button className={classes(cs.submitButton, c.formSubmitButton)} onClick={click} disabled={isButtonDisabled}>Next</button>
+          <button
+            className={classes(cs.submitButton, c.formSubmitButton)}
+            onClick={click}
+            disabled={isButtonDisabled}
+          >
+            Next
+          </button>
         </form>
       </div>
     </>

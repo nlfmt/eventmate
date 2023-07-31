@@ -1,8 +1,7 @@
-import { PersonAddRounded } from "@mui/icons-material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import c from "./createEvent.module.scss";
 import cs from "@/styles/common.module.scss";
-import { Event } from "@prisma/client";
+import { type Event } from "@prisma/client";
 import { classes } from "@/utils/utils";
 import Link from "next/link";
 

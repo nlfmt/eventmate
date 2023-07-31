@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { createContext } from "react";
 
 interface OverlayContext {
@@ -10,5 +11,5 @@ export default createContext<OverlayContext>({
   overlay: false,
   addOverlay: () => {},
   rmOverlay: () => {},
-  setOverlay: (v) => {},
+  setOverlay: () => {},
 });

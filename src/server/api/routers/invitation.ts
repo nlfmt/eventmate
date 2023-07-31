@@ -1,6 +1,6 @@
 
 import z from "zod";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 
 export const invitationRouter = createTRPCRouter({
@@ -10,7 +10,7 @@ export const invitationRouter = createTRPCRouter({
 
       const event = await ctx.prisma.event.findUnique({
         where: { id: input.eventId },
-        include: { participants: true },
+        include: { participants: { select: { id: true } } },
       });
       if (!event) throw new TRPCError({
         code: "NOT_FOUND",
@@ -25,6 +25,7 @@ export const invitationRouter = createTRPCRouter({
       }
       const user = await ctx.prisma.user.findUnique({
         where: { id: input.userId },
+        select: { id: true }
       });
       if (!user) {
         throw new TRPCError({

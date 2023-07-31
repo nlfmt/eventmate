@@ -1,5 +1,4 @@
 import { type NextPage } from "next";
-import common from "@/styles/common.module.scss";
 import Head from "next/head";
 import Router, { useRouter } from "next/router";
 import { api } from "@/utils/api";
@@ -25,7 +24,6 @@ import { SearchFilters } from "@/components/LandingPage/SearchSection";
 import Card, { type CardProps } from "@/components/LandingPage/Card";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
-import TopBar from "@/components/LandingPage/TopBar";
 import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 
 

@@ -1,26 +1,21 @@
-import common from "@/styles/common.module.scss"
-import c from "@/components/EventOverview/eventOverview.module.scss"
+import c from "@/components/EventOverview/eventOverview.module.scss";
+import { useContext, useState } from "react";
+import EventOverviewContext from "@/contexts/EventOverviewContext";
+import React from "react";
 
-import type { Event, User } from "@prisma/client";
-
-
-
-export interface DescriptionProps {
-  event: Event;
-}
-
-
-const EventDescription = (props: DescriptionProps) => {
-  const { event } = props;
+const EventDescription = () => {
+  const { event } = useContext(EventOverviewContext);
 
   return (
-      <div className={c.description}>
-          <h2>Beschreibung</h2>
-          <div className={c.descriptionText}>
-            <span>{event.description}</span>
-          </div>
+    <div className={c.description}>
+      <div className={c.descriptionTitle}>
+        <h2>Description</h2>
       </div>
+      <div className={c.descriptionText}>
+        <span>{event.description}</span>
+      </div>
+    </div>
   );
-}
+};
 
 export default EventDescription;

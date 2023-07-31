@@ -1,30 +1,27 @@
 import c from "@/components/forms/createEvent.module.scss";
-import cs from "@/styles/common.module.scss";
 import EventDetails from "@/components/forms/EventDetails";
 import Plans from "@/components/forms/Plans";
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import DotNavigation from "@/components/DotNavigation";
 import CreateEventHeading from "@/components/forms/CreateEventHeading";
 import Requirements from "@/components/forms/Requirements";
 import Invited from "@/components/forms/Invited";
 import Finished from "@/components/forms/Finished";
-import CreateEventContext, { EventInfo, FullEventInfo } from "@/contexts/CreateEventContext";
+import CreateEventContext, { type EventInfo, type FullEventInfo } from "@/contexts/CreateEventContext";
 import PageWithSidebar from "@/components/PageWithSidebar/PageWithSidebar";
 import { api } from "@/utils/api";
-import { useRouter } from "next/router";
-import { classes } from "@/utils/utils";
-import { Event } from "@prisma/client";
+import { type Event } from "@prisma/client";
 
 const CreateEvent: NextPage = () => {
   const [count, setCount] = useState(0);
   const [state, setState] = useState<EventInfo>({
     private: false,
   });
-  const [createdEvent, setCreatedEvent] = useState<Event | null>(null);
+  const updateState = (data: EventInfo) => setState(s => ({ ...s, ...data }));
 
-  const router = useRouter();
+  const [createdEvent, setCreatedEvent] = useState<Event | null>(null);
 
   function onClick() {
     setCount((v) => {
@@ -69,14 +66,14 @@ const CreateEvent: NextPage = () => {
       </Head>
       <PageWithSidebar>
         <div className={c.background}>
-          <CreateEventHeading count={count} />
+          <CreateEventHeading />
           <DotNavigation count={count} />
           
-          <CreateEventContext.Provider value={{ state, setState }}>
+          <CreateEventContext.Provider value={{ state, setState, updateState }}>
             {count === 0 && <EventDetails click={onClick} />}
             {count === 1 && <Plans click={onClick} />}
             {count === 2 && <Requirements click={onClick} />}
-            {count === 3 && <Invited click={onClick} createEvent={createEvent} />}
+            {count === 3 && <Invited createEvent={createEvent} />}
             {count === 4 && <Finished event={createdEvent} />}
             {count >= 1 && count < 4 && (
               <button className={c.back} onClick={back}>

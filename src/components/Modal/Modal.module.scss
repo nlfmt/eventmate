@@ -1,0 +1,79 @@
+@use "@/styles/mixins.scss" as mixins;
+
+.overlay {
+  z-index: 9999;
+  background-color: var(--black-a9);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.content {
+  z-index: 10000;
+  position: relative;
+  background-color: var(--bg-light);
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 30rem;
+  // max-height: 75vh;
+  min-height: 50vh;
+  padding: 25px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  color: var(--text);
+}
+
+.trigger {
+  @include mixins.btn;
+}
+
+.iconButton {
+  @include mixins.btn(var(--bg-lighter), var(--text), var(--text), var(--text-inv));
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+
+@keyframes overlayShow {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+    opacity: 0;
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(5px);
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
