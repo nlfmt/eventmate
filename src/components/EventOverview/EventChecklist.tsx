@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Requirement } from "@prisma/client";
+import { type Requirement } from "@prisma/client";
 import {
   AddRounded,
   RemoveRounded
